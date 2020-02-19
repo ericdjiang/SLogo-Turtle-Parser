@@ -212,7 +212,6 @@ public interface CompilerInterface {
 
 
 #### Design Considerations
-
 * One aspect of the design that my team has focused on is where the error handling should be done with respect to the parsing of the input that the user types. We discussed whether or not we should do a pre-check for basic "syntax" errors by checking if all of the words typed by the user are in the properties file. If we did this primary check, we would disable the run button until all of the commands were valid. Our argument for doing this would be that it would reduce the amount of error checking later, because we would not even let the user run code with broken commands. However, this starts to confuse the front-end with the back-end and complicate encapsulation. It also does not save any time, since we can just make this the first check in the back-end and format it the same way.
 * Another design decision that we talked about was whether or not we should use a controller. In the end we wanted to make sure that our design was more closed and so we decided to employ a controller in a few classes.
 * ASSUMPTIONS:

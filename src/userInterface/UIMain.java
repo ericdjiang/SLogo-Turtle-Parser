@@ -163,12 +163,12 @@ public class UIMain {
             ResourceBundle r = ResourceBundle.getBundle("resources/languages.Unicode");
             String l = r.getString(cb.getValue());
             System.out.println(l);
-            if (l.equals("Urdu")) {
-                flipped = true;
-            }
-            else {
-                flipped = false;
-            }
+//            if (l.equals("Urdu")) {
+//                flipped = true;
+//            }
+//            else {
+//                flipped = false;
+//            }
             myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + l);
             ta.setPromptText(myResources.getString("EnterText"));
             b.setText(myResources.getString("Run"));

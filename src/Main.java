@@ -1,12 +1,13 @@
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import userInterface.UIMain;
+import View.UserInterface;
+
+import java.util.Locale;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
@@ -20,7 +21,7 @@ public class Main extends Application {
     private Scene myScene;
     private Timeline myAnimation;
     private final Pane turtleView = new Pane();
-    private UIMain UI;
+    private UserInterface UI;
 
 
     public static void main (String[] args) {
@@ -30,7 +31,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        UI = new UIMain(primaryStage, "English");
+        UI = new UserInterface(primaryStage, "English");
         myScene = UI.setupUI(turtleView);
 
         primaryStage.setScene(myScene);

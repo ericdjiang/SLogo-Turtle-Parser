@@ -1,6 +1,6 @@
 .root {
   -fx-font-size: 12pt;
-  -fx-font-family: "Impact";
+  -fx-font-family: "Arial Black";
   -fx-base: #eef;
   -fx-background-color: #eee;
 }
@@ -19,6 +19,7 @@
   -fx-pref-height: 600;
 }
 .button {
+  -fx-font-size: 8;
   -fx-text-fill: #000;
   -fx-background-color: #eef;
   -fx-border-radius: 15;

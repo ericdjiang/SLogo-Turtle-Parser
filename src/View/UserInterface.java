@@ -1,4 +1,4 @@
-package userInterface;
+package View;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,19 +14,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.File;
 
 import java.util.ResourceBundle;
 
-public class UIMain {
+public class UserInterface {
         private static final int HEIGHT = 600;
         private static final int WIDTH = 850;
 
@@ -42,21 +40,25 @@ public class UIMain {
         private HBox hb2 = new HBox();
         private VBox vb2 = new VBox();
         private VBox vb3 = new VBox();
+        private VBox vb4 = new VBox();
         private VBox vb = new VBox();
         private VBox content = new VBox();
         private VBox content2 = new VBox();
+        private VBox content3 = new VBox();
         private Button b = new Button("Clear");
         private Button b2 = new Button("Run");
         private ScrollPane sp = new ScrollPane();
         private ScrollPane sp2 = new ScrollPane();
+        private ScrollPane sp3 = new ScrollPane();
         private BorderPane bp = new BorderPane();
         private BorderPane bp2 = new BorderPane();
         //private StackPane st = new StackPane();
         private ComboBox<String> cb = new ComboBox<>();
         private ColorPicker cp = new ColorPicker();
         private TextArea ta = new TextArea();
-        private Text t = new Text("History");
-        private Text t2 = new Text("Commands");
+        private Text t = new Text();
+        private Text t2 = new Text();
+        private Text t3 = new Text();
         private Rectangle r = new Rectangle(50, 50);
 
         private boolean flipped;
@@ -67,9 +69,9 @@ public class UIMain {
          * @param stage
          * @param language
          */
-        public UIMain(Stage stage, String language) {
+        public UserInterface(Stage stage, String language) {
             myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-            stage.setTitle("Parser_Team08");
+            stage.setTitle(myResources.getString("Title"));
             getFileNames();
 
         }
@@ -81,12 +83,21 @@ public class UIMain {
          * @return
          */
         public Scene setupUI(Pane turtleView) {
+            t.setText(myResources.getString("HistoryWindow"));
+            t2.setText(myResources.getString("CommandWindow"));
+            t3.setText(myResources.getString("VariableWindow"));
+            t.setFont(Font.font(9.5));
+            t2.setFont(Font.font(9.5));
+            t3.setFont(Font.font(9.5));
             t.setFill(Color.BLUE);
             t2.setFill(Color.BLUE);
-            t.setOnMouseEntered(event -> animateLink1());
-            t2.setOnMouseEntered(event -> animateLink2());
-            t.setOnMouseExited(event -> removeUnderline1());
-            t2.setOnMouseExited(event -> removeUnderline2());
+            t3.setFill(Color.BLUE);
+            t.setOnMouseEntered(event -> animateLink(t));
+            t2.setOnMouseEntered(event -> animateLink(t2));
+            t3.setOnMouseEntered(event -> animateLink(t3));
+            t.setOnMouseExited(event -> removeUnderline(t));
+            t2.setOnMouseExited(event -> removeUnderline(t2));
+            t3.setOnMouseExited(event -> removeUnderline(t3));
             turtleView.setBorder(new Border(new BorderStroke(Color.BLACK,
                     BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             hb.getChildren().add(cb);
@@ -97,14 +108,16 @@ public class UIMain {
             b.setOnAction(event -> clearConsole());
             t.setOnMouseClicked(event -> setHistoryWindow());
             t2.setOnMouseClicked(event -> setCommandsWindow());
+            t3.setOnMouseClicked(event -> setVariableWindow());
             ta.setPromptText(myResources.getString("EnterText"));
-            cb.setPromptText("Select Language");
+            cb.setPromptText(myResources.getString("LanguageSelect"));
             vb.getChildren().add(b);
             vb.getChildren().add(b2);
             hb2.getChildren().add(ta);
             hb2.getChildren().add(vb);
             vb2.getChildren().add(t);
             vb2.getChildren().add(t2);
+            vb2.getChildren().add(t3);
             vb2.getChildren().add(sp);
             cp.setPromptText("Set Background Color");
             //hb.setSpacing(450);
@@ -127,7 +140,9 @@ public class UIMain {
             bp2.setCenter(bp);
             bp2.setRight(vb2);
             content2.getChildren().addAll(new Text("fd = forward"), new Text("bk = backward"));
+            content3.getChildren().addAll(new Text("x = 42"));
             sp2.setContent(content2);
+            sp3.setContent(content3);
             r.setX(100);
             r.setY(100);
             turtleView.getChildren().add(r);
@@ -144,23 +159,18 @@ public class UIMain {
             content.getChildren().add(l);
             r.setX(r.getX()+50);
         }
-        private void animateLink1() {
-            t.setUnderline(true);
+        private void animateLink(Text text) {
+            text.setUnderline(true);
         }
-        private void animateLink2() {
-            t2.setUnderline(true);
+        private void removeUnderline(Text text) {
+            text.setUnderline(false);
         }
-        private void removeUnderline1() {
-            t.setUnderline(false);
-        }
-        private void removeUnderline2() {
-            t2.setUnderline(false);
-    }
+
         private void clearConsole() {
             ta.clear();
         }
         private void updateLanguage() {
-            ResourceBundle r = ResourceBundle.getBundle("resources/languages.Unicode");
+            ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
             String l = r.getString(cb.getValue());
             System.out.println(l);
 //            if (l.equals("Urdu")) {
@@ -173,13 +183,17 @@ public class UIMain {
             ta.setPromptText(myResources.getString("EnterText"));
             b.setText(myResources.getString("Run"));
             b2.setText(myResources.getString("Clear"));
+            t.setText(myResources.getString("HistoryWindow"));
+            t2.setText(myResources.getString("CommandWindow"));
+            t3.setText(myResources.getString("VariableWindow"));
         }
         //probably refactor windows into another class and call a contructor to set right
         private void setHistoryWindow() {
             bp2.getChildren().remove(bp2.getRight());
-            vb2.getChildren().removeAll(t, t2, sp);
+            vb2.getChildren().removeAll(t, t2, t3, sp);
             vb2.getChildren().add(t);
             vb2.getChildren().add(t2);
+            vb2.getChildren().add(t3);
             vb2.getChildren().add(sp);
             if (! flipped) {
                 bp2.setRight(vb2);
@@ -190,9 +204,10 @@ public class UIMain {
         }
         private void setCommandsWindow() {
             bp2.getChildren().remove(bp2.getRight());
-            vb3.getChildren().removeAll(t, t2, sp2);
+            vb3.getChildren().removeAll(t, t2, t3, sp2);
             vb3.getChildren().add(t);
             vb3.getChildren().add(t2);
+            vb3.getChildren().add(t3);
             vb3.getChildren().add(sp2);
             if (! flipped) {
                 bp2.setRight(vb3);
@@ -201,9 +216,23 @@ public class UIMain {
                 bp2.setLeft(vb3);
             }
         }
+        private void setVariableWindow() {
+            bp2.getChildren().remove(bp2.getRight());
+            vb4.getChildren().removeAll(t, t2, t3, sp3);
+            vb4.getChildren().add(t);
+            vb4.getChildren().add(t2);
+            vb4.getChildren().add(t3);
+            vb4.getChildren().add(sp3);
+            if (! flipped) {
+                bp2.setRight(vb4);
+            }
+            else {
+                bp2.setLeft(vb4);
+            }
+        }
         private void getFileNames() {
             File folder = new File("src/resources/languages");
-            ResourceBundle r = ResourceBundle.getBundle("resources/languages.Unicode");
+            ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
             File[] listOfFiles = folder.listFiles();
             assert listOfFiles != null;
             for (File listOfFile : listOfFiles) {

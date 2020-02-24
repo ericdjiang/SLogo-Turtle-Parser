@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -22,6 +24,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.io.File;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class UserInterface {
@@ -63,6 +66,7 @@ public class UserInterface {
         private boolean flipped;
         private TurtleView turtleWindow;
 
+        private ArrayList<Point2D> list = new ArrayList<>();
 
         /**
          * create a UI object that houses all animation function and simulation loading functionality
@@ -145,15 +149,26 @@ public class UserInterface {
             sp3.setContent(content3);
             Scene myScene = new Scene(bp2, WIDTH, HEIGHT);
             myScene.getStylesheets().add(STYLESHEET);
-            System.out.println(turtleWindow.getWidth());
             return myScene;
         }
         private void setBackgroundColor(Pane tv) {
             tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         }
+        int x = 50;
+        int y = 50;
+
         private void executeRun() {
             turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
             turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
+
+            double[] l = new double[list.size()*2];
+            for (int i=0; i<list.size(); i++){
+                l[2*i] = list.get(i).getX();
+                l[2*i+1] = list.get(i).getY();
+            }
+            Polyline pl = new Polyline(l);
+            pl.setFill(Color.BLACK);
+            turtleWindow.getChildren().add(pl);
             updateInputHistory();
         }
         private void updateInputHistory() {
@@ -170,6 +185,9 @@ public class UserInterface {
 
         private void clearConsole() {
             ta.clear();
+            x ++;
+            y ++;
+            list.add(new Point2D(x, y));
         }
         private void updateLanguage() {
             ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");

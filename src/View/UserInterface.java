@@ -45,8 +45,8 @@ public class UserInterface {
         private VBox content = new VBox();
         private VBox content2 = new VBox();
         private VBox content3 = new VBox();
-        private Button b = new Button("Clear");
-        private Button b2 = new Button("Run");
+        private Button b = new Button("Run");
+        private Button b2 = new Button("Clear");
         private ScrollPane sp = new ScrollPane();
         private ScrollPane sp2 = new ScrollPane();
         private ScrollPane sp3 = new ScrollPane();
@@ -59,9 +59,9 @@ public class UserInterface {
         private Text t = new Text();
         private Text t2 = new Text();
         private Text t3 = new Text();
-        private Rectangle r = new Rectangle(50, 50);
 
         private boolean flipped;
+        private TurtleView turtleWindow;
 
 
         /**
@@ -69,9 +69,10 @@ public class UserInterface {
          * @param stage
          * @param language
          */
-        public UserInterface(Stage stage, String language) {
+        public UserInterface(Stage stage, String language, TurtleView turtleView) {
             myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
             stage.setTitle(myResources.getString("Title"));
+            this.turtleWindow = turtleView;
             getFileNames();
 
         }
@@ -79,10 +80,9 @@ public class UserInterface {
     /**
          * initialize main visuals of UI including hbox and vbox housing buttons, sliders,
          * and a spot for sim specific ui
-         * @param turtleView
          * @return
          */
-        public Scene setupUI(Pane turtleView) {
+        public Scene setupUI() {
             t.setText(myResources.getString("HistoryWindow"));
             t2.setText(myResources.getString("CommandWindow"));
             t3.setText(myResources.getString("VariableWindow"));
@@ -98,14 +98,14 @@ public class UserInterface {
             t.setOnMouseExited(event -> removeUnderline(t));
             t2.setOnMouseExited(event -> removeUnderline(t2));
             t3.setOnMouseExited(event -> removeUnderline(t3));
-            turtleView.setBorder(new Border(new BorderStroke(Color.BLACK,
+            turtleWindow.setBorder(new Border(new BorderStroke(Color.BLACK,
                     BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             hb.getChildren().add(cb);
             hb.getChildren().add(cp);
-            cp.setOnAction(event -> setBackgroundColor(turtleView));
-            b2.setOnAction(event -> updateInputHistory());
+            cp.setOnAction(event -> setBackgroundColor(turtleWindow));
+            b.setOnAction(event -> executeRun());
             cb.setOnAction(event -> updateLanguage());
-            b.setOnAction(event -> clearConsole());
+            b2.setOnAction(event -> clearConsole());
             t.setOnMouseClicked(event -> setHistoryWindow());
             t2.setOnMouseClicked(event -> setCommandsWindow());
             t3.setOnMouseClicked(event -> setVariableWindow());
@@ -132,7 +132,7 @@ public class UserInterface {
             bp.setBottom(hb2);
             bp.setTop(hb);
             //bp.setRight(sp);
-            bp.setCenter(turtleView);
+            bp.setCenter(turtleWindow);
             sp.setContent(content);
             //st.getChildren().add(bp);
             //st.setMargin(sp, new Insets(0, 0, 0, 650));
@@ -143,21 +143,23 @@ public class UserInterface {
             content3.getChildren().addAll(new Text("x = 42"));
             sp2.setContent(content2);
             sp3.setContent(content3);
-            r.setX(100);
-            r.setY(100);
-            turtleView.getChildren().add(r);
             Scene myScene = new Scene(bp2, WIDTH, HEIGHT);
             myScene.getStylesheets().add(STYLESHEET);
+            System.out.println(turtleWindow.getWidth());
             return myScene;
         }
         private void setBackgroundColor(Pane tv) {
             tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         }
+        private void executeRun() {
+            turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
+            turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
+            updateInputHistory();
+        }
         private void updateInputHistory() {
             Text l = new Text(ta.getText());
             l.setWrappingWidth(200);
             content.getChildren().add(l);
-            r.setX(r.getX()+50);
         }
         private void animateLink(Text text) {
             text.setUnderline(true);

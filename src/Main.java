@@ -1,3 +1,4 @@
+import View.TurtleView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -20,7 +21,7 @@ public class Main extends Application {
     private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private Scene myScene;
     private Timeline myAnimation;
-    private final Pane turtleView = new Pane();
+    private final TurtleView turtleView = new TurtleView();
     private UserInterface UI;
 
 
@@ -31,8 +32,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        UI = new UserInterface(primaryStage, "English");
-        myScene = UI.setupUI(turtleView);
+        UI = new UserInterface(primaryStage, "English", turtleView);
+        myScene = UI.setupUI();
 
         primaryStage.setScene(myScene);
         primaryStage.show();

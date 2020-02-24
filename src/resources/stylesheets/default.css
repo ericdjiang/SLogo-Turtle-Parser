@@ -1,0 +1,41 @@
+.root {
+  -fx-font-size: 12pt;
+  -fx-font-family: "Arial Black";
+  -fx-base: #eef;
+  -fx-background-color: #eee;
+}
+.color-picker {
+  -fx-pref-height: 35;
+}
+.combo-box {
+  -fx-pref-height: 35;
+}
+.text-area {
+  -fx-pref-height: 100;
+  -fx-pref-width: 550;
+}
+.scroll-pane {
+  -fx-pref-width: 200;
+  -fx-pref-height: 600;
+}
+.button {
+  -fx-font-size: 9.5;
+  -fx-text-fill: #000;
+  -fx-background-color: #eef;
+  -fx-border-radius: 15;
+  -fx-background-radius: 15;
+  -fx-padding: 20;
+  -fx-pref-width: 100;
+}
+
+.button:hover {
+  -fx-background-color: #aaa;
+}
+
+.label {
+  -fx-font-size: 12;
+}
+
+
+
+

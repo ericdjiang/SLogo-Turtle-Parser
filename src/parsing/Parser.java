@@ -12,10 +12,11 @@ public class Parser {
     Method[] myMethods = executor.getClass().getMethods();
 
 
-    public Parser (List<String> lines,String language) throws InvocationTargetException, IllegalAccessException {
+    public Parser (String commands ,String language) throws InvocationTargetException, IllegalAccessException {
         addPatterns(language);
-        parseText(lines);
+        parseText(commands);
     }
+
 
 
     private boolean validateMessage(){
@@ -23,7 +24,8 @@ public class Parser {
     }
 
 
-    private void parseText ( List<String> lines) throws InvocationTargetException, IllegalAccessException {
+    private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException {
+        String[] lines = commands.split("\n");
         for (String line : lines) {
             String[] commandAndParam = line.split(" ");
             String command = commandAndParam[0];
@@ -36,14 +38,13 @@ public class Parser {
                 }
             }
         }
-        // FIXME: Only works for commands with only one parameter of type int
-        //FIXME: Only works for one line
+        //FIXME: Only works for commands with only one parameter of type int
     }
 
         /**
          * Adds the given resource file to this language's recognized types
          */
-        private void addPatterns (String syntax) {
+        public void addPatterns(String syntax) {
             mySymbols = new ArrayList<>();
             ResourceBundle resources = ResourceBundle.getBundle(RESOURCES_PACKAGE + syntax);
             for (String key : Collections.list(resources.getKeys())) {

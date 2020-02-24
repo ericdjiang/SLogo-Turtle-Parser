@@ -37,7 +37,7 @@ public class UserInterface {
         private static final String STYLESHEET = "resources/stylesheets/default.css";
         private static final String EXTENSION = ".properties";
         private String myLanguage;
-        private  ResourceBundle myResources;
+        private ResourceBundle myResources;
 
         private HBox hb = new HBox();
         private HBox hb2 = new HBox();
@@ -165,10 +165,8 @@ public class UserInterface {
             tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         }
         private void executeRun() throws InvocationTargetException, IllegalAccessException {
-            ArrayList<String> list = new ArrayList<>();
-            list.add(ta.getText());
-            //FIXME: Right now only works with one line need to add multiple lines to list
-            parser = new Parser(list,myLanguage);
+            String commands = ta.getText();
+            parser = new Parser(commands,myLanguage);
             turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
             turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
             updateInputHistory();
@@ -277,8 +275,7 @@ public class UserInterface {
         result.setOnAction(handler);
         return result;
     }
-
-    }
+}
 
 
 

@@ -6,11 +6,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Parser {
-
-    // where to find resources specifically for this class
     private static final String RESOURCES_PACKAGE = Parser.class.getPackageName() + ".resources.";
-    // "types" and the regular expression patterns that recognize those types
-    // note, it is a list because order matters (some patterns may be more generic)
     private List<Map.Entry<String, Pattern>> mySymbols;
     private Executor executor = new Executor();
     Method[] myMethods = executor.getClass().getMethods();
@@ -47,7 +43,7 @@ public class Parser {
         /**
          * Adds the given resource file to this language's recognized types
          */
-        public void addPatterns (String syntax) {
+        private void addPatterns (String syntax) {
             mySymbols = new ArrayList<>();
             ResourceBundle resources = ResourceBundle.getBundle(RESOURCES_PACKAGE + syntax);
             for (String key : Collections.list(resources.getKeys())) {
@@ -61,7 +57,7 @@ public class Parser {
         /**
          * Returns language's type associated with the given text if one exists
          */
-        public String getSymbol (String text) {
+        private String getSymbol (String text) {
             final String ERROR = "NO MATCH";
             for (Map.Entry<String, Pattern> e : mySymbols) {
                 if (match(text, e.getValue())) {

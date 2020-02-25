@@ -22,10 +22,11 @@ public class CommandReferenceView extends ScrollPane {
         this.myLanguage = language;
         this.referenceList = new ArrayList<>();
         setContent(content);
-        initializeReferences();
+        initializeReferences(myLanguage);
     }
-    private void initializeReferences() throws IOException {
-        Scanner fileReader = new Scanner(new File("src/resources/languages/" + myLanguage + ".properties"));
+    public void initializeReferences(String language) throws IOException {
+        content.getChildren().clear();
+        Scanner fileReader = new Scanner(new File("src/resources/languages/" + language + ".properties"));
         while (fileReader.hasNextLine()) {
             String s = fileReader.nextLine();
             if (s.contains("Run")) {

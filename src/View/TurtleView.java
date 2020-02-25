@@ -1,7 +1,8 @@
 package View;
 
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
@@ -22,6 +23,8 @@ public class TurtleView extends Pane {
         turtle.setX(viewWidth/2-turtle.getWidth()/2);
         turtle.setY(viewHeight/2-turtle.getHeight()/2);
         turtle.setFill(turtlePattern);
+        this.setBorder(new Border(new BorderStroke(Color.BLACK,
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
     }
     public double getTurtleXPos() {

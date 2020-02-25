@@ -24,6 +24,7 @@ public class Parser {
         for (String line : lines) {
             String[] commandAndParams = line.split(" ");
             String command = commandAndParams[0];
+
             if (line.trim().length() > 0) {
                 String symbol = getSymbol(command);
                 Command usercommand = factory.getCommand(symbol);

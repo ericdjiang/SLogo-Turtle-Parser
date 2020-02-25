@@ -23,6 +23,9 @@ import parsing.Parser;
 import javax.imageio.ImageIO;
 import java.io.File;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -66,6 +69,7 @@ public class UserInterface {
         private boolean flipped;
         private TurtleView turtleWindow;
         private Parser parser;
+        private CommandReferenceView referenceWindow;
 
 
         /**
@@ -73,12 +77,14 @@ public class UserInterface {
          * @param stage
          * @param language
          */
-        public UserInterface(Stage stage, String language, TurtleView turtleView) {
+        public UserInterface(Stage stage, String language, TurtleView turtleView) throws IOException, InvocationTargetException, IllegalAccessException {
             myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
             myLanguage = language;
             stage.setTitle(myResources.getString("Title"));
             this.turtleWindow = turtleView;
             getFileNames();
+            this.referenceWindow = new CommandReferenceView(language);
+            this.parser = new Parser();
 
         }
 
@@ -87,7 +93,7 @@ public class UserInterface {
          * and a spot for sim specific ui
          * @return
          */
-        public Scene setupUI() {
+        public Scene setupUI() throws IOException {
             t.setText(myResources.getString("HistoryWindow"));
             t2.setText(myResources.getString("CommandWindow"));
             t3.setText(myResources.getString("VariableWindow"));
@@ -117,10 +123,22 @@ public class UserInterface {
                     e.printStackTrace();
                 }
             });
-            cb.setOnAction(event -> updateLanguage());
+            cb.setOnAction(event -> {
+                try {
+                    updateLanguage();
+                } catch (IOException e) {
+//                    e.printStackTrace();
+                }
+            });
             b2.setOnAction(event -> clearConsole());
             t.setOnMouseClicked(event -> setHistoryWindow());
-            t2.setOnMouseClicked(event -> setCommandsWindow());
+            t2.setOnMouseClicked(event -> {
+                try {
+                    setCommandsWindow(myLanguage);
+                } catch (IOException e) {
+//                    e.printStackTrace();
+                }
+            });
             t3.setOnMouseClicked(event -> setVariableWindow());
             ta.setPromptText(myResources.getString("EnterText"));
             cb.setPromptText(myResources.getString("LanguageSelect"));
@@ -158,7 +176,7 @@ public class UserInterface {
             sp3.setContent(content3);
             Scene myScene = new Scene(bp2, WIDTH, HEIGHT);
             myScene.getStylesheets().add(STYLESHEET);
-            System.out.println(turtleWindow.getWidth());
+
             return myScene;
         }
         private void setBackgroundColor(Pane tv) {
@@ -166,8 +184,8 @@ public class UserInterface {
         }
         private void executeRun() throws InvocationTargetException, IllegalAccessException {
             String commands = ta.getText();
-            parser = new Parser(commands,myLanguage);
-            turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
+            parser.parseText(commands);
+            turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + parser.getCommand());
             turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
             updateInputHistory();
         }
@@ -186,7 +204,7 @@ public class UserInterface {
         private void clearConsole() {
             ta.clear();
         }
-        private void updateLanguage() {
+        private void updateLanguage() throws IOException {
             ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
             String l = r.getString(cb.getValue());
             myLanguage = l;
@@ -198,6 +216,7 @@ public class UserInterface {
 //            else {
 //                flipped = false;
 //            }
+            setCommandsWindow(myLanguage);
             myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + l);
             ta.setPromptText(myResources.getString("EnterText"));
             b.setText(myResources.getString("Run"));
@@ -221,13 +240,14 @@ public class UserInterface {
                 bp2.setLeft(vb2);
             }
         }
-        private void setCommandsWindow() {
+        private void setCommandsWindow(String language) throws IOException {
             bp2.getChildren().remove(bp2.getRight());
-            vb3.getChildren().removeAll(t, t2, t3, sp2);
+            vb3.getChildren().removeAll(t, t2, t3, referenceWindow);
             vb3.getChildren().add(t);
             vb3.getChildren().add(t2);
             vb3.getChildren().add(t3);
-            vb3.getChildren().add(sp2);
+            referenceWindow = new CommandReferenceView(language);
+            vb3.getChildren().add(referenceWindow);
             if (! flipped) {
                 bp2.setRight(vb3);
             }

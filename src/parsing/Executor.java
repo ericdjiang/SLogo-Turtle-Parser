@@ -5,18 +5,22 @@ public class Executor {
     public Executor(){
     }
 
-    public void forward(int size){
-        System.out.println(String.format("The Turtle moves forward %d steps", size) );
+    public int forward(int size){
+        System.out.println(String.format("The Turtle moves forward %d steps", size));
+        return size;
     }
 
-    public void backward(int size){
+    public int backward(int size){
         System.out.println(String.format("The Turtle moves backward %d steps", size) );
+        return -size;
     }
-    public void left(int size){
+    public int left(int size){
         System.out.println(String.format("The Turtle moves left %d steps", size) );
+        return -size;
     }
-    public void right(int size){
+    public int right(int size){
         System.out.println(String.format("The Turtle moves right %d steps", size) );
+        return size;
     }
 
 }

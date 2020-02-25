@@ -1,27 +1,28 @@
 package parsing;
 
+import execution.Command;
+import execution.CommandFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
+import model.TurtleModel;
 
 public class Parser {
     private static final String RESOURCES_PACKAGE = Parser.class.getPackageName() + ".resources.";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
 
-
-
-    public Parser (String commands ,String language) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
+    private TurtleModel myTurtleModel;
+    public Parser (String commands ,String language, TurtleModel myTurtleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         addPatterns(language);
         parseText(commands);
+
+        this.myTurtleModel = myTurtleModel;
     }
-
-
 
     private boolean validateMessage(){
         return false;
     }
-
 
     private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String[] lines = commands.split("\n");
@@ -31,7 +32,9 @@ public class Parser {
             if (line.trim().length() > 0) {
                 String symbol = getSymbol(command);
                 Command usercommand = factory.getCommand(getSymbol(symbol));
-                usercommand.execute();
+                usercommand.execute(symbol, parameters, myTurtleModel);
+
+
             }
         }
         //FIXME: Only works for commands with only one parameter of type int
@@ -58,6 +61,7 @@ public class Parser {
             final String ERROR = "NO MATCH";
             for (Map.Entry<String, Pattern> e : mySymbols) {
                 if (match(text, e.getValue())) {
+                    System.out.println(e.getKey());
                     return e.getKey();
                 }
             }

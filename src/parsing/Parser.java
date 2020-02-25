@@ -25,44 +25,116 @@ public class Parser {
     }
 
     private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        String[] lines = commands.split("\n");
-        for (String line : lines) {
-            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
+        List<String>inputCommands = Arrays.asList(String.join(" ",commands.toLowerCase().split("\n")).split("[ ]+"));
 
-            //extract the command name (e.g. FD)
-            String command = commandAndParams.get(0);
-            if(!command.matches("^[a-zA-Z]+$")) {
-                System.out.println("Invalid command.");
-                return;
-            }
+//        for (String line : lines) {
+//            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
+//
+//            //extract the command name (e.g. FD)
+//            String command = commandAndParams.get(0);
+//            if(!command.matches("^[a-zA-Z]+$")) {
+//                System.out.println("Invalid command.");
+//                return;
+//            }
+//
+//            // populate a list of the parameters
+//            List<String> params = new ArrayList<>();
+//            // check if there are parameters included with the command symbol
+//            if(commandAndParams.size()>1) {
+//                params = commandAndParams.subList(1, commandAndParams.size());
+//            }
+//            // error check the parameters for invalid nonnumeric charactrs
+//            for(String param: params){
+//                // make sure string is a decimal
+//                System.out.println("Parameter: " + param);
+//                if (!param.matches("^\\-?[0-9]*\\.?[0-9]*$")) {
+//                    System.out.println("Invalid Parameter.");
+//                    return;
+//                }
+//            }
+//
+//            // Execute the command
+//            String symbol = getSymbol(command);
+//            Command factoryCommand = factory.getCommand(getSymbol(symbol));
+//            if(factoryCommand.getNumParams()==params.size()){
+//                factoryCommand.execute(params, myTurtleModel);
+//            } else {
+//                System.out.println("Invalid number of parameters.");
+//            }
+//
+//        }
+        //FIXME: Only works for commands with only one parameter of type int
+        Stack <List<String>> stack = new Stack();
 
-            // populate a list of the parameters
-            List<String> params = new ArrayList<>();
-            // check if there are parameters included with the command symbol
-            if(commandAndParams.size()>1) {
-                params = commandAndParams.subList(1, commandAndParams.size());
-            }
-            // error check the parameters for invalid nonnumeric charactrs
-            for(String param: params){
-                // make sure string is a decimal
-                System.out.println("Parameter: " + param);
-                if (!param.matches("^\\-?[0-9]*\\.?[0-9]*$")) {
-                    System.out.println("Invalid Parameter.");
-                    return;
+        Map <String, String> variables = new HashMap<>();
+
+        stack.push(inputCommands);
+
+        while(!stack.isEmpty()){
+            List <String> poppedElement = stack.pop();
+            List <Integer> indecesToSkip = new ArrayList<>();
+
+//            parseLine(poppedElement);
+            // iterate thru commands in popped element;
+            for(int i = 0; i < poppedElement.size(); i++){
+                if(!(indecesToSkip).contains(i)){
+                    String symbol = poppedElement.get(i).strip();
+
+                    Command factoryCommand = factory.getCommand(getSymbol(symbol));
+                    int numParamsRequired = factoryCommand.getNumParams();
+                    int numParamsParsed = 0;
+                    Stack <String> executionStack = new Stack();
+                    executionStack.push(symbol);
+
+                    while (numParamsParsed < numParamsRequired){
+                        i++;
+                        symbol = poppedElement.get(i).strip();
+                        //if the symbol is a command
+                        if(symbol.matches("^[a-zA-Z]+$")){
+                            executionStack.push(poppedElement.get(i));
+                        } else { // if symbol is a number
+
+                        }
+
+                    }
+
+
+//                    if(factoryCommand.getNumParams()==params.size()){
+//                        factoryCommand.execute(params, myTurtleModel);
+//                    } else {
+//                        System.out.println("Invalid number of parameters.");
+//                    }
+
+
+
+                    switch(symbol){
+                        case "REPEAT":
+                            int numLoops = Integer.parseInt(poppedElement.get(i+1));
+                            for(int j = 0; j < numLoops; j++){
+                                stack.push(getLoopBody(poppedElement, i+1));
+                            }
+                            break;
+                        case "DOTIMES":
+                            break;
+                        case "FOR":
+                            break;
+                    }
                 }
             }
 
-            // Execute the command
-            String symbol = getSymbol(command);
-            Command factoryCommand = factory.getCommand(getSymbol(symbol));
-            if(factoryCommand.getNumParams()==params.size()){
-                factoryCommand.execute(params, myTurtleModel);
-            } else {
-                System.out.println("Invalid number of parameters.");
-            }
-            
         }
-        //FIXME: Only works for commands with only one parameter of type int
+    }
+
+
+
+    private List<String> getLoopBody(List<String> poppedElement, int loopStartIndex){
+        int loopEndIndex = -1;
+        for (int i = 0; i < poppedElement.size(); i++){
+            if(poppedElement.get(i).equals("]")){
+                loopEndIndex = i;
+            }
+        }
+        return poppedElement.subList(loopStartIndex, loopEndIndex-1);
     }
 
         /**

@@ -111,9 +111,7 @@ public class UserInterface {
             b.setOnAction(event -> {
                 try {
                     executeRun();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | InstantiationException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             });
@@ -164,7 +162,7 @@ public class UserInterface {
         private void setBackgroundColor(Pane tv) {
             tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        private void executeRun() throws InvocationTargetException, IllegalAccessException {
+        private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
             String commands = ta.getText();
             parser = new Parser(commands,myLanguage);
             turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);

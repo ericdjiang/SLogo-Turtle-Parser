@@ -17,7 +17,6 @@
 .scroll-pane {
   -fx-pref-width: 200;
   -fx-pref-height: 600;
-  -fx-font-family: "Arial";
 }
 .button {
   -fx-font-size: 9.5;

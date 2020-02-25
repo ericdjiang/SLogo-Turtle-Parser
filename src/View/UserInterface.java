@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import parsing.Parser;
 import java.io.IOException;
@@ -17,30 +16,17 @@ public class UserInterface {
 
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
-
     private static final String STYLESHEET = "resources/stylesheets/default.css";
 
-    private String myLanguage;
     private ResourceBundle myResources;
-
-    private HBox hb = new HBox();
-    private HBox hb2 = new HBox();
-    private VBox historyViewWindow = new VBox();
-    private VBox vb3 = new VBox();
-    private VBox vb4 = new VBox();
-    private VBox vb = new VBox();
-    private VBox content2 = new VBox();
-    private VBox content3 = new VBox();
-
-    private BorderPane bp = new BorderPane();
-    private BorderPane bp2 = new BorderPane();
-
+    private HBox customizationPanel = new HBox();
+    private HBox inputPanel = new HBox();
+    private BorderPane mainView = new BorderPane();
+    private BorderPane mainFrame = new BorderPane();
     private ColorPicker colorPicker = new ColorPicker();
     private ViewSwitchText historySwitchText;
     private ViewSwitchText referenceSwitchText;
     private ViewSwitchText variableSwitchText;
-
-    private boolean flipped;
     private TurtleView turtleWindow;
     private Parser parser;
     private CommandReferenceView referenceView;
@@ -49,14 +35,12 @@ public class UserInterface {
     private Console commandPrompt;
     private LanguageSelector languageSelector;
     private ControlPanel controlPanel;
+    public CommandHistoryWindow historyWindow;
+    private CommandReferenceWindow referenceWindow;
+    private VariableWindow variableWindow;
 
+    private String myLanguage;
 
-
-    /**
-     * create a UI object that houses all animation function and simulation loading functionality
-     * @param stage
-     * @param language
-     */
     public UserInterface(Stage stage, String language, TurtleView turtleView) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
@@ -69,22 +53,18 @@ public class UserInterface {
         this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt);
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
-
     }
-
-    /**
-     * initialize main visuals of UI including hbox and vbox housing buttons, sliders,
-     * and a spot for sim specific ui
-     * @return
-     */
     public Scene setupUI() throws IOException {
         historySwitchText = new ViewSwitchText(myResources.getString("HistoryWindow"));
         referenceSwitchText = new ViewSwitchText(myResources.getString("CommandWindow"));
         variableSwitchText = new ViewSwitchText(myResources.getString("VariableWindow"));
-        hb.getChildren().add(languageSelector);
-        hb.getChildren().add(colorPicker);
-        colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
 
+        historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
+
+        customizationPanel.getChildren().add(languageSelector);
+        customizationPanel.getChildren().add(colorPicker);
+
+        colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
         languageSelector.setOnAction(event -> {
             try {
                 updateLanguage();
@@ -94,53 +74,31 @@ public class UserInterface {
         });
         historySwitchText.setOnMouseClicked(event -> setHistoryWindow());
         referenceSwitchText.setOnMouseClicked(event -> {
-            try {
-                setCommandsWindow();
-            } catch (IOException e) {
-//                    e.printStackTrace();
-            }
+            setCommandsWindow();
         });
         variableSwitchText.setOnMouseClicked(event -> setVariableWindow());
-        vb.getChildren().add(controlPanel.getRunButton());
-        vb.getChildren().add(controlPanel.getClearButton());
-        hb2.getChildren().add(commandPrompt);
-        hb2.getChildren().add(vb);
-        historyViewWindow.getChildren().add(historySwitchText);
-        historyViewWindow.getChildren().add(referenceSwitchText);
-        historyViewWindow.getChildren().add(variableSwitchText);
-        historyViewWindow.getChildren().add(historyView);
-        colorPicker.setPromptText("Set Background Color");
-        bp.setBottom(hb2);
-        bp.setTop(hb);
-        //bp.setRight(sp);
-        bp.setCenter(turtleWindow);
-        bp2.setCenter(bp);
-        bp2.setRight(historyViewWindow);
-        content2.getChildren().addAll(new Text("fd = forward"), new Text("bk = backward"));
-        content3.getChildren().addAll(new Text("x = 42"));
 
-        Scene myScene = new Scene(bp2, WIDTH, HEIGHT);
+        inputPanel.getChildren().add(commandPrompt);
+        inputPanel.getChildren().add(controlPanel);
+
+        mainView.setBottom(inputPanel);
+        mainView.setTop(customizationPanel);
+        mainView.setCenter(turtleWindow);
+        mainFrame.setCenter(mainView);
+        mainFrame.setRight(historyWindow);
+        Scene myScene = new Scene(mainFrame, WIDTH, HEIGHT);
         myScene.getStylesheets().add(STYLESHEET);
-
         return myScene;
     }
-    private void setBackgroundColor(Pane tv) {
-        tv.setBackground(new Background(new BackgroundFill(colorPicker.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
+    private void setBackgroundColor(Pane turtleView) {
+        turtleView.setBackground(new Background(new BackgroundFill(colorPicker.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
     }
-
     private void updateLanguage() throws IOException {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
-        String l = r.getString(languageSelector.getValue());
-        myLanguage = l;
-        //parser.addPatterns(l);
-        System.out.println(l);
-//            if (l.equals("Urdu")) {
-//                flipped = true;
-//            }
-//            else {
-//                flipped = false;
-//            }
-        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + l);
+        myLanguage = r.getString(languageSelector.getValue());
+        //parser.addPatterns(myLanguage);
+        System.out.println(myLanguage);
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
         commandPrompt.updateLanguage(myResources);
         referenceView.initializeReferences(myLanguage);
         setCommandsWindow();
@@ -151,49 +109,20 @@ public class UserInterface {
     }
     //probably refactor windows into another class and call a contructor to set right
     private void setHistoryWindow() {
-        bp2.getChildren().remove(bp2.getRight());
-        historyViewWindow.getChildren().removeAll(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
-        historyViewWindow.getChildren().add(historySwitchText);
-        historyViewWindow.getChildren().add(referenceSwitchText);
-        historyViewWindow.getChildren().add(variableSwitchText);
-        historyViewWindow.getChildren().add(historyView);
-        if (! flipped) {
-            bp2.setRight(historyViewWindow);
-        }
-        else {
-            bp2.setLeft(historyViewWindow);
-        }
+        mainFrame.getChildren().remove(mainFrame.getRight());
+        historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
+        mainFrame.setRight(historyWindow);
     }
-    private void setCommandsWindow() throws IOException {
-        bp2.getChildren().remove(bp2.getRight());
-        vb3.getChildren().removeAll(historySwitchText, referenceSwitchText, variableSwitchText, referenceView);
-        vb3.getChildren().add(historySwitchText);
-        vb3.getChildren().add(referenceSwitchText);
-        vb3.getChildren().add(variableSwitchText);
-        vb3.getChildren().add(referenceView);
-        if (! flipped) {
-            bp2.setRight(vb3);
-        }
-        else {
-            bp2.setLeft(vb3);
-        }
+    private void setCommandsWindow() {
+        mainFrame.getChildren().remove(mainFrame.getRight());
+        referenceWindow = new CommandReferenceWindow(historySwitchText, referenceSwitchText, variableSwitchText, referenceView);
+        mainFrame.setRight(referenceWindow);
     }
     private void setVariableWindow() {
-        bp2.getChildren().remove(bp2.getRight());
-        vb4.getChildren().removeAll(historySwitchText, referenceSwitchText, variableSwitchText, variableView);
-        vb4.getChildren().add(historySwitchText);
-        vb4.getChildren().add(referenceSwitchText);
-        vb4.getChildren().add(variableSwitchText);
-        vb4.getChildren().add(variableView);
-        if (! flipped) {
-            bp2.setRight(vb4);
-        }
-        else {
-            bp2.setLeft(vb4);
-        }
+        mainFrame.getChildren().remove(mainFrame.getRight());
+        variableWindow = new VariableWindow(historySwitchText, referenceSwitchText, variableSwitchText, variableView);
+        mainFrame.setRight(variableWindow);
     }
-
-
 }
 
 

@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import parsing.Parser;
 
@@ -12,7 +13,7 @@ import javax.imageio.ImageIO;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
-public class ControlPanel {
+public class ControlPanel extends VBox {
     private ResourceBundle resources;
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
@@ -41,13 +42,8 @@ public class ControlPanel {
             }
         });
         clearButton = makeButton(resources.getString("Clear"), event -> clearConsole());
-
-    }
-    public Button getRunButton() {
-        return this.runButton;
-    }
-    public Button getClearButton() {
-        return this.clearButton;
+        getChildren().add(runButton);
+        getChildren().add(clearButton);
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes

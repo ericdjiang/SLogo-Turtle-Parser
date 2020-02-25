@@ -6,14 +6,15 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class Parser {
-    private static final String RESOURCES = "resources/languages";
-    private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    private static final String RESOURCES_PACKAGE = Parser.class.getPackageName() + ".resources.";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private Executor executor = new Executor();
     Method[] myMethods = executor.getClass().getMethods();
 
 
-    public Parser () throws InvocationTargetException, IllegalAccessException {
+    public Parser (String commands ,String language) throws InvocationTargetException, IllegalAccessException {
+        addPatterns(language);
+        parseText(commands);
     }
 
 
@@ -23,7 +24,7 @@ public class Parser {
     }
 
 
-    public void parseText ( String commands) throws InvocationTargetException, IllegalAccessException {
+    private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException {
         String[] lines = commands.split("\n");
         for (String line : lines) {
             String[] commandAndParam = line.split(" ");
@@ -32,27 +33,20 @@ public class Parser {
             if (line.trim().length() > 0) {
                 for(Method method : myMethods){
                     if(getSymbol(command).equals(method.getName())){
-                        returnCommand(method.invoke(executor,param));
+                        method.invoke(executor,param);
                     }
                 }
             }
         }
         //FIXME: Only works for commands with only one parameter of type int
     }
-    int command;
-    private void returnCommand(Object o) {
-        this.command = (int) o;
-        getCommand();
-    }
-    public int getCommand() {
-        return command;
-    }
+
         /**
          * Adds the given resource file to this language's recognized types
          */
         public void addPatterns(String syntax) {
             mySymbols = new ArrayList<>();
-            ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + syntax);
+            ResourceBundle resources = ResourceBundle.getBundle(RESOURCES_PACKAGE + syntax);
             for (String key : Collections.list(resources.getKeys())) {
                 String regex = resources.getString(key);
                 mySymbols.add(new AbstractMap.SimpleEntry<>(key,

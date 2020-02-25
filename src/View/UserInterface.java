@@ -18,10 +18,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import parsing.Parser;
 
 import javax.imageio.ImageIO;
 import java.io.File;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class UserInterface {
@@ -33,8 +36,8 @@ public class UserInterface {
         private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
         private static final String STYLESHEET = "resources/stylesheets/default.css";
         private static final String EXTENSION = ".properties";
-
-        private  ResourceBundle myResources;
+        private String myLanguage;
+        private ResourceBundle myResources;
 
         private HBox hb = new HBox();
         private HBox hb2 = new HBox();
@@ -62,6 +65,7 @@ public class UserInterface {
 
         private boolean flipped;
         private TurtleView turtleWindow;
+        private Parser parser;
 
 
         /**
@@ -71,6 +75,7 @@ public class UserInterface {
          */
         public UserInterface(Stage stage, String language, TurtleView turtleView) {
             myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
+            myLanguage = language;
             stage.setTitle(myResources.getString("Title"));
             this.turtleWindow = turtleView;
             getFileNames();
@@ -103,7 +108,13 @@ public class UserInterface {
             hb.getChildren().add(cb);
             hb.getChildren().add(cp);
             cp.setOnAction(event -> setBackgroundColor(turtleWindow));
-            b.setOnAction(event -> executeRun());
+            b.setOnAction(event -> {
+                try {
+                    executeRun();
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | InstantiationException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            });
             cb.setOnAction(event -> updateLanguage());
             b2.setOnAction(event -> clearConsole());
             t.setOnMouseClicked(event -> setHistoryWindow());
@@ -151,12 +162,14 @@ public class UserInterface {
         private void setBackgroundColor(Pane tv) {
             tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        private void executeRun() {
+        private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+            String commands = ta.getText();
+            parser = new Parser(commands,myLanguage);
             turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
             turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
             updateInputHistory();
         }
-        private void updateInputHistory() {
+        private void updateInputHistory(){
             Text l = new Text(ta.getText());
             l.setWrappingWidth(200);
             content.getChildren().add(l);
@@ -174,6 +187,8 @@ public class UserInterface {
         private void updateLanguage() {
             ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
             String l = r.getString(cb.getValue());
+            myLanguage = l;
+            parser.addPatterns(l);
             System.out.println(l);
 //            if (l.equals("Urdu")) {
 //                flipped = true;
@@ -258,7 +273,7 @@ public class UserInterface {
         result.setOnAction(handler);
         return result;
     }
-    }
+}
 
 
 

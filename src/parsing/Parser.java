@@ -1,18 +1,17 @@
 package parsing;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Pattern;
 
 public class Parser {
     private static final String RESOURCES_PACKAGE = Parser.class.getPackageName() + ".resources.";
     private List<Map.Entry<String, Pattern>> mySymbols;
-    private Executor executor = new Executor();
-    Method[] myMethods = executor.getClass().getMethods();
+    private CommandFactory factory = new CommandFactory();
 
 
-    public Parser (String commands ,String language) throws InvocationTargetException, IllegalAccessException {
+
+    public Parser (String commands ,String language) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         addPatterns(language);
         parseText(commands);
     }
@@ -24,18 +23,15 @@ public class Parser {
     }
 
 
-    private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException {
+    private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String[] lines = commands.split("\n");
         for (String line : lines) {
-            String[] commandAndParam = line.split(" ");
-            String command = commandAndParam[0];
-            int param = Integer.parseInt(commandAndParam[1]);
+            String[] commandAndParams = line.split(" ");
+            String command = commandAndParams[0];
             if (line.trim().length() > 0) {
-                for(Method method : myMethods){
-                    if(getSymbol(command).equals(method.getName())){
-                        method.invoke(executor,param);
-                    }
-                }
+                String symbol = getSymbol(command);
+                Command usercommand = factory.getCommand(getSymbol(symbol));
+                usercommand.execute();
             }
         }
         //FIXME: Only works for commands with only one parameter of type int

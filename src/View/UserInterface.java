@@ -23,9 +23,11 @@ import parsing.Parser;
 import javax.imageio.ImageIO;
 import java.io.File;
 
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -66,10 +68,12 @@ public class UserInterface {
     private Text t2 = new Text();
     private Text t3 = new Text();
 
+
     private boolean flipped;
     private TurtleView turtleWindow;
     private Parser parser;
     private CommandReferenceView referenceWindow;
+
 
 
     /**
@@ -84,7 +88,8 @@ public class UserInterface {
         this.turtleWindow = turtleView;
         getFileNames();
         this.referenceWindow = new CommandReferenceView(language);
-        this.parser = new Parser();
+        //this.parser = new Parser();
+
 
     }
 
@@ -118,8 +123,8 @@ public class UserInterface {
             try {
                 executeRun();
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+               e.printStackTrace();
+            } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         });
@@ -182,15 +187,15 @@ public class UserInterface {
     private void setBackgroundColor(Pane tv) {
         tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
     }
-    private void executeRun() throws InvocationTargetException, IllegalAccessException {
+    private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String commands = ta.getText();
-        parser.parseText(commands);
-        turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + parser.getCommand());
+        parser = new Parser(commands,myLanguage);
+        turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
         turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
-        updateInputHistory();
+        updateInputHistory(commands);
     }
-    private void updateInputHistory(){
-        Text l = new Text(ta.getText());
+    private void updateInputHistory(String commands){
+        Text l = new Text(commands);
         l.setWrappingWidth(200);
         content.getChildren().add(l);
     }
@@ -208,7 +213,7 @@ public class UserInterface {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
         String l = r.getString(cb.getValue());
         myLanguage = l;
-        parser.addPatterns(l);
+        //parser.addPatterns(l);
         System.out.println(l);
 //            if (l.equals("Urdu")) {
 //                flipped = true;
@@ -216,7 +221,7 @@ public class UserInterface {
 //            else {
 //                flipped = false;
 //            }
-        setCommandsWindow(myLanguage);
+        //setCommandsWindow(myLanguage);
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + l);
         ta.setPromptText(myResources.getString("EnterText"));
         b.setText(myResources.getString("Run"));

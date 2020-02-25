@@ -1,9 +1,10 @@
 package execution;
 
 import java.util.List;
+import model.TurtleModel;
 
 public interface Command {
-    double execute();
+    double execute(List<String> parameters, TurtleModel turtleModel);
 
-    List<String> getParamList();
+    int getNumParams();
 }

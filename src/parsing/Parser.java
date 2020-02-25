@@ -27,15 +27,40 @@ public class Parser {
     private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String[] lines = commands.split("\n");
         for (String line : lines) {
-            String[] commandAndParams = line.split(" ");
-            String command = commandAndParams[0];
-            if (line.trim().length() > 0) {
-                String symbol = getSymbol(command);
-                Command usercommand = factory.getCommand(getSymbol(symbol));
-                usercommand.execute(symbol, parameters, myTurtleModel);
+            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
 
-
+            //extract the command name (e.g. FD)
+            String command = commandAndParams.get(0);
+            if(!command.matches("^[a-zA-Z]+$")) {
+                System.out.println("Invalid command.");
+                return;
             }
+
+            // populate a list of the parameters
+            List<String> params = new ArrayList<>();
+            // check if there are parameters included with the command symbol
+            if(commandAndParams.size()>1) {
+                params = commandAndParams.subList(1, commandAndParams.size());
+            }
+            // error check the parameters for invalid nonnumeric charactrs
+            for(String param: params){
+                // make sure string is a decimal
+                System.out.println("Parameter: " + param);
+                if (!param.matches("^\\-?[0-9]*\\.?[0-9]*$")) {
+                    System.out.println("Invalid Parameter.");
+                    return;
+                }
+            }
+
+            // Execute the command
+            String symbol = getSymbol(command);
+            Command factoryCommand = factory.getCommand(getSymbol(symbol));
+            if(factoryCommand.getNumParams()==params.size()){
+                factoryCommand.execute(params, myTurtleModel);
+            } else {
+                System.out.println("Invalid number of parameters.");
+            }
+            
         }
         //FIXME: Only works for commands with only one parameter of type int
     }

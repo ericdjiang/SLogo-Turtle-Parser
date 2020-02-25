@@ -5,6 +5,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import model.TurtleModel;
 
 import java.io.File;
 
@@ -14,12 +15,14 @@ public class TurtleView extends Pane {
     private ImagePattern turtlePattern = new ImagePattern(ig);
     private int viewWidth = 650;
     private int viewHeight = 480;
+    private TurtleModel turtleModel;
 
     public TurtleView() {
         this.turtle = new Rectangle(50, 50);
         getChildren().add(turtle);
         setWidth(viewWidth);
         setHeight(viewHeight);
+        this.turtleModel = new TurtleModel(viewWidth/2-turtle.getWidth()/2, viewHeight/2-turtle.getHeight()/2, 0);
         turtle.setX(viewWidth/2-turtle.getWidth()/2);
         turtle.setY(viewHeight/2-turtle.getHeight()/2);
         turtle.setFill(turtlePattern);

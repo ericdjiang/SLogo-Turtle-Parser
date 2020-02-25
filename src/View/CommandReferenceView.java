@@ -26,6 +26,7 @@ public class CommandReferenceView extends ScrollPane {
     }
     public void initializeReferences(String language) throws IOException {
         content.getChildren().clear();
+        referenceList.clear();
         Scanner fileReader = new Scanner(new File("src/resources/languages/" + language + ".properties"));
         while (fileReader.hasNextLine()) {
             String s = fileReader.nextLine();

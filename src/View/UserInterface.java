@@ -5,12 +5,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.TurtleModel;
 import parsing.Parser;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
 public class UserInterface {
+
     private static final int HEIGHT = 600;
     private static final int WIDTH = 850;
 
@@ -38,6 +40,7 @@ public class UserInterface {
     public CommandHistoryWindow historyWindow;
     private CommandReferenceWindow referenceWindow;
     private VariableWindow variableWindow;
+    private TurtleModel turtleModel;
 
     private String myLanguage;
 
@@ -101,7 +104,6 @@ public class UserInterface {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
         commandPrompt.updateLanguage(myResources);
         referenceView.initializeReferences(myLanguage);
-        setCommandsWindow();
         controlPanel.updateLanguage(myResources);
         historySwitchText.updateLanguage(myResources.getString("HistoryWindow"));
         referenceSwitchText.updateLanguage(myResources.getString("CommandWindow"));

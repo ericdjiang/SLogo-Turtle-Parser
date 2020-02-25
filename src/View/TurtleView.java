@@ -48,4 +48,7 @@ public class TurtleView extends Pane {
     public void setTurtleRotation(double r) {
         turtle.setRotate(r);
     }
+    public void setImage(String l) {
+        turtle.setFill(new ImagePattern(new Image("file:src/resources/images/" + l)));
+    }
 }

@@ -40,7 +40,6 @@ public class UserInterface {
     public CommandHistoryWindow historyWindow;
     private CommandReferenceWindow referenceWindow;
     private VariableWindow variableWindow;
-    private TurtleModel turtleModel;
 
     private String myLanguage;
 
@@ -53,7 +52,7 @@ public class UserInterface {
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView);
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
     }

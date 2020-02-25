@@ -7,9 +7,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
@@ -21,12 +24,15 @@ public class ControlPanel extends VBox {
     private Console console;
     private Button runButton;
     private Button clearButton;
+    private Button turtleSwitchButton;
+    private TurtleView turtleView;
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console) {
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView) {
         this.resources = resources;
         this.historyView = historyView;
         this.console = console;
-        runButton = makeButton(resources.getString("Run"), event -> {
+        this.turtleView = turtleView;
+        runButton = makeButton("Run", event -> {
             try {
                 executeRun();
             } catch (InvocationTargetException e) {
@@ -41,9 +47,11 @@ public class ControlPanel extends VBox {
                 //e.printStackTrace();
             }
         });
-        clearButton = makeButton(resources.getString("Clear"), event -> clearConsole());
+        clearButton = makeButton("Clear", event -> clearConsole());
+        turtleSwitchButton = makeButton("TurtleSelect", event -> switchTurtleImage());
         getChildren().add(runButton);
         getChildren().add(clearButton);
+        getChildren().add(turtleSwitchButton);
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes
@@ -77,4 +85,12 @@ public class ControlPanel extends VBox {
         runButton.setText(resources.getString("Run"));
         clearButton.setText(resources.getString("Clear"));
     }
+    private void switchTurtleImage() {
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(new File("src/resources/images"));
+        Stage s = new Stage();
+        File selected = fc.showOpenDialog(s);
+        turtleView.setImage(selected.getName());
+    }
+
 }

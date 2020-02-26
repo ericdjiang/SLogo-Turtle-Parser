@@ -15,11 +15,10 @@ public class Parser {
 
     private TurtleModel myTurtleModel;
     public Parser (String commands ,String language, TurtleModel myTurtleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
-        this.myTurtleModel = myTurtleModel;
         addPatterns(language);
         parseText(commands);
 
-
+        this.myTurtleModel = myTurtleModel;
     }
 
     private boolean validateMessage(){
@@ -152,41 +151,40 @@ public class Parser {
         return symbolList.subList(loopStartIndex, loopEndIndex-1);
     }
 
-        /**
-         * Adds the given resource file to this language's recognized types
-         */
-        public void addPatterns(String syntax) {
-            mySymbols = new ArrayList<>();
-            ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + syntax);
-            for (String key : Collections.list(resources.getKeys())) {
-                String regex = resources.getString(key);
-                mySymbols.add(new AbstractMap.SimpleEntry<>(key,
-                        // THIS IS THE IMPORTANT LINE
-                        Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
-            }
-        }
-
-        /**
-         * Returns language's type associated with the given text if one exists
-         */
-        private String getSymbol (String text) {
-            final String ERROR = "NO MATCH";
-            for (Map.Entry<String, Pattern> e : mySymbols) {
-                if (match(text, e.getValue())) {
-//                    System.out.println(e.getKey());
-                    return e.getKey();
-                }
-            }
-            // FIXME: perhaps throw an exception instead
-            return ERROR;
-        }
-
-        // Returns true if the given text matches the given regular expression pattern
-        private boolean match (String text, Pattern regex) {
-            // THIS IS THE IMPORTANT LINE
-            return regex.matcher(text).matches();
+    /**
+     * Adds the given resource file to this language's recognized types
+     */
+    public void addPatterns(String syntax) {
+        mySymbols = new ArrayList<>();
+        ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + syntax);
+        for (String key : Collections.list(resources.getKeys())) {
+            String regex = resources.getString(key);
+            mySymbols.add(new AbstractMap.SimpleEntry<>(key,
+                // THIS IS THE IMPORTANT LINE
+                Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
         }
     }
 
+    /**
+     * Returns language's type associated with the given text if one exists
+     */
+    private String getSymbol (String text) {
+        final String ERROR = "NO MATCH";
+        for (Map.Entry<String, Pattern> e : mySymbols) {
+            if (match(text, e.getValue())) {
+//                    System.out.println(e.getKey());
+                return e.getKey();
+            }
+        }
+        // FIXME: perhaps throw an exception instead
+        return ERROR;
+    }
+
+    // Returns true if the given text matches the given regular expression pattern
+    private boolean match (String text, Pattern regex) {
+        // THIS IS THE IMPORTANT LINE
+        return regex.matcher(text).matches();
+    }
+}
 
 

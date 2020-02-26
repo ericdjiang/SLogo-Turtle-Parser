@@ -17,12 +17,6 @@ public class TurtleView extends Rectangle {
         setWidth(50);
         setHeight(50);
     }
-    public void setTurtleXPos(double x) {
-        setX(x);
-    }
-    public void setTurtleYPos(double y) {
-        setY(y);
-    }
     public void setTurtleRotation(double r) {
         setRotate(r);
     }

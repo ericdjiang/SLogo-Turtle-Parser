@@ -3,30 +3,46 @@ package view;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polyline;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-//FIXME edit so that one line can have different colors after basic
-public class Pen extends Polyline {
+
+public class Pen {
     private List myPoints;
     private Collection myCoordinates;
+    private Paint color;
+    private List myLines;
 
     public Pen() {
         this.myPoints = new ArrayList();
+        this.color = Color.BLACK;
+        this.myLines = new ArrayList();
     }
-    public void addPoint(double x, double y) {
-        myPoints.add(x);
-        myPoints.add(y);
+    public void addPoint(double x1, double y1, double x2, double y2) {
+        myPoints.add(x1);
+        myPoints.add(y1);
+        myPoints.add(x2);
+        myPoints.add(y2);
     }
-    public void draw() {
+    public Polyline draw(Paint c) {
+        Polyline p = new Polyline();
         myCoordinates = Arrays.asList(myPoints.toArray());
-        getPoints().addAll(myCoordinates);
+        p.getPoints().addAll(myCoordinates);
+        p.setStroke(c);
         myPoints.clear();
+        return p;
     }
     public void setColor(Paint color) {
-        setStroke(color);
+        this.color = color;
+    }
+    public Paint getColor() {
+        return this.color;
+    }
+    public void clear() {
+        for (Object o : myLines) {
+            Polyline p = (Polyline) o;
+            p.getPoints().clear();
+        }
     }
 }

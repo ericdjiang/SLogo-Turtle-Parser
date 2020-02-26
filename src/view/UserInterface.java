@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import parsing.Parser;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class UserInterface {
     private CommandReferenceWindow referenceWindow;
     private VariableWindow variableWindow;
     private Controller controller;
-
+    private Pen pen;
     private String myLanguage;
 
     public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
@@ -56,6 +57,7 @@ public class UserInterface {
         this.languageSelector = new LanguageSelector(myResources);
         this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c);
         this.controller = c;
+        this.pen = c.getPen();
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
     }
@@ -74,7 +76,7 @@ public class UserInterface {
         Button b = controlPanel.getTurtleSwitcher();
         customizationPanel.getChildren().add(b);
         b.getStyleClass().add("turtleswitch");
-        penColorPicker.setOnAction(event -> setPenColor(controller.getPen()));
+        penColorPicker.setOnAction(event -> setPenColor());
         colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
         languageSelector.setOnAction(event -> {
             try {
@@ -104,7 +106,7 @@ public class UserInterface {
     private void setBackgroundColor(Pane turtleView) {
         turtleView.setBackground(new Background(new BackgroundFill(colorPicker.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
     }
-    private void setPenColor(Pen pen) {
+    private void setPenColor() {
         pen.setColor(penColorPicker.getValue());
     }
     private void updateLanguage() throws IOException {

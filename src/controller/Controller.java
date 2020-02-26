@@ -16,17 +16,19 @@ public class Controller {
         this.turtleWindow = turtleFrontEnd;
         this.turtleView = new TurtleView();
         this.pen = new Pen();
-        turtleView.setTurtleXPos(turtleModel.getX());
-        turtleView.setTurtleYPos(turtleModel.getY());
-        turtleWindow.getChildren().add(pen);
+        turtleView.setX(turtleModel.getX());
+        turtleView.setY(turtleModel.getY());
+       // turtleWindow.getChildren().add(pen);
         turtleWindow.getChildren().add(turtleView);
     }
     public void update() {
-        turtleView.setTurtleXPos(turtleModel.getX());
-        turtleView.setTurtleYPos(turtleModel.getY());
+        System.out.println(turtleView.getX());
+        System.out.println(turtleModel.getX());
+        pen.addPoint(turtleView.getX() + turtleView.getWidth()/2, turtleView.getY() + turtleView.getHeight()/2, turtleModel.getX() + turtleView.getWidth()/2, turtleModel.getY() + turtleView.getHeight()/2);
+        turtleWindow.getChildren().add(pen.draw(pen.getColor()));
+        turtleView.setX(turtleModel.getX());
+        turtleView.setY(turtleModel.getY());
         turtleView.setTurtleRotation(turtleModel.getAngle());
-        pen.addPoint(turtleModel.getX() + turtleView.getWidth()/2, turtleModel.getY() + turtleView.getHeight()/2);
-        pen.draw();
     }
     public TurtleModel getModel() {
         return this.turtleModel;

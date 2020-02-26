@@ -88,23 +88,21 @@ public class Parser {
                 cursor++;
                 String symbol = symbolList.get(cursor).strip();
 
-                System.out.println("Symbol:"+symbol);
                 //if the symbol is a command
                 if (symbol.matches("^[a-zA-Z]+$")) {
-                    System.out.println(symbol);
                     cmdStack.push(factory.getCommand(getSymbol(symbol)));
                 } else { // if symbol is a number
-                    System.out.println(symbol);
                     argStack.push(Double.parseDouble(symbol));
                 }
 
                 System.out.println(cursor);
-                System.out.println(argStack);
                 System.out.println(cmdStack);
+                System.out.println(argStack);
                 System.out.println();
 
-                while (!cmdStack.isEmpty() && !argStack.isEmpty()) {
-                    if( argStack.size() >= cmdStack.peek().getNumParams()){
+                while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
+                    argStack.size() >= cmdStack.peek().getNumParams()) {
+
                         Command cmdToExecute = cmdStack.pop();
                         List <Double> params = new ArrayList<>();
                         while (cmdToExecute.getNumParams() > params.size()){
@@ -118,7 +116,7 @@ public class Parser {
                         }
 
                     }
-                }
+
 
             }
 

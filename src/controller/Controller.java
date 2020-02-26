@@ -14,15 +14,12 @@ public class Controller {
     public Controller(TurtleModel turtleBackEnd, TurtleWindow turtleFrontEnd) {
         this.turtleModel = turtleBackEnd;
         this.turtleWindow = turtleFrontEnd;
-
         this.turtleView = new TurtleView();
+        this.pen = new Pen();
         turtleView.setTurtleXPos(turtleModel.getX());
         turtleView.setTurtleYPos(turtleModel.getY());
-        this.pen = new Pen();
         turtleWindow.getChildren().add(pen);
         turtleWindow.getChildren().add(turtleView);
-        System.out.println(turtleModel.getX());
-        System.out.println(turtleModel.getY());
     }
     public void update() {
         turtleView.setTurtleXPos(turtleModel.getX());
@@ -36,6 +33,9 @@ public class Controller {
     }
     public TurtleView getView() {
         return this.turtleView;
+    }
+    public Pen getPen() {
+        return this.pen;
     }
 
 }

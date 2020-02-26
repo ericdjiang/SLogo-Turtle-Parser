@@ -29,12 +29,6 @@ public class TurtleView extends Rectangle {
     public void setImage(String l) {
         setFill(new ImagePattern(new Image("file:src/resources/images/" + l)));
     }
-    public double getImageWidth() {
-        return ig.getWidth();
-    }
-    public double getImageHeight() {
-        return ig.getHeight();
-    }
     public void switchTurtleImage() {
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(new File("src/resources/images"));

@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import parsing.Parser;
 import java.io.IOException;
@@ -26,11 +27,11 @@ public class UserInterface {
     private BorderPane mainView = new BorderPane();
     private BorderPane mainFrame = new BorderPane();
     private ColorPicker colorPicker = new ColorPicker();
+    private ColorPicker penColorPicker = new ColorPicker();
     private ViewSwitchText historySwitchText;
     private ViewSwitchText referenceSwitchText;
     private ViewSwitchText variableSwitchText;
     private TurtleWindow turtleWindow;
-    private Parser parser;
     private CommandReferenceView referenceView;
     private CommandHistoryView historyView;
     private VariableView variableView;
@@ -40,6 +41,7 @@ public class UserInterface {
     public CommandHistoryWindow historyWindow;
     private CommandReferenceWindow referenceWindow;
     private VariableWindow variableWindow;
+    private Controller controller;
 
     private String myLanguage;
 
@@ -53,6 +55,7 @@ public class UserInterface {
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
         this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c);
+        this.controller = c;
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
     }
@@ -65,10 +68,13 @@ public class UserInterface {
 
         customizationPanel.getChildren().add(languageSelector);
         customizationPanel.getChildren().add(colorPicker);
+        penColorPicker.setValue(Color.BLACK);
+        customizationPanel.getChildren().add(penColorPicker);
+        //FIXME refactor button
         Button b = controlPanel.getTurtleSwitcher();
         customizationPanel.getChildren().add(b);
         b.getStyleClass().add("turtleswitch");
-
+        penColorPicker.setOnAction(event -> setPenColor(controller.getPen()));
         colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
         languageSelector.setOnAction(event -> {
             try {
@@ -97,6 +103,9 @@ public class UserInterface {
     }
     private void setBackgroundColor(Pane turtleView) {
         turtleView.setBackground(new Background(new BackgroundFill(colorPicker.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+    private void setPenColor(Pen pen) {
+        pen.setColor(penColorPicker.getValue());
     }
     private void updateLanguage() throws IOException {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");

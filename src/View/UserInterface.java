@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.TurtleModel;
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
@@ -67,6 +68,8 @@ public class UserInterface {
         private TurtleView turtleWindow;
         private Parser parser;
 
+        private TurtleModel myTurtleModel = new TurtleModel(0,0,0);
+
 
         /**
          * create a UI object that houses all animation function and simulation loading functionality
@@ -82,7 +85,7 @@ public class UserInterface {
 
         }
 
-    /**
+        /**
          * initialize main visuals of UI including hbox and vbox housing buttons, sliders,
          * and a spot for sim specific ui
          * @return
@@ -111,9 +114,7 @@ public class UserInterface {
             b.setOnAction(event -> {
                 try {
                     executeRun();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException | InstantiationException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             });
@@ -164,9 +165,9 @@ public class UserInterface {
         private void setBackgroundColor(Pane tv) {
             tv.setBackground(new Background(new BackgroundFill(cp.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        private void executeRun() throws InvocationTargetException, IllegalAccessException {
+        private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
             String commands = ta.getText();
-            parser = new Parser(commands,myLanguage);
+            parser = new Parser(commands,myLanguage, myTurtleModel);
             turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
             turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation()+15);
             updateInputHistory();

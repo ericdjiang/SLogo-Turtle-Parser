@@ -9,4 +9,18 @@ public class TurtleModel {
     this.myY = myY;
     this.myAngle = myAngle;
   }
+
+  public void setX(double x){
+    this.myX = x;
+  }
+
+  public void setY(double y){
+    this.myY = y;
+  }
+
+  public void setXY(double x, double y) {
+    setX(x);
+    setY(y);
+  }
+
 }

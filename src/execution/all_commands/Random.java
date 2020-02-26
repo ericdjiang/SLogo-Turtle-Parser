@@ -1,13 +1,16 @@
 package execution.all_commands;
 
 import execution.Command;
-import java.util.List;
 import model.TurtleModel;
+import model.VariableModel;
+
+import java.util.List;
 
 public class Random implements Command {
+
     @Override
-    public double execute(List<Double> parameters, TurtleModel turtleModel) {
-        double randomnum = Math.random() * parameters.get(0) + 1;
+    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
+        double randomnum = Math.random() * Double.parseDouble(parameters.get(0)) + 1;
         System.out.println("Inside Random Class: Ramdom number is " + (int) randomnum + ": param is " + parameters.get(0));
         return randomnum;
     }

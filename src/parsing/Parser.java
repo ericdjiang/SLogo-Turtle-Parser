@@ -6,29 +6,39 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 import model.TurtleModel;
+import model.VariableModel;
 
 public class Parser {
+
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
     private String myLanguage;
+    private VariableModel myVariableModel;
 
     private TurtleModel myTurtleModel;
-    public Parser (String commands, String language, TurtleModel myTurtleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
+
+    public Parser(String commands, String language, TurtleModel myTurtleModel,
+        VariableModel myVariableModel)
+        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         this.myTurtleModel = myTurtleModel;
+        this.myVariableModel = myVariableModel;
 
         this.myLanguage = language;
+
         addPatterns(language);
         parseText(commands);
     }
 
-    private boolean validateMessage(){
+    private boolean validateMessage() {
         return false;
     }
 
-    private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        List<String>inputCommands = Arrays.asList(String.join(" ",commands.toLowerCase().split("\n")).split("[ ]+"));
+    private void parseText(String commands)
+        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+        List<String> inputCommands = Arrays
+            .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
 
 //        for (String line : lines) {
 //            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
@@ -67,17 +77,17 @@ public class Parser {
 //
 //        }
         //FIXME: Only works for commands with only one parameter of type int
-        Stack <List<String>> stack = new Stack();
+        Stack<List<String>> stack = new Stack();
 
-        Map <String, String> variables = new HashMap<>();
+        Map<String, String> variables = new HashMap<>();
 
         stack.push(inputCommands);
 
-        while(!stack.isEmpty()){
-            List <String> symbolList = stack.pop();
+        while (!stack.isEmpty()) {
+            List<String> symbolList = stack.pop();
 
-            Stack <Command> cmdStack = new Stack<>();
-            Stack <String> argStack = new Stack<>();
+            Stack<Command> cmdStack = new Stack<>();
+            Stack<String> argStack = new Stack<>();
 
             // iterate thru commands in popped element;
             int loopEndIndex = -1;
@@ -85,8 +95,8 @@ public class Parser {
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
 
-            for ( int cursor = 0; cursor < symbolList.size(); cursor++ ){
-                if(cursor > loopEndIndex){
+            for (int cursor = 0; cursor < symbolList.size(); cursor++) {
+                if (cursor > loopEndIndex) {
                     String symbol = symbolList.get(cursor).strip();
 
                     //if the symbol is a command
@@ -94,7 +104,8 @@ public class Parser {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
                         loopEndIndex = getLoopEndIndex(symbolList);
 
-                        List<String> argsWithLanguage = symbolList.subList(cursor+1, loopEndIndex);
+                        List<String> argsWithLanguage = symbolList
+                            .subList(cursor + 1, loopEndIndex);
                         argsWithLanguage.add(0, myLanguage);
                         argStack.push(String.join(" ", argsWithLanguage));
                     } else if (symbol.matches("^[a-zA-Z]+$")) {
@@ -103,29 +114,29 @@ public class Parser {
                         argStack.push(symbol);
                     }
 
-    //                System.out.println(cursor);
-    //                System.out.println(cmdStack);
-    //                System.out.println(argStack);
-    //                System.out.println();
+                    //                System.out.println(cursor);
+                    //                System.out.println(cmdStack);
+                    //                System.out.println(argStack);
+                    //                System.out.println();
 
-                    while (!cmdStack.isEmpty() && !argStack.isEmpty() && argStack.size() >= cmdStack.peek().getNumParams()) {
+                    while (!cmdStack.isEmpty() && !argStack.isEmpty() && argStack.size() >= cmdStack
+                        .peek().getNumParams()) {
 
-                            Command cmdToExecute = cmdStack.pop();
-                            List <String> params = new ArrayList<>();
-                            while (cmdToExecute.getNumParams() > params.size()){
-                                String popped = argStack.pop();
-                                params.add(popped);
-                            }
-
-                            Double returnValue = cmdToExecute.execute(params, myTurtleModel);
-                            if(!cmdStack.isEmpty()){
-                                argStack.push(returnValue.toString());
-                            }
-
+                        Command cmdToExecute = cmdStack.pop();
+                        List<String> params = new ArrayList<>();
+                        while (cmdToExecute.getNumParams() > params.size()) {
+                            String popped = argStack.pop();
+                            params.add(popped);
                         }
 
+                        Double returnValue = cmdToExecute
+                            .execute(params, myTurtleModel, myVariableModel);
+                        if (!cmdStack.isEmpty()) {
+                            argStack.push(returnValue.toString());
+                        }
+
+                    }
                 }
-            }
 
 //                for(int i = 0; i < symbolList.size(); i++){
 //                    String symbol = symbolList.get(i).strip();
@@ -144,12 +155,14 @@ public class Parser {
 //                    }
 //                }
 
-
+            }
         }
+
+
     }
 
 
-    private int getLoopEndIndex (List<String> symbolList){
+    private int getLoopEndIndex(List<String> symbolList){
         int loopEndIndex = -1;
         for (int i = 0; i < symbolList.size(); i++){
             if(symbolList.get(i).equals("]")){
@@ -186,7 +199,7 @@ public class Parser {
     /**
      * Returns language's type associated with the given text if one exists
      */
-    private String getSymbol (String text) {
+    private String getSymbol(String text){
         final String ERROR = "NO MATCH";
         for (Map.Entry<String, Pattern> e : mySymbols) {
             if (match(text, e.getValue())) {
@@ -204,5 +217,4 @@ public class Parser {
         return regex.matcher(text).matches();
     }
 }
-
 

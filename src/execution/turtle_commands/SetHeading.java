@@ -10,8 +10,10 @@ public class SetHeading implements Command {
 
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel, VariableModel variableModel) {
+        double currentAngle = turtleModel.getAngle();
+        turtleModel.setAngle(parameters.get(0));
         System.out.println("turns turtle to an absolute heading by " +parameters.get(0) + " degrees");
-        return parameters.get(0);
+        return turtleModel.getAngle() - parameters.get(0);
     }
 
     @Override

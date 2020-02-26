@@ -11,8 +11,10 @@ public class TurtleView extends Pane {
     private Rectangle turtle; //change to Turtle object when created
     private Image ig = new Image("file:src/resources/images/turtle1.png");
     private ImagePattern turtlePattern = new ImagePattern(ig);
-    private int viewWidth = 650;
-    private int viewHeight = 480;
+    private static final int viewWidth = 650;
+    private static final int viewHeight = 480;
+    public final double zeroX = viewWidth/2-turtle.getWidth()/2;
+    public final double zeroY = viewHeight/2-turtle.getHeight()/2;
     private TurtleModel turtleModel;
 
     public TurtleView() {

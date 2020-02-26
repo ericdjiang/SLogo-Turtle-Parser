@@ -6,9 +6,15 @@ public class TurtleModel {
   private double myAngle;
   private boolean isShowing;
   private boolean penDown;
+
+  private double myZeroX;
+  private double myZeroY;
+
   public TurtleModel (double myX, double myY, double myAngle) {
     this.myX = myX;
     this.myY = myY;
+    this.myZeroX = myX;
+    this.myZeroY = myY;
     this.myAngle = myAngle;
   }
 
@@ -28,14 +34,26 @@ public class TurtleModel {
     this.myAngle = a;
   }
   public double getX() {
-    return this.myX;
+    double xfromCenter = this.myX - myZeroX;
+    return xfromCenter;
   }
   public double getY() {
-    return this.myY;
+    double yfromCenter = this.myY - myZeroY;
+    return yfromCenter;
   }
   public double getAngle() {
     return this.myAngle;
   }
+
   public boolean getShowing() {return this.isShowing;}
   public boolean getPen() {return this.penDown;}
+
+
+  public double getZeroX(){
+    return myZeroX;
+  }
+
+  public double getZeroY(){
+    return myZeroY;
+  }
 }

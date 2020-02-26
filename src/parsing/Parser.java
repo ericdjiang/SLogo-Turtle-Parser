@@ -84,7 +84,7 @@ public class Parser {
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
 
-            while (cursor < symbolList.size() - 1 ){
+            while ( cursor < symbolList.size() - 1 ){
                 cursor++;
                 String symbol = symbolList.get(cursor).strip();
 
@@ -116,7 +116,6 @@ public class Parser {
                         }
 
                     }
-
 
             }
 

@@ -1,11 +1,10 @@
-package View;
+package view;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import model.TurtleModel;
 import parsing.Parser;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +51,7 @@ public class UserInterface {
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView, myLanguage);
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
     }
@@ -65,6 +64,9 @@ public class UserInterface {
 
         customizationPanel.getChildren().add(languageSelector);
         customizationPanel.getChildren().add(colorPicker);
+        Button b = controlPanel.getTurtleSwitcher();
+        customizationPanel.getChildren().add(b);
+        b.getStyleClass().add("turtleswitch");
 
         colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
         languageSelector.setOnAction(event -> {
@@ -103,7 +105,7 @@ public class UserInterface {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
         commandPrompt.updateLanguage(myResources);
         referenceView.initializeReferences(myLanguage);
-        controlPanel.updateLanguage(myResources);
+        controlPanel.updateLanguage(myResources, myLanguage);
         historySwitchText.updateLanguage(myResources.getString("HistoryWindow"));
         referenceSwitchText.updateLanguage(myResources.getString("CommandWindow"));
         variableSwitchText.updateLanguage(myResources.getString("VariableWindow"));

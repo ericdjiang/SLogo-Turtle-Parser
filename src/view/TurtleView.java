@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -6,8 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
-
-import java.io.File;
 
 public class TurtleView extends Pane {
     private Rectangle turtle; //change to Turtle object when created
@@ -28,16 +26,6 @@ public class TurtleView extends Pane {
         turtle.setFill(turtlePattern);
         this.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
-    }
-    public double getTurtleXPos() {
-        return turtle.getX();
-    }
-    public double getTurtleYPos() {
-        return turtle.getY();
-    }
-    public double getTurtleRotation() {
-        return turtle.getRotate();
     }
     public void setTurtleXPos(double x) {
         turtle.setX(x);
@@ -50,5 +38,8 @@ public class TurtleView extends Pane {
     }
     public void setImage(String l) {
         turtle.setFill(new ImagePattern(new Image("file:src/resources/images/" + l)));
+    }
+    public TurtleModel getTurtle() {
+        return turtleModel;
     }
 }

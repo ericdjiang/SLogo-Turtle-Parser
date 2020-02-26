@@ -1,10 +1,8 @@
-package View;
+package view;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
-import java.util.ResourceBundle;
 
 public class ViewSwitchText extends Text {
     public ViewSwitchText(String s) {

@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.TurtleModel;
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
@@ -26,12 +27,17 @@ public class ControlPanel extends VBox {
     private Button clearButton;
     private Button turtleSwitchButton;
     private TurtleView turtleView;
+    private Parser parser;
+    private String myLanguage;
+    private TurtleModel model;
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView) {
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView, String language) {
         this.resources = resources;
         this.historyView = historyView;
         this.console = console;
         this.turtleView = turtleView;
+        this.myLanguage = language;
+        this.model = turtleView.getTurtle();
         runButton = makeButton("Run", event -> {
             try {
                 executeRun();
@@ -51,7 +57,6 @@ public class ControlPanel extends VBox {
         turtleSwitchButton = makeButton("TurtleSelect", event -> switchTurtleImage());
         getChildren().add(runButton);
         getChildren().add(clearButton);
-        getChildren().add(turtleSwitchButton);
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes
@@ -68,12 +73,16 @@ public class ControlPanel extends VBox {
         result.setOnAction(handler);
         return result;
     }
+    public Button getTurtleSwitcher() {
+        return this.turtleSwitchButton;
+    }
     private void updateInputHistory(String commands){
         historyView.updateHistory(new Text(commands));
     }
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String commands = console.getText();
-        //parser = new Parser(commands, myLanguage);
+        resources.getBaseBundleName();
+        parser = new Parser(commands, myLanguage, model);
         //turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
         //turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation() + 15);
         updateInputHistory(commands);
@@ -81,9 +90,10 @@ public class ControlPanel extends VBox {
     private void clearConsole() {
         console.clear();
     }
-    public void updateLanguage(ResourceBundle resources) {
+    public void updateLanguage(ResourceBundle resources, String language) {
         runButton.setText(resources.getString("Run"));
         clearButton.setText(resources.getString("Clear"));
+        this.myLanguage = language;
     }
     private void switchTurtleImage() {
         FileChooser fc = new FileChooser();

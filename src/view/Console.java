@@ -1,7 +1,6 @@
-package View;
+package view;
 
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Text;
 
 import java.util.ResourceBundle;
 

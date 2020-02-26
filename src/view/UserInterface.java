@@ -6,9 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import parsing.Parser;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
@@ -59,9 +57,8 @@ public class UserInterface {
         this.controller = c;
         this.pen = c.getPen();
         stage.setTitle(myResources.getString("Title"));
-        //this.parser = new Parser();
     }
-    public Scene setupUI() throws IOException {
+    public Scene setupUI() {
         historySwitchText = new ViewSwitchText(myResources.getString("HistoryWindow"));
         referenceSwitchText = new ViewSwitchText(myResources.getString("CommandWindow"));
         variableSwitchText = new ViewSwitchText(myResources.getString("VariableWindow"));
@@ -99,6 +96,7 @@ public class UserInterface {
         mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
         mainFrame.setRight(historyWindow);
+
         Scene myScene = new Scene(mainFrame, WIDTH, HEIGHT);
         myScene.getStylesheets().add(STYLESHEET);
         return myScene;
@@ -112,8 +110,6 @@ public class UserInterface {
     private void updateLanguage() throws IOException {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
         myLanguage = r.getString(languageSelector.getValue());
-        //parser.addPatterns(myLanguage);
-        System.out.println(myLanguage);
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
         commandPrompt.updateLanguage(myResources);
         referenceView.initializeReferences(myLanguage);
@@ -122,7 +118,6 @@ public class UserInterface {
         referenceSwitchText.updateLanguage(myResources.getString("CommandWindow"));
         variableSwitchText.updateLanguage(myResources.getString("VariableWindow"));
     }
-    //probably refactor windows into another class and call a contructor to set right
     private void setHistoryWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
         historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);

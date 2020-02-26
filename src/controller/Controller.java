@@ -18,7 +18,6 @@ public class Controller {
         this.pen = new Pen();
         turtleView.setX(turtleModel.getX());
         turtleView.setY(turtleModel.getY());
-       // turtleWindow.getChildren().add(pen);
         turtleWindow.getChildren().add(turtleView);
     }
     public void update() {

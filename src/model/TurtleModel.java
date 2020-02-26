@@ -13,19 +13,19 @@ public class TurtleModel {
   public TurtleModel (double myX, double myY, double myAngle) {
     this.myX = myX;
     this.myY = myY;
-    this.myZeroX = myX;
-    this.myZeroY = myY;
     this.myAngle = myAngle;
   }
 
   public void setX(double x){
-    double newX = x + myZeroX;
-    this.myX = newX;
+    //double newX = x + myZeroX;
+    this.myX = x;
+    System.out.println(this.myX);
   }
 
   public void setY(double y){
-    double newY  = myZeroY - y;
-    this.myY = newY;
+    //double newY  = myZeroY - y;
+    this.myY = y;
+    System.out.println(this.myY);
   }
 
   public void setXY(double x, double y) {
@@ -36,12 +36,10 @@ public class TurtleModel {
     this.myAngle = a;
   }
   public double getX() {
-    double xfromCenter = this.myX - myZeroX;
-    return xfromCenter;
+    return this.myX;
   }
   public double getY() {
-    double yfromCenter = this.myY - myZeroY;
-    return yfromCenter;
+    return this.myX;
   }
   public double getAngle() {
     return this.myAngle;

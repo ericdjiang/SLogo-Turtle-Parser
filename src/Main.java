@@ -17,7 +17,7 @@ public class Main extends Application {
     /**
      * Start of the program.
      */
-    private final int FRAMES_PER_SECOND = 1;
+    private final int FRAMES_PER_SECOND = 60;
     private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private Scene myScene;
     private Timeline myAnimation;

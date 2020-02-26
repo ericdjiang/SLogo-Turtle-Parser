@@ -78,32 +78,44 @@ public class Parser {
             Stack <Double> argStack = new Stack<>();
 
             // iterate thru commands in popped element;
-            int cursor = 0;
+            int cursor = -1;
 
-            String symbol = symbolList.get(cursor).strip();
-            Command factoryCommand = factory.getCommand(getSymbol(symbol));
-            cmdStack.push(factoryCommand);
+//            String symbol = symbolList.get(cursor).strip();
+//            Command factoryCommand = factory.getCommand(getSymbol(symbol));
+//            cmdStack.push(factoryCommand);
 
-            while (!cmdStack.isEmpty()) {
-                if( argStack.size() >= cmdStack.peek().getNumParams()){
-                    Command cmdToExecute = cmdStack.pop();
-                    List<Double> params = new ArrayList<>();
-                    while (cmdToExecute.getNumParams() > params.size()){
-                        Double popped = argStack.pop();
-                        params.add(popped);
+            while (cursor < symbolList.size() - 1 ){
+                cursor++;
+                String symbol = symbolList.get(cursor).strip();
+                //if the symbol is a command
+                if (symbol.matches("^[a-zA-Z]+$")) {
+                    cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                } else { // if symbol is a number
+                    argStack.push(Double.parseDouble(symbol));
+                }
 
-                    }
-                    argStack.push(cmdToExecute.execute(params, myTurtleModel));
-                } else if (cursor<symbolList.size()-1){
-                    cursor++;
-                    symbol = symbolList.get(cursor).strip();
-                    //if the symbol is a command
-                    if (symbol.matches("^[a-zA-Z]+$")) {
-                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
-                    } else { // if symbol is a number
-                        argStack.push(Double.parseDouble(symbol));
+                System.out.println(cursor);
+                System.out.println(argStack);
+                System.out.println(cmdStack);
+                System.out.println();
+
+                while (!cmdStack.isEmpty() && !argStack.isEmpty()) {
+                    if( argStack.size() >= cmdStack.peek().getNumParams()){
+                        Command cmdToExecute = cmdStack.pop();
+                        List <Double> params = new ArrayList<>();
+                        while (cmdToExecute.getNumParams() > params.size()){
+                            Double popped = argStack.pop();
+                            params.add(popped);
+                        }
+
+                        Double returnValue = cmdToExecute.execute(params, myTurtleModel);
+                        if(!cmdStack.isEmpty()){
+                            argStack.push(returnValue);
+                        }
+
                     }
                 }
+
             }
 
 //                for(int i = 0; i < symbolList.size(); i++){

@@ -87,10 +87,14 @@ public class Parser {
             while (cursor < symbolList.size() - 1 ){
                 cursor++;
                 String symbol = symbolList.get(cursor).strip();
+
+                System.out.println("Symbol:"+symbol);
                 //if the symbol is a command
                 if (symbol.matches("^[a-zA-Z]+$")) {
+                    System.out.println(symbol);
                     cmdStack.push(factory.getCommand(getSymbol(symbol)));
                 } else { // if symbol is a number
+                    System.out.println(symbol);
                     argStack.push(Double.parseDouble(symbol));
                 }
 

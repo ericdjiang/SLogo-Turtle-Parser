@@ -12,18 +12,13 @@ public class SetTowards implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         System.out.println(" number of degrees turned" + parameters.get(0));
         double originalAngle = turtleModel.getAngle();
-        double turtleDistanceFromOrigin = Math.sqrt(Math.pow(2,turtleModel.getX()) + Math.pow(2,turtleModel.getY()));
-        double coordDistanceFromOrigin = Math.sqrt(Math.pow(2,Double.parseDouble(parameters.get(0))) + Math.pow(2,Double.parseDouble(parameters.get(1))));
-
-        if(Double.parseDouble(parameters.get(1)) == 0  ){
-            if(Double.parseDouble(parameters.get(0)) > 0) turtleModel.setAngle(90);
-            else if(Double.parseDouble(parameters.get(1) ) <0){turtleModel.setAngle(-90);}
-            else{ turtleModel.setAngle(0);}
-        }
-        double angle = Math.atan(Double.parseDouble(parameters.get(0))/Double.parseDouble(parameters.get(1)));
-        turtleModel.setAngle(angle);
+        double[] orginalvector = {Math.cos(Math.toRadians(originalAngle)), Math.sin(Math.toRadians(originalAngle))};
+        double[] xyVector = {Double.parseDouble(parameters.get(0)), Double.parseDouble(parameters.get(1))};
+        double[] differenceVector = {Double.parseDouble(parameters.get(0)) - Math.cos(Math.toRadians(originalAngle)), Double.parseDouble(parameters.get(1)) - Math.sin(Math.toRadians(originalAngle)) };
+        double differenceAngle = Math.atan(differenceVector[0]/ differenceVector[1]);
+        turtleModel.setAngle(originalAngle + differenceAngle);
         //FIXME: This is not the correct implementation
-        return Double.parseDouble(parameters.get(0));
+        return differenceAngle;
     }
 
     @Override

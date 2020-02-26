@@ -8,25 +8,31 @@ import model.TurtleModel;
 import model.VariableModel;
 import parsing.Parser;
 
-public class DoTimes implements Command {
+public class For implements Command {
   @Override
   public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
+    System.out.println(symbolList);
+
     String language = symbolList.get(0);
 
     String varName = symbolList.get(2);
-    int loopLimit = Integer.parseInt(symbolList.get(3));
-    String loopBody = String.join(" ",symbolList.subList(6, symbolList.size()));
+    int loopStart = Integer.parseInt(symbolList.get(3));
+    int loopEnd = Integer.parseInt(symbolList.get(4));
+    int loopIncrement = Integer.parseInt(symbolList.get(5));
+    String loopBody = String.join(" ",symbolList.subList(8, symbolList.size()));
 
-    //DOTIMES [ variable limit ]
-    //[ command(s) ]
+/**
+ * FOR [ variable start end increment ]   [  command(s) ]
+ * 0   1    2      3     4    5       6   7     8
+ * **/
 //
 //        System.out.println(language);
 //        System.out.println(loopLimit);
 //        System.out.println(loopBody);
 
-    for (int i = 0; i < loopLimit; i++) {
+    for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
         variableModel.updateVariable(varName, i);
         Parser parser = new Parser(loopBody, language, turtleModel, variableModel);
@@ -34,7 +40,6 @@ public class DoTimes implements Command {
         System.out.println("Error in dotimes");
       }
     }
-
 
     return 0;
   }

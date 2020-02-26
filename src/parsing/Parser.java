@@ -115,6 +115,13 @@ public class Parser {
                         List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
                         argsWithLanguage.add(0, myLanguage);
                         argStack.push(String.join(" ", argsWithLanguage));
+                    } else if (symbol.equals("for")) {
+                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                        loopEndIndex = getLoopEndIndex(symbolList, cursor + 7);
+
+                        List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
+                        argsWithLanguage.add(0, myLanguage);
+                        argStack.push(String.join(" ", argsWithLanguage));
                     }
 
                     else if (symbol.matches("^[a-zA-Z]+$")) {
@@ -184,7 +191,6 @@ public class Parser {
         while (openBracketCount > closeBracketCount) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
-            System.out.println(symbol);
             if( symbol.equals("[") ){
                 openBracketCount += 1;
             } else if (symbol.equals("]")){

@@ -5,15 +5,14 @@ import model.TurtleModel;
 
 import java.util.List;
 
-public class SetTowards implements Command {
+public class Pi implements Command {
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel) {
-        System.out.println("getting number of degrees turned" + parameters.get(0));
-        return parameters.get(0);
+        return Math.PI;
     }
 
     @Override
     public int getNumParams() {
-        return 1;
+        return 0;
     }
 }

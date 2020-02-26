@@ -3,11 +3,11 @@
 #### Introduction
 The goal of this program is to provide an IDE that allows users to write SLogo programs. The IDE should allow commands to be issued on a per instruction basis and focus on helping users to experiment and build complex expressions while also providing a visual representation of the turtle. 
 
-Our program should be flexible in its implementation of View and Model such that new additions to the UI such as views for conosle history or list of commands can be added with relative ease. The Model should be able to handle the addition of more commands as well as throw any errors unique to those commands. Being flexible in both of these regions will allow us to achieve our goal of creating a user-friendly coding IDE. 
+Our program should be flexible in its implementation of view and Model such that new additions to the UI such as views for conosle history or list of commands can be added with relative ease. The Model should be able to handle the addition of more commands as well as throw any errors unique to those commands. Being flexible in both of these regions will allow us to achieve our goal of creating a user-friendly coding IDE. 
 
 With an MVC design in mind, our program should keep its model and view closed in the sense that neither component should know or rely on the data structure implemented. Meanwhile, the Controller will hold both the view and model, allowing them to communicate so that they do not have to access each other. 
 
-At a high level, the View component is responsible for visualization of the input and output of commands in the form of a console where the user inputs text and a window where a turtle is moved and draws. Commands input into the View are then sent through the Controller, where they are parsed and checked for errors, to the Model which contains a compiler holding the SLogo logic. This information is then passed back through the Controller to be visualized in the View's main visualization window. 
+At a high level, the view component is responsible for visualization of the input and output of commands in the form of a console where the user inputs text and a window where a turtle is moved and draws. Commands input into the view are then sent through the Controller, where they are parsed and checked for errors, to the Model which contains a compiler holding the SLogo logic. This information is then passed back through the Controller to be visualized in the view's main visualization window. 
 #### Overview
 As a high level overview, the slogo project will follow the overarching design paradigm of the MVC. The model, view, and controller each contain their own respective classes which can communicate with each other to get and alter states via public API methods. 
 

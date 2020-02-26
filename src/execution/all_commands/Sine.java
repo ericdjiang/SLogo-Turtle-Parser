@@ -8,9 +8,9 @@ import java.util.List;
 
 public class Sine implements Command {
     @Override
-    public double execute(List<Double> parameters, TurtleModel turtleModel, VariableModel variableModel) {
+    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
         System.out.println("Sine of " + parameters.get(0));
-        return Math.sin((parameters.get(0)*Math.PI)/180);
+        return Math.sin((Double.parseDouble(parameters.get(0))*Math.PI)/180);
     }
 
     @Override

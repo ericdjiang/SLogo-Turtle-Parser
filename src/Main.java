@@ -34,7 +34,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        controller = new Controller(new TurtleModel(turtleWindow.getWidth()/2, turtleWindow.getHeight()/2, 0), turtleWindow, consoleModel);
+        controller = new Controller(new TurtleModel(0, 0, 0), turtleWindow, consoleModel);
         UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();
         primaryStage.setScene(myScene);

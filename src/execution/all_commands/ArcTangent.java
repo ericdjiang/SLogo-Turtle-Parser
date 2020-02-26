@@ -1,23 +1,22 @@
 package execution.all_commands;
 
 import execution.Command;
-import java.util.List;
 import model.TurtleModel;
 import model.VariableModel;
 
-public class LessThan implements Command {
+import java.util.List;
+
+public class ArcTangent implements Command {
+
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
-        if(Double.parseDouble(parameters.get(0)) < Double.parseDouble(parameters.get(1))){
-            System.out.println(1);
-            return 1;
-        }
-        System.out.println(0);
-        return 0;
+        double angle = Double.parseDouble(parameters.get(0));
+        System.out.println("Arctangent of " + parameters.get(0));
+        return Math.atan((angle*Math.PI)/180);
     }
 
     @Override
     public int getNumParams() {
-        return 2;
+        return 1;
     }
 }

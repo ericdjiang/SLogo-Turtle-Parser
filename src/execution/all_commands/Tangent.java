@@ -6,16 +6,16 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class Sum implements Command {
+public class Tangent implements Command {
 
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel, VariableModel variableModel) {
-        double sum = parameters.get(0) + parameters.get(1);
-        return sum;
+        System.out.println("Tangent of " + parameters.get(0));
+        return Math.tan((parameters.get(0)*Math.PI)/180);
     }
 
     @Override
     public int getNumParams() {
-        return 2;
+        return 1;
     }
 }

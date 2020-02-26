@@ -1,3 +1,5 @@
+import controller.Controller;
+import model.TurtleModel;
 import view.TurtleView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,6 +21,8 @@ public class Main extends Application {
     private Scene myScene;
     private Timeline myAnimation;
     private final TurtleView turtleView = new TurtleView();
+    private Controller controller;
+    private TurtleModel turtleModel;
     private UserInterface UI;
 
 
@@ -29,9 +33,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        UI = new UserInterface(primaryStage, "English", turtleView);
+        controller = new Controller(new TurtleModel(turtleView.getWidth()/2, turtleView.getHeight()/2, 0), turtleView);
+        UI = new UserInterface(primaryStage, "English", turtleView, controller);
         myScene = UI.setupUI();
-
         primaryStage.setScene(myScene);
         primaryStage.show();
         primaryStage.setResizable(false);
@@ -45,6 +49,7 @@ public class Main extends Application {
     }
 
     private void step() {
+            controller.update();
     }
 
 }

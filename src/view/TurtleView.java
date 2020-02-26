@@ -13,14 +13,12 @@ public class TurtleView extends Pane {
     private ImagePattern turtlePattern = new ImagePattern(ig);
     private int viewWidth = 650;
     private int viewHeight = 480;
-    private TurtleModel turtleModel;
 
     public TurtleView() {
         this.turtle = new Rectangle(50, 50);
         getChildren().add(turtle);
         setWidth(viewWidth);
         setHeight(viewHeight);
-        this.turtleModel = new TurtleModel(viewWidth/2-turtle.getWidth()/2, viewHeight/2-turtle.getHeight()/2, 0);
         turtle.setX(viewWidth/2-turtle.getWidth()/2);
         turtle.setY(viewHeight/2-turtle.getHeight()/2);
         turtle.setFill(turtlePattern);
@@ -38,8 +36,5 @@ public class TurtleView extends Pane {
     }
     public void setImage(String l) {
         turtle.setFill(new ImagePattern(new Image("file:src/resources/images/" + l)));
-    }
-    public TurtleModel getTurtle() {
-        return turtleModel;
     }
 }

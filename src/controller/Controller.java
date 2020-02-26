@@ -8,13 +8,18 @@ import view.TurtleView;
 public class Controller {
     private TurtleModel turtleModel;
     private TurtleView turtleView;
-    private Parser parser;
-    private CommandFactory commandFactory;
 
-    public Controller() {
-        this.turtleView = new TurtleView();
-        this.commandFactory = new CommandFactory();
-        //this.turtleModel = new TurtleModel()
+    public Controller(TurtleModel turtleBackEnd, TurtleView turtleFrontEnd) {
+        this.turtleModel = turtleBackEnd;
+        this.turtleView = turtleFrontEnd;
+    }
+
+    public void update() {
+        turtleView.setTurtleXPos(turtleModel.getX());
+        turtleView.setTurtleYPos(turtleModel.getY());
+    }
+    public TurtleModel getModel() {
+        return this.turtleModel;
     }
 
 }

@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -29,15 +30,15 @@ public class ControlPanel extends VBox {
     private TurtleView turtleView;
     private Parser parser;
     private String myLanguage;
-    private TurtleModel model;
+    private Controller c;
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView, String language) {
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView, String language, Controller c) {
         this.resources = resources;
         this.historyView = historyView;
         this.console = console;
         this.turtleView = turtleView;
         this.myLanguage = language;
-        this.model = turtleView.getTurtle();
+        this.c = c;
         runButton = makeButton("Run", event -> {
             try {
                 executeRun();
@@ -82,9 +83,7 @@ public class ControlPanel extends VBox {
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String commands = console.getText();
         resources.getBaseBundleName();
-        parser = new Parser(commands, myLanguage, model);
-        //turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
-        //turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation() + 15);
+        parser = new Parser(commands, myLanguage, c.getModel());
         updateInputHistory(commands);
     }
     private void clearConsole() {

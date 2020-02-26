@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controller;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -42,7 +43,7 @@ public class UserInterface {
 
     private String myLanguage;
 
-    public UserInterface(Stage stage, String language, TurtleView turtleView) throws IOException, InvocationTargetException, IllegalAccessException {
+    public UserInterface(Stage stage, String language, TurtleView turtleView, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
         this.turtleWindow = turtleView;
@@ -51,7 +52,7 @@ public class UserInterface {
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView, myLanguage);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView, myLanguage, c);
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
     }

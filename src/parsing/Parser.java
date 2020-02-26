@@ -113,15 +113,18 @@ public class Parser {
                     } else { // if symbol is a number
                         argStack.push(symbol);
                     }
+                    System.out.println();
 
-                    //                System.out.println(cursor);
-                    //                System.out.println(cmdStack);
-                    //                System.out.println(argStack);
-                    //                System.out.println();
+                                    System.out.println(cursor);
+                                    System.out.println(cmdStack);
+                                    System.out.println(argStack);
 
-                    while (!cmdStack.isEmpty() && !argStack.isEmpty() && argStack.size() >= cmdStack
-                        .peek().getNumParams()) {
-
+                    while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
+                        argStack.size() >= cmdStack.peek().getNumParams()
+                    ) {
+                        if(cmdStack.size()>=2 && cmdStack.get(cmdStack.size()-2).getNumParams() > argStack.size()){
+                            break;
+                        }
                         Command cmdToExecute = cmdStack.pop();
                         List<String> params = new ArrayList<>();
                         while (cmdToExecute.getNumParams() > params.size()) {

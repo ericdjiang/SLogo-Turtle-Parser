@@ -13,7 +13,6 @@ public class For implements Command {
   public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
-    System.out.println(symbolList);
 
     String language = symbolList.get(0);
 

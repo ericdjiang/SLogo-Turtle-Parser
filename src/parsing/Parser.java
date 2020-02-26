@@ -100,6 +100,8 @@ public class Parser {
 
                 if (cursor > loopEndIndex) {
                     String symbol = symbolList.get(cursor).strip();
+                    System.out.println(symbol);
+
                     //if the symbol is a command
                     if (symbol.equals("repeat")) {
                         loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 2);
@@ -107,18 +109,16 @@ public class Parser {
                         loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 5);
                     } else if (symbol.equals("for")) {
                         loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 7);
-                    }
-
-                    else if (symbol.matches("^[a-zA-Z]+$")) {
+                    } else if (symbol.matches("^[a-zA-Z]+$")) {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
                     } else { // if symbol is a number
                         argStack.push(symbol);
                     }
 //                    System.out.println();
 //
-//                    System.out.println(cursor);
-//                    System.out.println(cmdStack);
-//                    System.out.println(argStack);
+                    System.out.println(cursor);
+                    System.out.println(cmdStack);
+                    System.out.println(argStack);
 
                     while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
                         argStack.size() >= cmdStack.peek().getNumParams()
@@ -130,8 +130,15 @@ public class Parser {
                         List<String> params = new ArrayList<>();
                         while (cmdToExecute.getNumParams() > params.size()) {
                             String popped = argStack.pop();
+
+                            // check if the argument is a variable, and convert it to double if the command is not make
+                            if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable") && popped.matches(":[a-zA-Z_]+")){
+                                popped = Double.toString(myVariableModel.getValue(popped));
+                            }
+
                             params.add(popped);
                         }
+                        Collections.reverse(params);
 
                         Double returnValue = cmdToExecute
                             .execute(params, myTurtleModel, myVariableModel);

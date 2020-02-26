@@ -7,7 +7,7 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class Make implements Command {
+public class MakeVariable implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         return 0;

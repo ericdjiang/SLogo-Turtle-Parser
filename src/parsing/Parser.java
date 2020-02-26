@@ -94,6 +94,11 @@ public class Parser {
                     argStack.push(Double.parseDouble(symbol));
                 }
 
+                System.out.println(cursor);
+                System.out.println(argStack);
+                System.out.println(cmdStack);
+                System.out.println();
+
                 while (!cmdStack.isEmpty() && !argStack.isEmpty()) {
                     if( argStack.size() >= cmdStack.peek().getNumParams()){
                         Command cmdToExecute = cmdStack.pop();

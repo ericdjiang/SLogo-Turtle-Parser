@@ -4,13 +4,15 @@ import execution.Command;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+
+import model.ConsoleModel;
 import model.TurtleModel;
 import model.VariableModel;
 import parsing.Parser;
 
 public class Repeat implements Command {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
+  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     String language = symbolList.get(0);
@@ -24,7 +26,7 @@ public class Repeat implements Command {
     for (int i = 0; i < numRepeats; i++) {
       try{
 //        System.out.println("parsing"+loopBody);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel);
+        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
       } catch (Exception e) {
 
       }

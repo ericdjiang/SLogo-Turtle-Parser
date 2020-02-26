@@ -7,7 +7,7 @@ The user will type the command and hit enter to run said command. When the enter
 The result of the parsing will be the action that the turle has to take. The turtle model itself will recieve the result of parsing and act accordingly.
 
 3) When are errors detected and how are they reported?
-Errors should be caught and thrown in the back end upon a command input with improper syntax. The error should then be parsed and sent to the front end and visualized in a user-friendly way as well as being displayed in the console.
+Errors should be caught and thrown in the back end upon a command input with improper syntax. The error should then be parsed and sent to the front end and visualized in a user-friendly way as well as being displayed in the consoleView.
 4) What do commands know, when do they know it, and how do they get it?
 Each command will be mapped to a specific functionality that alters the model; for intance, the user-input command rotate should be mapped to the function the roatates the turtle in the model. 
 

@@ -1,4 +1,4 @@
-package execution.all_commands;
+package execution.boolean_operations;
 
 import execution.Command;
 import model.ConsoleModel;
@@ -7,13 +7,14 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class Difference implements Command {
+public class GreaterThan implements Command {
 
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        System.out.println("Difference of " + parameters.get(0) + "and " + parameters.get(1));
-        double difference = Double.parseDouble(parameters.get(0)) - Double.parseDouble(parameters.get(1));
-        return difference;
+        if(Double.parseDouble(parameters.get(1)) > Double.parseDouble(parameters.get(0))) {
+            return 1;
+        }
+        return 0;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package view;
 
+import controller.Controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -7,14 +8,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+
+import model.ConsoleModel;
+
 import model.TurtleModel;
 import model.VariableModel;
+
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
@@ -23,7 +25,7 @@ public class ControlPanel extends VBox {
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
     private CommandHistoryView historyView;
-    private Console console;
+    private ConsoleView consoleView;
     private Button runButton;
     private Button clearButton;
     private Button turtleSwitchButton;
@@ -31,16 +33,25 @@ public class ControlPanel extends VBox {
     private Parser parser;
     private String myLanguage;
     private TurtleModel model;
+    private Controller c;
+    private ConsoleModel cm;
+
     private VariableModel variableModel;
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView, String language) {
+
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model) {
         this.resources = resources;
         this.historyView = historyView;
-        this.console = console;
+        this.consoleView = consoleView;
         this.turtleView = turtleView;
         this.myLanguage = language;
-        this.model = turtleView.getTurtle();
+        this.model = model;
+
+        this.cm = cm;
+        this.c = c;
+
         this.variableModel = new VariableModel();
+
         runButton = makeButton("Run", event -> {
             try {
                 executeRun();
@@ -57,7 +68,7 @@ public class ControlPanel extends VBox {
             }
         });
         clearButton = makeButton("Clear", event -> clearConsole());
-        turtleSwitchButton = makeButton("TurtleSelect", event -> switchTurtleImage());
+        turtleSwitchButton = makeButton("TurtleSelect", event -> turtleView.switchTurtleImage());
         getChildren().add(runButton);
         getChildren().add(clearButton);
     }
@@ -80,30 +91,24 @@ public class ControlPanel extends VBox {
         return this.turtleSwitchButton;
     }
     private void updateInputHistory(String commands){
-        historyView.updateHistory(new Text(commands));
+        historyView.updateHistory(new Text("Input: " + commands), new Text("Output: " + c.getConsoleModel().getReturnVal()));
     }
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        String commands = console.getText();
+        String commands = consoleView.getText();
         resources.getBaseBundleName();
-        parser = new Parser(commands, myLanguage, model, variableModel);
-        //turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
-        //turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation() + 15);
+
+        parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel());
+
         updateInputHistory(commands);
     }
     private void clearConsole() {
-        console.clear();
+        consoleView.clear();
     }
     public void updateLanguage(ResourceBundle resources, String language) {
         runButton.setText(resources.getString("Run"));
         clearButton.setText(resources.getString("Clear"));
         this.myLanguage = language;
     }
-    private void switchTurtleImage() {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File("src/resources/images"));
-        Stage s = new Stage();
-        File selected = fc.showOpenDialog(s);
-        turtleView.setImage(selected.getName());
-    }
+
 
 }

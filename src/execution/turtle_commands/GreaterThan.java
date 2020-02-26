@@ -5,16 +5,16 @@ import model.TurtleModel;
 
 import java.util.List;
 
-public class Pi implements Command {
+public class GreaterThan implements Command {
+
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel) {
-        System.out.println(Math.PI);
-        return Math.PI;
-
+        if(parameters.get(1) > parameters.get(0)) return 1;
+        return 0;
     }
 
     @Override
     public int getNumParams() {
-        return 0;
+        return 2;
     }
 }

@@ -71,70 +71,71 @@ public class Parser {
         stack.push(inputCommands);
 
         while(!stack.isEmpty()){
-            List <String> poppedElement = stack.pop();
-            List <Integer> indecesToSkip = new ArrayList<>();
+            List <String> symbolList = stack.pop();
 
-//            parseLine(poppedElement);
+            Stack <Command> cmdStack = new Stack<>();
+            Stack <Double> argStack = new Stack<>();
+
             // iterate thru commands in popped element;
-            for(int i = 0; i < poppedElement.size(); i++){
-                if(!(indecesToSkip).contains(i)){
-                    String symbol = poppedElement.get(i).strip();
+            int cursor = 0;
 
-                    Command factoryCommand = factory.getCommand(getSymbol(symbol));
-                    int numParamsRequired = factoryCommand.getNumParams();
-                    int numParamsParsed = 0;
-                    Stack <String> executionStack = new Stack();
-                    executionStack.push(symbol);
+            String symbol = symbolList.get(cursor).strip();
+            Command factoryCommand = factory.getCommand(getSymbol(symbol));
+            cmdStack.push(factoryCommand);
 
-                    while (numParamsParsed < numParamsRequired){
-                        i++;
-                        symbol = poppedElement.get(i).strip();
-                        //if the symbol is a command
-                        if(symbol.matches("^[a-zA-Z]+$")){
-                            executionStack.push(poppedElement.get(i));
-                        } else { // if symbol is a number
-
-                        }
+            while (!cmdStack.isEmpty()) {
+                if( argStack.size() >= cmdStack.peek().getNumParams()){
+                    Command cmdToExecute = cmdStack.pop();
+                    List<Double> params = new ArrayList<>();
+                    while (cmdToExecute.getNumParams() > params.size()){
+                        Double popped = argStack.pop();
+                        params.add(popped);
 
                     }
-
-
-//                    if(factoryCommand.getNumParams()==params.size()){
-//                        factoryCommand.execute(params, myTurtleModel);
-//                    } else {
-//                        System.out.println("Invalid number of parameters.");
-//                    }
-
-
-
-                    switch(symbol){
-                        case "REPEAT":
-                            int numLoops = Integer.parseInt(poppedElement.get(i+1));
-                            for(int j = 0; j < numLoops; j++){
-                                stack.push(getLoopBody(poppedElement, i+1));
-                            }
-                            break;
-                        case "DOTIMES":
-                            break;
-                        case "FOR":
-                            break;
+                    argStack.push(cmdToExecute.execute(params, myTurtleModel));
+                } else if (cursor<symbolList.size()-1){
+                    cursor++;
+                    symbol = symbolList.get(cursor).strip();
+                    //if the symbol is a command
+                    if (symbol.matches("^[a-zA-Z]+$")) {
+                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                    } else { // if symbol is a number
+                        argStack.push(Double.parseDouble(symbol));
                     }
                 }
             }
+
+//                for(int i = 0; i < symbolList.size(); i++){
+//                    String symbol = symbolList.get(i).strip();
+//
+//                    switch(symbol){
+//                        case "REPEAT":
+//                            int numLoops = Integer.parseInt(symbolList.get(i+1));
+//                            for(int j = 0; j < numLoops; j++){
+//                                stack.push(getLoopBody(symbolList, i+1));
+//                            }
+//                            break;
+//                        case "DOTIMES":
+//                            break;
+//                        case "FOR":
+//                            break;
+//                    }
+//                }
+
 
         }
     }
 
 
 
-    private List<String> getLoopBody(List<String> poppedElement, int loopStartIndex){
+    private List<String> getLoopBody(List<String> symbolList, int loopStartIndex){
         int loopEndIndex = -1;
-        for (int i = 0; i < poppedElement.size(); i++){
-            if(poppedElement.get(i).equals("]")){
+        for (int i = 0; i < symbolList.size(); i++){
+            if(symbolList.get(i).equals("]")){
                 loopEndIndex = i;
             }
         }
-        return poppedElement.subList(loopStartIndex, loopEndIndex-1);
+        return symbolList.subList(loopStartIndex, loopEndIndex-1);
     }
 
         /**
@@ -158,7 +159,7 @@ public class Parser {
             final String ERROR = "NO MATCH";
             for (Map.Entry<String, Pattern> e : mySymbols) {
                 if (match(text, e.getValue())) {
-                    System.out.println(e.getKey());
+//                    System.out.println(e.getKey());
                     return e.getKey();
                 }
             }

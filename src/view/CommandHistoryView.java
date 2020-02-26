@@ -16,10 +16,13 @@ public class CommandHistoryView extends ScrollPane {
         commandList = new ArrayList<Text>();
         setContent(content);
     }
-    public void updateHistory(Text text) {
-        commandList.add(text);
-        text.setWrappingWidth(200); //remove magic number
-        this.content.getChildren().add(text);
+    public void updateHistory(Text input, Text output) {
+        commandList.add(input);
+        commandList.add(output);
+        input.setWrappingWidth(900); //remove magic number
+        output.setWrappingWidth(900);
+        this.content.getChildren().add(input);
+        this.content.getChildren().add(output);
     }
     private void clearHistory() {
         content.getChildren().removeAll(commandList);

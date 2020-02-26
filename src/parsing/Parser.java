@@ -2,9 +2,13 @@ package parsing;
 
 import execution.Command;
 import execution.CommandFactory;
+
+import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import model.ConsoleModel;
 import model.TurtleModel;
 import model.VariableModel;
 
@@ -14,21 +18,21 @@ public class Parser {
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
+
     private String myLanguage;
     private VariableModel myVariableModel;
-
+    private ConsoleModel myConsoleModel;
     private TurtleModel myTurtleModel;
 
     public Parser(String commands, String language, TurtleModel myTurtleModel,
-        VariableModel myVariableModel)
+        VariableModel myVariableModel, ConsoleModel myConsoleModel)
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         this.myTurtleModel = myTurtleModel;
         this.myVariableModel = myVariableModel;
-
+        this.myConsoleModel = myConsoleModel;
         this.myLanguage = language;
 
         addPatterns(language);
-
 
         parseText(commands);
     }
@@ -133,10 +137,12 @@ public class Parser {
                             params.add(popped);
                         }
 
+
                         Double returnValue = cmdToExecute
-                            .execute(params, myTurtleModel, myVariableModel);
+                            .execute(params, myTurtleModel, myVariableModel, myConsoleModel);
                         if (!cmdStack.isEmpty()) {
                             argStack.push(returnValue.toString());
+
                         }
 
                     }

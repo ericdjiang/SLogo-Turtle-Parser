@@ -14,6 +14,7 @@ public class VariableModel {
 
     public void updateVariable(String variableName, double value){
         myMap.put(variableName,value);
+        System.out.println(variableName + value);
     }
 
 

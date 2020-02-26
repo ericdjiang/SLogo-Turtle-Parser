@@ -16,6 +16,7 @@ public class Pen extends Polyline {
 
     public Pen() {
         this.myPoints = new ArrayList();
+
     }
     public void addPoint(double x, double y) {
         myPoints.add(x);

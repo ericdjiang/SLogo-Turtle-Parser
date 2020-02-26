@@ -1,6 +1,6 @@
 import controller.Controller;
 import model.TurtleModel;
-import view.TurtleView;
+import view.TurtleWindow;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -20,9 +20,8 @@ public class Main extends Application {
     private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private Scene myScene;
     private Timeline myAnimation;
-    private final TurtleView turtleView = new TurtleView();
+    private final TurtleWindow turtleWindow = new TurtleWindow();
     private Controller controller;
-    private TurtleModel turtleModel;
     private UserInterface UI;
 
 
@@ -33,8 +32,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        controller = new Controller(new TurtleModel(turtleView.getWidth()/2, turtleView.getHeight()/2, 0), turtleView);
-        UI = new UserInterface(primaryStage, "English", turtleView, controller);
+        controller = new Controller(new TurtleModel(turtleWindow.getWidth()/2, turtleWindow.getHeight()/2, 0), turtleWindow);
+        UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();
         primaryStage.setScene(myScene);
         primaryStage.show();

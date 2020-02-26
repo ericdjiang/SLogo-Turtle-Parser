@@ -29,7 +29,7 @@ public class UserInterface {
     private ViewSwitchText historySwitchText;
     private ViewSwitchText referenceSwitchText;
     private ViewSwitchText variableSwitchText;
-    private TurtleView turtleWindow;
+    private TurtleWindow turtleWindow;
     private Parser parser;
     private CommandReferenceView referenceView;
     private CommandHistoryView historyView;
@@ -43,16 +43,16 @@ public class UserInterface {
 
     private String myLanguage;
 
-    public UserInterface(Stage stage, String language, TurtleView turtleView, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
+    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
-        this.turtleWindow = turtleView;
+        this.turtleWindow = turtleWindow;
         this.referenceView = new CommandReferenceView(language);
         this.commandPrompt = new Console(myResources);
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView, myLanguage, c);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c);
         stage.setTitle(myResources.getString("Title"));
         //this.parser = new Parser();
     }
@@ -87,8 +87,8 @@ public class UserInterface {
         inputPanel.getChildren().add(controlPanel);
 
         mainView.setBottom(inputPanel);
-        mainView.setTop(customizationPanel);
         mainView.setCenter(turtleWindow);
+        mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
         mainFrame.setRight(historyWindow);
         Scene myScene = new Scene(mainFrame, WIDTH, HEIGHT);

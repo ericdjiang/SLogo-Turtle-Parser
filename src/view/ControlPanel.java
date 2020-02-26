@@ -10,7 +10,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.TurtleModel;
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
@@ -55,7 +54,7 @@ public class ControlPanel extends VBox {
             }
         });
         clearButton = makeButton("Clear", event -> clearConsole());
-        turtleSwitchButton = makeButton("TurtleSelect", event -> switchTurtleImage());
+        turtleSwitchButton = makeButton("TurtleSelect", event -> turtleView.switchTurtleImage());
         getChildren().add(runButton);
         getChildren().add(clearButton);
     }
@@ -94,12 +93,6 @@ public class ControlPanel extends VBox {
         clearButton.setText(resources.getString("Clear"));
         this.myLanguage = language;
     }
-    private void switchTurtleImage() {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File("src/resources/images"));
-        Stage s = new Stage();
-        File selected = fc.showOpenDialog(s);
-        turtleView.setImage(selected.getName());
-    }
+
 
 }

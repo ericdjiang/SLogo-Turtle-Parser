@@ -103,7 +103,7 @@ public class Parser {
                     //if the symbol is a command
                     if (symbol.equals("repeat")) {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
-                        loopEndIndex = getLoopEndIndex(symbolList);
+                        loopEndIndex = getLoopEndIndex(symbolList, cursor+2);
 
                         List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
                         argsWithLanguage.add(0, myLanguage);
@@ -113,11 +113,11 @@ public class Parser {
                     } else { // if symbol is a number
                         argStack.push(symbol);
                     }
-                    System.out.println();
-
-                                    System.out.println(cursor);
-                                    System.out.println(cmdStack);
-                                    System.out.println(argStack);
+//                    System.out.println();
+//
+//                    System.out.println(cursor);
+//                    System.out.println(cmdStack);
+//                    System.out.println(argStack);
 
                     while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
                         argStack.size() >= cmdStack.peek().getNumParams()
@@ -165,16 +165,24 @@ public class Parser {
     }
 
 
-    private int getLoopEndIndex(List<String> symbolList){
+    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex){
         int loopEndIndex = -1;
-        for (int i = 0; i < symbolList.size(); i++){
-            if(symbolList.get(i).strip().equals("]")){
 
-                loopEndIndex = i;
+        int openBracketCount = 1;
+        int closeBracketCount = 0;
+
+        int cursor = loopStartIndex; //the start of the opening bracket
+        while (openBracketCount > closeBracketCount) {
+            cursor += 1;
+            String symbol = symbolList.get(cursor).strip();
+            if( symbol.equals("[") ){
+                openBracketCount += 1;
+            } else if (symbol.equals("]")){
+                closeBracketCount += 1;
             }
         }
 //        System.out.println("LOOP END INDEX:"+loopEndIndex);
-        return loopEndIndex;
+        return cursor;
     }
 
     private List<String> getLoopBody(List<String> symbolList, int loopStartIndex){

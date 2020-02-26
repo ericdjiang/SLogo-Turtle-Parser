@@ -101,31 +101,35 @@ public class Parser {
 //            cmdStack.push(factoryCommand);
 
             for (int cursor = 0; cursor < symbolList.size(); cursor++) {
+
                 if (cursor > loopEndIndex) {
                     String symbol = symbolList.get(cursor).strip();
-
                     //if the symbol is a command
                     if (symbol.equals("repeat")) {
-                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
-                        loopEndIndex = getLoopEndIndex(symbolList);
+                        loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 2);
+                    } else if (symbol.equals("dotimes")){
+                        loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 5);
+                    } else if (symbol.equals("for")) {
+                        loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 7);
+                    }
 
-                        List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
-                        argsWithLanguage.add(0, myLanguage);
-                        argStack.push(String.join(" ", argsWithLanguage));
-                    } else if (symbol.matches("^[a-zA-Z]+$")) {
+                    else if (symbol.matches("^[a-zA-Z]+$")) {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
                     } else { // if symbol is a number
                         argStack.push(symbol);
                     }
+//                    System.out.println();
+//
+//                    System.out.println(cursor);
+//                    System.out.println(cmdStack);
+//                    System.out.println(argStack);
 
-                    //                System.out.println(cursor);
-                    //                System.out.println(cmdStack);
-                    //                System.out.println(argStack);
-                    //                System.out.println();
-
-                    while (!cmdStack.isEmpty() && !argStack.isEmpty() && argStack.size() >= cmdStack
-                        .peek().getNumParams()) {
-
+                    while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
+                        argStack.size() >= cmdStack.peek().getNumParams()
+                    ) {
+                        if(cmdStack.size()>=2 && cmdStack.get(cmdStack.size()-2).getNumParams() > argStack.size()){
+                            break;
+                        }
                         Command cmdToExecute = cmdStack.pop();
                         List<String> params = new ArrayList<>();
                         while (cmdToExecute.getNumParams() > params.size()) {
@@ -144,40 +148,41 @@ public class Parser {
                     }
                 }
 
-//                for(int i = 0; i < symbolList.size(); i++){
-//                    String symbol = symbolList.get(i).strip();
-//
-//                    switch(symbol){
-//                        case "REPEAT":
-//                            int numLoops = Integer.parseInt(symbolList.get(i+1));
-//                            for(int j = 0; j < numLoops; j++){
-//                                stack.push(getLoopBody(symbolList, i+1));
-//                            }
-//                            break;
-//                        case "DOTIMES":
-//                            break;
-//                        case "FOR":
-//                            break;
-//                    }
-//                }
-
             }
         }
 
 
     }
 
+    private int handleLoop(List<String> symbolList, Stack<Command> cmdStack, Stack<String> argStack,
+        int cursor, String symbol, int loopStartIndex)
+        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        int loopEndIndex;
+        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+        loopEndIndex = getLoopEndIndex(symbolList, cursor+loopStartIndex);
 
-    private int getLoopEndIndex(List<String> symbolList){
-        int loopEndIndex = -1;
-        for (int i = 0; i < symbolList.size(); i++){
-            if(symbolList.get(i).strip().equals("]")){
+        List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
+        argsWithLanguage.add(0, myLanguage);
+        argStack.push(String.join(" ", argsWithLanguage));
+        return loopEndIndex;
+    }
 
-                loopEndIndex = i;
+
+    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex){
+        int openBracketCount = 1;
+        int closeBracketCount = 0;
+
+        int cursor = loopStartIndex; //the start of the opening bracket
+        while (openBracketCount > closeBracketCount) {
+            cursor += 1;
+            String symbol = symbolList.get(cursor).strip();
+            if( symbol.equals("[") ){
+                openBracketCount += 1;
+            } else if (symbol.equals("]")){
+                closeBracketCount += 1;
             }
         }
-//        System.out.println("LOOP END INDEX:"+loopEndIndex);
-        return loopEndIndex;
+        return cursor;
     }
 
     private List<String> getLoopBody(List<String> symbolList, int loopStartIndex){

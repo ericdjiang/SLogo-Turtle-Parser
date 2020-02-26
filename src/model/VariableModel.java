@@ -13,9 +13,9 @@ public class VariableModel {
     }
 
     public void updateVariable(String variableName, double value){
-        myMap.putIfAbsent(variableName, 0.0);
         myMap.put(variableName,value);
     }
+
 
     public boolean checkIfVariableExists(String variableName){
         return myMap.containsKey(variableName);

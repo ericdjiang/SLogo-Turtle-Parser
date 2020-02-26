@@ -28,6 +28,8 @@ public class Parser {
         this.myLanguage = language;
 
         addPatterns(language);
+
+
         parseText(commands);
     }
 
@@ -36,6 +38,7 @@ public class Parser {
     }
 
     private void parseText(String commands)
+
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         List<String> inputCommands = Arrays
             .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
@@ -79,8 +82,6 @@ public class Parser {
         //FIXME: Only works for commands with only one parameter of type int
         Stack<List<String>> stack = new Stack();
 
-        Map<String, String> variables = new HashMap<>();
-
         stack.push(inputCommands);
 
         while (!stack.isEmpty()) {
@@ -104,8 +105,7 @@ public class Parser {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
                         loopEndIndex = getLoopEndIndex(symbolList);
 
-                        List<String> argsWithLanguage = symbolList
-                            .subList(cursor + 1, loopEndIndex);
+                        List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
                         argsWithLanguage.add(0, myLanguage);
                         argStack.push(String.join(" ", argsWithLanguage));
                     } else if (symbol.matches("^[a-zA-Z]+$")) {
@@ -165,10 +165,12 @@ public class Parser {
     private int getLoopEndIndex(List<String> symbolList){
         int loopEndIndex = -1;
         for (int i = 0; i < symbolList.size(); i++){
-            if(symbolList.get(i).equals("]")){
+            if(symbolList.get(i).strip().equals("]")){
+
                 loopEndIndex = i;
             }
         }
+//        System.out.println("LOOP END INDEX:"+loopEndIndex);
         return loopEndIndex;
     }
 

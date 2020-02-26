@@ -15,18 +15,23 @@ public class Repeat implements Command {
 
     String language = symbolList.get(0);
     int numRepeats = Integer.parseInt(symbolList.get(1));
-    String loopBody = String.join(" ",symbolList.subList(2, symbolList.size()));
+    String loopBody = String.join(" ",symbolList.subList(3, symbolList.size()));
+
+//    System.out.println(language);
+//    System.out.println(numRepeats);
+//    System.out.println(loopBody);
 
     for (int i = 0; i < numRepeats; i++) {
       try{
-        Parser parser = new Parser(language, loopBody, turtleModel, variableModel);
+//        System.out.println("parsing"+loopBody);
+        Parser parser = new Parser(loopBody, language, turtleModel, variableModel);
       } catch (Exception e) {
 
       }
     }
 
 
-    return Double.parseDouble(parameters.get(0));
+    return 0;
   }
 
   @Override

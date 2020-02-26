@@ -43,6 +43,12 @@ public class TurtleModel {
     double yfromCenter = this.myY - myZeroY;
     return yfromCenter;
   }
+  public double getInitX() {
+    return myX;
+  }
+  public double getInitY() {
+    return myY;
+  }
   public double getAngle() {
     return this.myAngle;
   }

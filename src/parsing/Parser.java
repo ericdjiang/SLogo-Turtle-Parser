@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 import model.TurtleModel;
 
 public class Parser {
-    private static final String RESOURCES_PACKAGE = Parser.class.getPackageName() + ".resources.";
+    private static final String RESOURCES = "resources/languages";
+    private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
 
@@ -143,7 +144,7 @@ public class Parser {
          */
         public void addPatterns(String syntax) {
             mySymbols = new ArrayList<>();
-            ResourceBundle resources = ResourceBundle.getBundle(RESOURCES_PACKAGE + syntax);
+            ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + syntax);
             for (String key : Collections.list(resources.getKeys())) {
                 String regex = resources.getString(key);
                 mySymbols.add(new AbstractMap.SimpleEntry<>(key,
@@ -166,7 +167,6 @@ public class Parser {
             // FIXME: perhaps throw an exception instead
             return ERROR;
         }
-
 
         // Returns true if the given text matches the given regular expression pattern
         private boolean match (String text, Pattern regex) {

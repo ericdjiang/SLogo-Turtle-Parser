@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 import model.TurtleModel;
+import model.VariableModel;
 
 public class Parser {
     private static final String RESOURCES = "resources/languages";
@@ -14,9 +15,10 @@ public class Parser {
     private CommandFactory factory = new CommandFactory();
 
     private TurtleModel myTurtleModel;
-    public Parser (String commands ,String language, TurtleModel myTurtleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
+    private VariableModel myVariableModel;
+    public Parser (String commands , String language, TurtleModel myTurtleModel, VariableModel myVariableModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         this.myTurtleModel = myTurtleModel;
-
+        this.myVariableModel = myVariableModel;
         addPatterns(language);
         parseText(commands);
     }
@@ -110,7 +112,7 @@ public class Parser {
                             params.add(popped);
                         }
 
-                        Double returnValue = cmdToExecute.execute(params, myTurtleModel);
+                        Double returnValue = cmdToExecute.execute(params, myTurtleModel, myVariableModel);
                         if(!cmdStack.isEmpty()){
                             argStack.push(returnValue);
                         }

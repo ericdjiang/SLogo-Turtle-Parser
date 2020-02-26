@@ -1,4 +1,4 @@
-package execution.boolean_operations;
+package execution.turtle_commands;
 
 import execution.Command;
 import model.TurtleModel;
@@ -6,20 +6,15 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class Equal implements Command {
-
+public class Heading implements Command {
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel, VariableModel variableModel) {
-        if(parameters.get(0) == parameters.get(1)){
-            System.out.println(1);
-            return 1;
-        }
-        System.out.println(0);
-        return 0;
+        System.out.println("Getting angle facing of turtle");
+        return turtleModel.getAngle();
     }
 
     @Override
     public int getNumParams() {
-        return 2;
+        return 0;
     }
 }

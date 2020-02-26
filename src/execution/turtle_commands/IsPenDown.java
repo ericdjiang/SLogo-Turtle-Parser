@@ -1,4 +1,4 @@
-package execution.boolean_operations;
+package execution.turtle_commands;
 
 import execution.Command;
 import model.TurtleModel;
@@ -6,20 +6,18 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class NotEqual implements Command {
-
+public class IsPenDown implements Command {
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel, VariableModel variableModel) {
-        if(parameters.get(0) != parameters.get(1)){
-            System.out.println(1);
+        System.out.println("Returns if pen is down or not");
+        if(turtleModel.getPen()){
             return 1;
         }
-        System.out.println(0);
         return 0;
     }
 
     @Override
-        public int getNumParams() {
-            return 2;
-        }
+    public int getNumParams() {
+        return 0;
+    }
 }

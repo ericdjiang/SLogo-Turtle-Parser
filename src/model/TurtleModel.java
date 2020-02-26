@@ -19,11 +19,13 @@ public class TurtleModel {
   }
 
   public void setX(double x){
-    this.myX = x;
+    double newX = x + myZeroX;
+    this.myX = newX;
   }
 
   public void setY(double y){
-    this.myY = y;
+    double newY  = myZeroY - y;
+    this.myY = newY;
   }
 
   public void setXY(double x, double y) {

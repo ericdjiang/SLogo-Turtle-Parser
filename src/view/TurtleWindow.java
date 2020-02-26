@@ -8,9 +8,10 @@ import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
 
 public class TurtleWindow extends Pane {
-    private int viewWidth = 650;
+    private int viewWidth = 540;
     private int viewHeight = 480;
 
+    //TODO make zoomable
     public TurtleWindow() {
         this.setWidth(viewWidth);
         this.setHeight(viewHeight);

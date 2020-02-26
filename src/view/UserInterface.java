@@ -13,8 +13,8 @@ import java.util.ResourceBundle;
 
 public class UserInterface {
 
-    private static final int HEIGHT = 600;
-    private static final int WIDTH = 850;
+    private static final int HEIGHT = 576;
+    private static final int WIDTH = 1024;
 
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
@@ -34,7 +34,7 @@ public class UserInterface {
     private CommandReferenceView referenceView;
     private CommandHistoryView historyView;
     private VariableView variableView;
-    private Console commandPrompt;
+    private ConsoleView commandPrompt;
     private LanguageSelector languageSelector;
     private ControlPanel controlPanel;
     public CommandHistoryWindow historyWindow;
@@ -49,11 +49,11 @@ public class UserInterface {
         this.myLanguage = language;
         this.turtleWindow = turtleWindow;
         this.referenceView = new CommandReferenceView(language);
-        this.commandPrompt = new Console(myResources);
+        this.commandPrompt = new ConsoleView(myResources);
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel());
         this.controller = c;
         this.pen = c.getPen();
         stage.setTitle(myResources.getString("Title"));
@@ -64,7 +64,6 @@ public class UserInterface {
         variableSwitchText = new ViewSwitchText(myResources.getString("VariableWindow"));
 
         historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
-
         customizationPanel.getChildren().add(languageSelector);
         customizationPanel.getChildren().add(colorPicker);
         penColorPicker.setValue(Color.BLACK);
@@ -92,7 +91,9 @@ public class UserInterface {
         inputPanel.getChildren().add(controlPanel);
 
         mainView.setBottom(inputPanel);
+        turtleWindow.getStyleClass().add("turtlewindow");
         mainView.setCenter(turtleWindow);
+        System.out.println(turtleWindow.getWidth());
         mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
         mainFrame.setRight(historyWindow);

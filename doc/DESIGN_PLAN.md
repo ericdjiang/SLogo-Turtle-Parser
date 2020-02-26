@@ -7,7 +7,7 @@ Our program should be flexible in its implementation of view and Model such that
 
 With an MVC design in mind, our program should keep its model and view closed in the sense that neither component should know or rely on the data structure implemented. Meanwhile, the Controller will hold both the view and model, allowing them to communicate so that they do not have to access each other. 
 
-At a high level, the view component is responsible for visualization of the input and output of commands in the form of a console where the user inputs text and a window where a turtle is moved and draws. Commands input into the view are then sent through the Controller, where they are parsed and checked for errors, to the Model which contains a compiler holding the SLogo logic. This information is then passed back through the Controller to be visualized in the view's main visualization window. 
+At a high level, the view component is responsible for visualization of the input and output of commands in the form of a consoleView where the user inputs text and a window where a turtle is moved and draws. Commands input into the view are then sent through the Controller, where they are parsed and checked for errors, to the Model which contains a compiler holding the SLogo logic. This information is then passed back through the Controller to be visualized in the view's main visualization window. 
 #### Overview
 As a high level overview, the slogo project will follow the overarching design paradigm of the MVC. The model, view, and controller each contain their own respective classes which can communicate with each other to get and alter states via public API methods. 
 
@@ -42,7 +42,7 @@ Instead of only taking one line at a time, like in the example, our program will
 #### Design Details
 The front-end external API will be in the StageModel class. This is where the user is able to change the background color and move the turtle around the screen. The StageModel class provides an end-to-end solution to allowing the user to change alter any Stage-specific parameters on the fly (including but not limited to the colors of the turtle/lines, stroke widths, and the size of the stage). This is achieved in the StageModel API by providing public setter methods to alter each of these state variables which are called by the StageVisualizer whenever an eventlistener for a button/GUI element is triggered. Since the StageModel also stores the result of the user-specified front-end attributes, the StageVisualizer can then read from the StageModel via getter methods and render the corresponding JavaFX nodes on screen based on the input parameters.
 
-The back-end external API will include the console model. This section of the program will include the parser that provides the main functionality in terms of executing commands. A key feature of our SLOGO project is the ConsoleModel, which contains an entire history of the commands that the user input. Just as any other Model class, this ConsoleModel backend external API provides getter and setter methods to retrieve and update, respectively, the corresponding state variables. 
+The back-end external API will include the consoleView model. This section of the program will include the parser that provides the main functionality in terms of executing commands. A key feature of our SLOGO project is the ConsoleModel, which contains an entire history of the commands that the user input. Just as any other Model class, this ConsoleModel backend external API provides getter and setter methods to retrieve and update, respectively, the corresponding state variables. 
 
 The front-end internal classes will provide features that do not require any processing by the back-end. This includes changing the color or formating the display, changing the input language, and viewing lists of old commands or variables. These classes will use each of the language properties. 
 
@@ -184,7 +184,7 @@ public interface CompilerInterface {
 
 #### Use Cases
 * The user types 'fd 50' in the command window, and sees the turtle move in the display window leaving a trail, and the command is added to the environment's history. Note, it is not necessary to understand exactly how parsing works in order to complete this example, just what the result of parsing the command will be. 
-    *  The user input goes into the console visualizer which gets sent to the model. Based on the command, it will get the method. And then the command will be called on the turtle model and the visuals will be updated. 
+    *  The user input goes into the consoleView visualizer which gets sent to the model. Based on the command, it will get the method. And then the command will be called on the turtle model and the visuals will be updated. 
 * The user sets the pen's color using the UI so subsequent lines drawn when the turtle moves use that color. 
     * The user input gors to the StageModel class that has the setTrailColor() method. Then the user will be able to see that change in color throught the TurtleVisualizer that updates the Visualizer. Both the Turtlevisualizer and the Visualizer will be contained in main. 
 
@@ -195,7 +195,7 @@ public interface CompilerInterface {
     * The user will hit a clear button. This will send a message to the ConsoleVisalizer. The ConsoleModle will use the Parser to send a message to the Executioner which will call consolemodle.clearHistory(). Then the Executioner will use the TurtleModel to set the turtle's X,Y, and angle positions to the default state. These updates to the TurleModel will be reflected in the TurtleVisualizer.
     
 * The user inputs a series of commands taking up multiple lines. However, the each line of code is separated by a blank line. 
-    * The Parser should be able to accommodate for blank lines, simply disregarding them in the parsing process rather than throwing a syntax error. The commands are then compiled and ran as if there were no blank lines. The flow of data in this case follows the same as other commands from the console visualizer to the console model which invokes methods on the turtle.
+    * The Parser should be able to accommodate for blank lines, simply disregarding them in the parsing process rather than throwing a syntax error. The commands are then compiled and ran as if there were no blank lines. The flow of data in this case follows the same as other commands from the consoleView visualizer to the consoleView model which invokes methods on the turtle.
 
 * The user wishes to issue a chain of commands involving order of processing such as 'fd fd fd fd 5'.
     *  In this case, the model and parser should be equipped to handle a general theory of regex given in a file in the data folder wherein processing is handled right to left. The command here is sent to the Parser which will break up the input into portions to recursively parse. In this case, this command is the same as 'fd 20'. The command will be parsed as 4 instances of fd 5 that execute 'fd' by 'fd'. This comamnd will then follow the normal chain of data flow mentioned in previous use cases.

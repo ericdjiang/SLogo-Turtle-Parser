@@ -2,11 +2,13 @@ package execution.turtle_commands;
 
 import execution.Command;
 import java.util.List;
+
+import model.ConsoleModel;
 import model.TurtleModel;
 
 public class Forward implements Command {
     @Override
-    public double execute(List<Double> parameters, TurtleModel turtleModel) {
+    public double execute(List<Double> parameters, TurtleModel turtleModel, ConsoleModel consoleModel) {
         System.out.println("Moving forward by: "+ parameters.get(0));
         double radians = turtleModel.getAngle() * Math.PI/180;
         double xChange = parameters.get(0) * Math.sin(radians);

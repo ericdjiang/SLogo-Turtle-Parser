@@ -1,4 +1,5 @@
 import controller.Controller;
+import model.ConsoleModel;
 import model.TurtleModel;
 import view.TurtleWindow;
 import javafx.animation.KeyFrame;
@@ -21,6 +22,7 @@ public class Main extends Application {
     private Scene myScene;
     private Timeline myAnimation;
     private final TurtleWindow turtleWindow = new TurtleWindow();
+    private ConsoleModel consoleModel = new ConsoleModel();
     private Controller controller;
     private UserInterface UI;
 
@@ -32,7 +34,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        controller = new Controller(new TurtleModel(turtleWindow.getWidth()/2, turtleWindow.getHeight()/2, 0), turtleWindow);
+        controller = new Controller(new TurtleModel(turtleWindow.getWidth()/2, turtleWindow.getHeight()/2, 0), turtleWindow, consoleModel);
         UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();
         primaryStage.setScene(myScene);

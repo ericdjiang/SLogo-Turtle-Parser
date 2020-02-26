@@ -5,6 +5,8 @@ import execution.CommandFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
+
+import model.ConsoleModel;
 import model.TurtleModel;
 
 public class Parser {
@@ -12,14 +14,14 @@ public class Parser {
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
-
     private TurtleModel myTurtleModel;
-    public Parser (String commands ,String language, TurtleModel myTurtleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
+    private ConsoleModel consoleModel;
+
+    public Parser (String commands , String language, TurtleModel myTurtleModel, ConsoleModel consoleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         this.myTurtleModel = myTurtleModel;
+        this.consoleModel = consoleModel;
         addPatterns(language);
         parseText(commands);
-
-
     }
 
     private boolean validateMessage(){
@@ -109,7 +111,7 @@ public class Parser {
                             params.add(popped);
                         }
 
-                        Double returnValue = cmdToExecute.execute(params, myTurtleModel);
+                        Double returnValue = cmdToExecute.execute(params, myTurtleModel, consoleModel);
                         if(!cmdStack.isEmpty()){
                             argStack.push(returnValue);
                         }

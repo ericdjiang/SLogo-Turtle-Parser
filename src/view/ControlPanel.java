@@ -8,12 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import model.ConsoleModel;
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
@@ -22,7 +20,7 @@ public class ControlPanel extends VBox {
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
     private CommandHistoryView historyView;
-    private Console console;
+    private ConsoleView consoleView;
     private Button runButton;
     private Button clearButton;
     private Button turtleSwitchButton;
@@ -30,13 +28,15 @@ public class ControlPanel extends VBox {
     private Parser parser;
     private String myLanguage;
     private Controller c;
+    private ConsoleModel cm;
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView, String language, Controller c) {
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm) {
         this.resources = resources;
         this.historyView = historyView;
-        this.console = console;
+        this.consoleView = consoleView;
         this.turtleView = turtleView;
         this.myLanguage = language;
+        this.cm = cm;
         this.c = c;
         runButton = makeButton("Run", event -> {
             try {
@@ -77,16 +77,16 @@ public class ControlPanel extends VBox {
         return this.turtleSwitchButton;
     }
     private void updateInputHistory(String commands){
-        historyView.updateHistory(new Text(commands));
+        historyView.updateHistory(new Text("Input: " + commands), new Text("Output: " + c.getConsoleModel().getReturnVal()));
     }
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        String commands = console.getText();
+        String commands = consoleView.getText();
         resources.getBaseBundleName();
-        parser = new Parser(commands, myLanguage, c.getModel());
+        parser = new Parser(commands, myLanguage, c.getModel(), c.getConsoleModel());
         updateInputHistory(commands);
     }
     private void clearConsole() {
-        console.clear();
+        consoleView.clear();
     }
     public void updateLanguage(ResourceBundle resources, String language) {
         runButton.setText(resources.getString("Run"));

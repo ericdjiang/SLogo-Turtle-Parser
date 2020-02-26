@@ -1,13 +1,14 @@
 package execution.boolean_operations;
 
 import execution.Command;
+import model.ConsoleModel;
 import model.TurtleModel;
 
 import java.util.List;
 
 public class LessThan implements Command {
     @Override
-    public double execute(List<Double> parameters, TurtleModel turtleModel) {
+    public double execute(List<Double> parameters, TurtleModel turtleModel, ConsoleModel consoleModel) {
         if(parameters.get(0) < parameters.get(1)){
             System.out.println(1);
             return 1;

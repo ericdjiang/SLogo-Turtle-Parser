@@ -1,15 +1,19 @@
-package execution.boolean_operations;
+package execution.all_commands;
 
 import execution.Command;
+
 import model.ConsoleModel;
 import model.TurtleModel;
 
 import java.util.List;
+import model.TurtleModel;
+import model.VariableModel;
 
 public class NotEqual implements Command {
         @Override
-        public double execute(List<Double> parameters, TurtleModel turtleModel, ConsoleModel consoleModel) {
-            if(parameters.get(0) != parameters.get(1)){
+
+        public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
+            if(! parameters.get(0).equals(parameters.get(1))){
                 System.out.println(1);
                 return 1;
             }

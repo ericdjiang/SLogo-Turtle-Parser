@@ -12,6 +12,11 @@ public class TurtleView extends Rectangle {
     private Image ig = new Image("file:src/resources/images/turtle1.png");
     private ImagePattern turtlePattern = new ImagePattern(ig);
 
+    private static final int viewWidth = 650;
+    private static final int viewHeight = 480;
+//    public final double zeroX = viewWidth/2-turtle.getWidth()/2;
+//    public final double zeroY = viewHeight/2-turtle.getHeight()/2;
+
     public TurtleView() {
         setFill(turtlePattern);
         setWidth(50);

@@ -1,11 +1,11 @@
-package execution.turtle_commands;
+package execution.all_commands;
 
 import execution.Command;
+import java.util.List;
+
 import model.ConsoleModel;
 import model.TurtleModel;
 import model.VariableModel;
-
-import java.util.List;
 
 public class Right implements Command {
     @Override

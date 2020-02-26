@@ -1,4 +1,4 @@
-package execution.turtle_commands;
+package execution.all_commands;
 
 import execution.Command;
 import model.ConsoleModel;
@@ -7,12 +7,13 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class Right implements Command {
+public class Cosine implements Command {
+
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        System.out.println("Rotating Right by: "+ parameters.get(0));
-        turtleModel.setAngle(turtleModel.getAngle() + Double.parseDouble(parameters.get(0)));
-        return Double.parseDouble(parameters.get(0));
+        System.out.println("Cosine of " + parameters.get(0));
+        double angle = Double.parseDouble(parameters.get(0));
+        return Math.cos((angle*Math.PI)/180);
     }
 
     @Override

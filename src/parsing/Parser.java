@@ -2,34 +2,50 @@ package parsing;
 
 import execution.Command;
 import execution.CommandFactory;
+
+import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
 import model.ConsoleModel;
 import model.TurtleModel;
+import model.VariableModel;
 
 public class Parser {
+
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
-    private TurtleModel myTurtleModel;
-    private ConsoleModel consoleModel;
 
-    public Parser (String commands , String language, TurtleModel myTurtleModel, ConsoleModel consoleModel) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
+    private String myLanguage;
+    private VariableModel myVariableModel;
+    private ConsoleModel myConsoleModel;
+    private TurtleModel myTurtleModel;
+
+    public Parser(String commands, String language, TurtleModel myTurtleModel,
+        VariableModel myVariableModel, ConsoleModel myConsoleModel)
+        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
         this.myTurtleModel = myTurtleModel;
-        this.consoleModel = consoleModel;
+        this.myVariableModel = myVariableModel;
+        this.myConsoleModel = myConsoleModel;
+        this.myLanguage = language;
+
         addPatterns(language);
+
         parseText(commands);
     }
 
-    private boolean validateMessage(){
+    private boolean validateMessage() {
         return false;
     }
 
-    private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        List<String>inputCommands = Arrays.asList(String.join(" ",commands.toLowerCase().split("\n")).split("[ ]+"));
+    private void parseText(String commands)
+
+        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+        List<String> inputCommands = Arrays
+            .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
 
 //        for (String line : lines) {
 //            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
@@ -68,58 +84,65 @@ public class Parser {
 //
 //        }
         //FIXME: Only works for commands with only one parameter of type int
-        Stack <List<String>> stack = new Stack();
-
-        Map <String, String> variables = new HashMap<>();
+        Stack<List<String>> stack = new Stack();
 
         stack.push(inputCommands);
 
-        while(!stack.isEmpty()){
-            List <String> symbolList = stack.pop();
+        while (!stack.isEmpty()) {
+            List<String> symbolList = stack.pop();
 
-            Stack <Command> cmdStack = new Stack<>();
-            Stack <Double> argStack = new Stack<>();
+            Stack<Command> cmdStack = new Stack<>();
+            Stack<String> argStack = new Stack<>();
 
             // iterate thru commands in popped element;
-            int cursor = -1;
-
+            int loopEndIndex = -1;
 //            String symbol = symbolList.get(cursor).strip();
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
 
-            while (cursor < symbolList.size() - 1 ){
-                cursor++;
-                String symbol = symbolList.get(cursor).strip();
-                //if the symbol is a command
-                if (symbol.matches("^[a-zA-Z]+$")) {
-                    cmdStack.push(factory.getCommand(getSymbol(symbol)));
-                } else { // if symbol is a number
-                    argStack.push(Double.parseDouble(symbol));
-                }
+            for (int cursor = 0; cursor < symbolList.size(); cursor++) {
+                if (cursor > loopEndIndex) {
+                    String symbol = symbolList.get(cursor).strip();
 
-                System.out.println(cursor);
-                System.out.println(argStack);
-                System.out.println(cmdStack);
-                System.out.println();
+                    //if the symbol is a command
+                    if (symbol.equals("repeat")) {
+                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                        loopEndIndex = getLoopEndIndex(symbolList);
 
-                while (!cmdStack.isEmpty() && !argStack.isEmpty()) {
-                    if( argStack.size() >= cmdStack.peek().getNumParams()){
+                        List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
+                        argsWithLanguage.add(0, myLanguage);
+                        argStack.push(String.join(" ", argsWithLanguage));
+                    } else if (symbol.matches("^[a-zA-Z]+$")) {
+                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                    } else { // if symbol is a number
+                        argStack.push(symbol);
+                    }
+
+                    //                System.out.println(cursor);
+                    //                System.out.println(cmdStack);
+                    //                System.out.println(argStack);
+                    //                System.out.println();
+
+                    while (!cmdStack.isEmpty() && !argStack.isEmpty() && argStack.size() >= cmdStack
+                        .peek().getNumParams()) {
+
                         Command cmdToExecute = cmdStack.pop();
-                        List <Double> params = new ArrayList<>();
-                        while (cmdToExecute.getNumParams() > params.size()){
-                            Double popped = argStack.pop();
+                        List<String> params = new ArrayList<>();
+                        while (cmdToExecute.getNumParams() > params.size()) {
+                            String popped = argStack.pop();
                             params.add(popped);
                         }
 
-                        Double returnValue = cmdToExecute.execute(params, myTurtleModel, consoleModel);
-                        if(!cmdStack.isEmpty()){
-                            argStack.push(returnValue);
+
+                        Double returnValue = cmdToExecute
+                            .execute(params, myTurtleModel, myVariableModel, myConsoleModel);
+                        if (!cmdStack.isEmpty()) {
+                            argStack.push(returnValue.toString());
+
                         }
 
                     }
                 }
-
-            }
 
 //                for(int i = 0; i < symbolList.size(); i++){
 //                    String symbol = symbolList.get(i).strip();
@@ -138,11 +161,24 @@ public class Parser {
 //                    }
 //                }
 
-
+            }
         }
+
+
     }
 
 
+    private int getLoopEndIndex(List<String> symbolList){
+        int loopEndIndex = -1;
+        for (int i = 0; i < symbolList.size(); i++){
+            if(symbolList.get(i).strip().equals("]")){
+
+                loopEndIndex = i;
+            }
+        }
+//        System.out.println("LOOP END INDEX:"+loopEndIndex);
+        return loopEndIndex;
+    }
 
     private List<String> getLoopBody(List<String> symbolList, int loopStartIndex){
         int loopEndIndex = -1;
@@ -154,41 +190,39 @@ public class Parser {
         return symbolList.subList(loopStartIndex, loopEndIndex-1);
     }
 
-        /**
-         * Adds the given resource file to this language's recognized types
-         */
-        public void addPatterns(String syntax) {
-            mySymbols = new ArrayList<>();
-            ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + syntax);
-            for (String key : Collections.list(resources.getKeys())) {
-                String regex = resources.getString(key);
-                mySymbols.add(new AbstractMap.SimpleEntry<>(key,
-                        // THIS IS THE IMPORTANT LINE
-                        Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
-            }
-        }
-
-        /**
-         * Returns language's type associated with the given text if one exists
-         */
-        private String getSymbol (String text) {
-            final String ERROR = "NO MATCH";
-            for (Map.Entry<String, Pattern> e : mySymbols) {
-                if (match(text, e.getValue())) {
-//                    System.out.println(e.getKey());
-                    return e.getKey();
-                }
-            }
-            // FIXME: perhaps throw an exception instead
-            return ERROR;
-        }
-
-        // Returns true if the given text matches the given regular expression pattern
-        private boolean match (String text, Pattern regex) {
-            // THIS IS THE IMPORTANT LINE
-            return regex.matcher(text).matches();
+    /**
+     * Adds the given resource file to this language's recognized types
+     */
+    public void addPatterns(String syntax) {
+        mySymbols = new ArrayList<>();
+        ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + syntax);
+        for (String key : Collections.list(resources.getKeys())) {
+            String regex = resources.getString(key);
+            mySymbols.add(new AbstractMap.SimpleEntry<>(key,
+                // THIS IS THE IMPORTANT LINE
+                Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
         }
     }
 
+    /**
+     * Returns language's type associated with the given text if one exists
+     */
+    private String getSymbol(String text){
+        final String ERROR = "NO MATCH";
+        for (Map.Entry<String, Pattern> e : mySymbols) {
+            if (match(text, e.getValue())) {
+//                    System.out.println(e.getKey());
+                return e.getKey();
+            }
+        }
+        // FIXME: perhaps throw an exception instead
+        return ERROR;
+    }
 
+    // Returns true if the given text matches the given regular expression pattern
+    private boolean match (String text, Pattern regex) {
+        // THIS IS THE IMPORTANT LINE
+        return regex.matcher(text).matches();
+    }
+}
 

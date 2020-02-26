@@ -8,7 +8,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
 import model.ConsoleModel;
+
+import model.TurtleModel;
+import model.VariableModel;
+
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
@@ -27,17 +32,26 @@ public class ControlPanel extends VBox {
     private TurtleView turtleView;
     private Parser parser;
     private String myLanguage;
+    private TurtleModel model;
     private Controller c;
     private ConsoleModel cm;
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm) {
+    private VariableModel variableModel;
+
+
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model) {
         this.resources = resources;
         this.historyView = historyView;
         this.consoleView = consoleView;
         this.turtleView = turtleView;
         this.myLanguage = language;
+        this.model = model;
+
         this.cm = cm;
         this.c = c;
+
+        this.variableModel = new VariableModel();
+
         runButton = makeButton("Run", event -> {
             try {
                 executeRun();
@@ -82,7 +96,9 @@ public class ControlPanel extends VBox {
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String commands = consoleView.getText();
         resources.getBaseBundleName();
-        parser = new Parser(commands, myLanguage, c.getModel(), c.getConsoleModel());
+
+        parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel());
+
         updateInputHistory(commands);
     }
     private void clearConsole() {

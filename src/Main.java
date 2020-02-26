@@ -1,14 +1,11 @@
-import View.TurtleView;
+import view.TurtleView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import View.UserInterface;
-
-import java.util.Locale;
+import view.UserInterface;
 
 /**
  * Feel free to completely change this code or delete it entirely. 

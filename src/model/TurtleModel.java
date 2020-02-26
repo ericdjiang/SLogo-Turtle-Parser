@@ -22,5 +22,16 @@ public class TurtleModel {
     setX(x);
     setY(y);
   }
-
+  public void setAngle(double a) {
+    this.myAngle = a;
+  }
+  public double getX() {
+    return this.myX;
+  }
+  public double getY() {
+    return this.myY;
+  }
+  public double getAngle() {
+    return this.myAngle;
+  }
 }

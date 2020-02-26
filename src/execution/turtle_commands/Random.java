@@ -5,12 +5,12 @@ import model.TurtleModel;
 
 import java.util.List;
 
-public class Right implements Command {
+public class Random implements Command {
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel) {
-        System.out.println("Rotating Right by: "+ parameters.get(0));
-        turtleModel.setAngle(turtleModel.getAngle() + parameters.get(0));
-        return parameters.get(0);
+        double randomnum = Math.random() * parameters.get(0) + 1;
+        System.out.println("Inside Random Class: Ramdom number is " + (int) randomnum + ": param is " + parameters.get(0));
+        return randomnum;
     }
 
     @Override

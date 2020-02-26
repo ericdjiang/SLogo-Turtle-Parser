@@ -25,44 +25,117 @@ public class Parser {
     }
 
     private void parseText ( String commands) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        String[] lines = commands.split("\n");
-        for (String line : lines) {
-            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
+        List<String>inputCommands = Arrays.asList(String.join(" ",commands.toLowerCase().split("\n")).split("[ ]+"));
 
-            //extract the command name (e.g. FD)
-            String command = commandAndParams.get(0);
-            if(!command.matches("^[a-zA-Z]+$")) {
-                System.out.println("Invalid command.");
-                return;
-            }
+//        for (String line : lines) {
+//            List<String> commandAndParams = Arrays.asList(line.strip().split("[ ]+"));
+//
+//            //extract the command name (e.g. FD)
+//            String command = commandAndParams.get(0);
+//            if(!command.matches("^[a-zA-Z]+$")) {
+//                System.out.println("Invalid command.");
+//                return;
+//            }
+//
+//            // populate a list of the parameters
+//            List<String> params = new ArrayList<>();
+//            // check if there are parameters included with the command symbol
+//            if(commandAndParams.size()>1) {
+//                params = commandAndParams.subList(1, commandAndParams.size());
+//            }
+//            // error check the parameters for invalid nonnumeric charactrs
+//            for(String param: params){
+//                // make sure string is a decimal
+//                System.out.println("Parameter: " + param);
+//                if (!param.matches("^\\-?[0-9]*\\.?[0-9]*$")) {
+//                    System.out.println("Invalid Parameter.");
+//                    return;
+//                }
+//            }
+//
+//            // Execute the command
+//            String symbol = getSymbol(command);
+//            Command factoryCommand = factory.getCommand(getSymbol(symbol));
+//            if(factoryCommand.getNumParams()==params.size()){
+//                factoryCommand.execute(params, myTurtleModel);
+//            } else {
+//                System.out.println("Invalid number of parameters.");
+//            }
+//
+//        }
+        //FIXME: Only works for commands with only one parameter of type int
+        Stack <List<String>> stack = new Stack();
 
-            // populate a list of the parameters
-            List<String> params = new ArrayList<>();
-            // check if there are parameters included with the command symbol
-            if(commandAndParams.size()>1) {
-                params = commandAndParams.subList(1, commandAndParams.size());
-            }
-            // error check the parameters for invalid nonnumeric charactrs
-            for(String param: params){
-                // make sure string is a decimal
-                System.out.println("Parameter: " + param);
-                if (!param.matches("^\\-?[0-9]*\\.?[0-9]*$")) {
-                    System.out.println("Invalid Parameter.");
-                    return;
+        Map <String, String> variables = new HashMap<>();
+
+        stack.push(inputCommands);
+
+        while(!stack.isEmpty()){
+            List <String> symbolList = stack.pop();
+
+            Stack <Command> cmdStack = new Stack<>();
+            Stack <Double> argStack = new Stack<>();
+
+            // iterate thru commands in popped element;
+            int cursor = 0;
+
+            String symbol = symbolList.get(cursor).strip();
+            Command factoryCommand = factory.getCommand(getSymbol(symbol));
+            cmdStack.push(factoryCommand);
+
+            while (!cmdStack.isEmpty()) {
+                if( argStack.size() >= cmdStack.peek().getNumParams()){
+                    Command cmdToExecute = cmdStack.pop();
+                    List<Double> params = new ArrayList<>();
+                    while (cmdToExecute.getNumParams() > params.size()){
+                        Double popped = argStack.pop();
+                        params.add(popped);
+
+                    }
+                    argStack.push(cmdToExecute.execute(params, myTurtleModel));
+                } else if (cursor<symbolList.size()-1){
+                    cursor++;
+                    symbol = symbolList.get(cursor).strip();
+                    //if the symbol is a command
+                    if (symbol.matches("^[a-zA-Z]+$")) {
+                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                    } else { // if symbol is a number
+                        argStack.push(Double.parseDouble(symbol));
+                    }
                 }
             }
 
-            // Execute the command
-            String symbol = getSymbol(command);
-            Command factoryCommand = factory.getCommand(getSymbol(symbol));
-            if(factoryCommand.getNumParams()==params.size()){
-                factoryCommand.execute(params, myTurtleModel);
-            } else {
-                System.out.println("Invalid number of parameters.");
-            }
-            
+//                for(int i = 0; i < symbolList.size(); i++){
+//                    String symbol = symbolList.get(i).strip();
+//
+//                    switch(symbol){
+//                        case "REPEAT":
+//                            int numLoops = Integer.parseInt(symbolList.get(i+1));
+//                            for(int j = 0; j < numLoops; j++){
+//                                stack.push(getLoopBody(symbolList, i+1));
+//                            }
+//                            break;
+//                        case "DOTIMES":
+//                            break;
+//                        case "FOR":
+//                            break;
+//                    }
+//                }
+
+
         }
-        //FIXME: Only works for commands with only one parameter of type int
+    }
+
+
+
+    private List<String> getLoopBody(List<String> symbolList, int loopStartIndex){
+        int loopEndIndex = -1;
+        for (int i = 0; i < symbolList.size(); i++){
+            if(symbolList.get(i).equals("]")){
+                loopEndIndex = i;
+            }
+        }
+        return symbolList.subList(loopStartIndex, loopEndIndex-1);
     }
 
         /**
@@ -86,7 +159,7 @@ public class Parser {
             final String ERROR = "NO MATCH";
             for (Map.Entry<String, Pattern> e : mySymbols) {
                 if (match(text, e.getValue())) {
-                    System.out.println(e.getKey());
+//                    System.out.println(e.getKey());
                     return e.getKey();
                 }
             }

@@ -64,6 +64,7 @@ public class ControlPanel extends VBox {
             } catch (InstantiationException e) {
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
+            Error notValid = new Error("ClassNotFound");
                 //e.printStackTrace();
             }
         });

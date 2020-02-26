@@ -7,14 +7,15 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class Make implements Command {
+public class MakeVariable implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        return 0;
+        variableModel.updateVariable(parameters.get(0), Double.parseDouble(parameters.get(1)));
+        return Double.parseDouble(parameters.get(1));
     }
 
     @Override
     public int getNumParams() {
-        return 0;
+        return 2;
     }
 }

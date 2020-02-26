@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.TurtleModel;
+import model.VariableModel;
 import parsing.Parser;
 
 import javax.imageio.ImageIO;
@@ -30,6 +31,7 @@ public class ControlPanel extends VBox {
     private Parser parser;
     private String myLanguage;
     private TurtleModel model;
+    private VariableModel variableModel;
 
     public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, Console console, TurtleView turtleView, String language) {
         this.resources = resources;
@@ -38,6 +40,7 @@ public class ControlPanel extends VBox {
         this.turtleView = turtleView;
         this.myLanguage = language;
         this.model = turtleView.getTurtle();
+        this.variableModel = new VariableModel();
         runButton = makeButton("Run", event -> {
             try {
                 executeRun();
@@ -82,7 +85,7 @@ public class ControlPanel extends VBox {
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String commands = console.getText();
         resources.getBaseBundleName();
-        parser = new Parser(commands, myLanguage, model);
+        parser = new Parser(commands, myLanguage, model, variableModel);
         //turtleWindow.setTurtleXPos(turtleWindow.getTurtleXPos() + 50);
         //turtleWindow.setTurtleRotation(turtleWindow.getTurtleRotation() + 15);
         updateInputHistory(commands);

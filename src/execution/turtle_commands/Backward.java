@@ -13,6 +13,7 @@ public class Backward implements Command {
         double yChange = parameters.get(0) * Math.cos(radians);
         turtleModel.setX(turtleModel.getX() - xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
+        turtleModel.setAngle(radians);
         return parameters.get(0);
     }
 

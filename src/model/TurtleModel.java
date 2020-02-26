@@ -6,9 +6,9 @@ public class TurtleModel {
   private double myAngle;
   private boolean isShowing;
   private boolean penDown;
-
   private double myZeroX;
   private double myZeroY;
+
 
   public TurtleModel (double myX, double myY, double myAngle) {
     this.myX = myX;
@@ -50,12 +50,19 @@ public class TurtleModel {
   public boolean getShowing() {return this.isShowing;}
   public boolean getPen() {return this.penDown;}
 
-
-  public double getZeroX(){
-    return myZeroX;
+  public void makePenDown(){
+    penDown = true;
   }
-
-  public double getZeroY(){
-    return myZeroY;
+  public void makePenUp(){
+    penDown = false;
+  }
+  public void hideTurtle(){
+    isShowing = false;
+  }
+  public void showTurtle(){
+    isShowing = true;
+  }
+  public void clearPen(){
+    //TODO: Implement
   }
 }

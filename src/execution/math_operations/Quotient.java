@@ -6,16 +6,15 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class NaturalLog implements Command {
-
+public class Quotient implements Command {
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel, VariableModel variableModel) {
-        System.out.println("Natural Log of" + parameters.get(0));
-        return Math.log(parameters.get(0));
+        System.out.println("Quotient of " + parameters.get(0) + "and " + parameters.get(1));
+        return parameters.get(0)/parameters.get(1);
     }
 
     @Override
     public int getNumParams() {
-        return 1;
+        return 2;
     }
 }

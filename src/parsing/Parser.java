@@ -97,9 +97,9 @@ public class Parser {
 //            cmdStack.push(factoryCommand);
 
             for (int cursor = 0; cursor < symbolList.size(); cursor++) {
+
                 if (cursor > loopEndIndex) {
                     String symbol = symbolList.get(cursor).strip();
-
                     //if the symbol is a command
                     if (symbol.equals("repeat")) {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
@@ -108,7 +108,16 @@ public class Parser {
                         List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
                         argsWithLanguage.add(0, myLanguage);
                         argStack.push(String.join(" ", argsWithLanguage));
-                    } else if (symbol.matches("^[a-zA-Z]+$")) {
+                    } else if (symbol.equals("dotimes")){
+                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                        loopEndIndex = getLoopEndIndex(symbolList, cursor + 5);
+
+                        List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
+                        argsWithLanguage.add(0, myLanguage);
+                        argStack.push(String.join(" ", argsWithLanguage));
+                    }
+
+                    else if (symbol.matches("^[a-zA-Z]+$")) {
                         cmdStack.push(factory.getCommand(getSymbol(symbol)));
                     } else { // if symbol is a number
                         argStack.push(symbol);
@@ -175,6 +184,7 @@ public class Parser {
         while (openBracketCount > closeBracketCount) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
+            System.out.println(symbol);
             if( symbol.equals("[") ){
                 openBracketCount += 1;
             } else if (symbol.equals("]")){

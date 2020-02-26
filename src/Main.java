@@ -25,6 +25,7 @@ public class Main extends Application {
     private ConsoleModel consoleModel = new ConsoleModel();
     private Controller controller;
     private UserInterface UI;
+    private TurtleModel turtleModel;
 
 
     public static void main (String[] args) {
@@ -34,7 +35,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        controller = new Controller(new TurtleModel(0, 0, 0), turtleWindow, consoleModel);
+        turtleModel = new TurtleModel(0, 0, 0);
+        controller = new Controller(turtleModel, turtleWindow, consoleModel);
         UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();
         primaryStage.setScene(myScene);

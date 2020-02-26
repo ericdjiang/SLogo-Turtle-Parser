@@ -8,6 +8,7 @@ public class TurtleModel {
   private boolean penDown;
   private double myZeroX;
   private double myZeroY;
+  private boolean isCleared;
 
 
   public TurtleModel (double myX, double myY, double myAngle) {
@@ -48,7 +49,7 @@ public class TurtleModel {
   }
 
   public boolean getShowing() {return this.isShowing;}
-  public boolean getPen() {return this.penDown;}
+  public boolean getPenStatus() {return this.penDown;}
 
   public void makePenDown(){
     penDown = true;
@@ -62,7 +63,10 @@ public class TurtleModel {
   public void showTurtle(){
     isShowing = true;
   }
-  public void clearPen(){
-    //TODO: Implement
+  public void setCleared(boolean b){
+    isCleared = b;
+  }
+  public boolean getClearedStatus() {
+    return this.isCleared;
   }
 }

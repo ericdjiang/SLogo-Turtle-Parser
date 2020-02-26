@@ -37,15 +37,17 @@ public class ControlPanel extends VBox {
     private ConsoleModel cm;
 
     private VariableModel variableModel;
+    private VariableView variableView;
 
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model) {
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView) {
         this.resources = resources;
         this.historyView = historyView;
         this.consoleView = consoleView;
         this.turtleView = turtleView;
         this.myLanguage = language;
         this.model = model;
+        this.variableView = variableView;
 
         this.cm = cm;
         this.c = c;
@@ -101,6 +103,14 @@ public class ControlPanel extends VBox {
         parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel());
 
         updateInputHistory(commands);
+        updateVariableView();
+    }
+    private void updateVariableView() {
+        Text t = new Text(variableModel.getVariable());
+        if (variableModel.newVarAdded()) {
+            variableView.addVariable(t);
+        }
+        variableModel.varReceived();
     }
     private void clearConsole() {
         consoleView.clear();

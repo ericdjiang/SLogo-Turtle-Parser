@@ -24,14 +24,23 @@ public class Controller {
         turtleWindow.getChildren().add(turtleView);
     }
     public void update() {
-        pen.addPoint(turtleView.getX() + turtleView.getWidth()/2, turtleView.getY() + turtleView.getHeight()/2, turtleModel.getX() + turtleWindow.getViewWidth()/2 , turtleModel.getY()  + turtleWindow.getViewHeight()/2);
+        turtleView.setVisible(true);
+//        if (turtleModel.getPenStatus()) {
+//            pen.addPoint(turtleView.getX() + turtleView.getWidth() / 2, turtleView.getY() + turtleView.getHeight() / 2, turtleModel.getX() + turtleWindow.getViewWidth() / 2, turtleModel.getY() + turtleWindow.getViewHeight() / 2);
+//        }
         turtleWindow.getChildren().add(pen.draw(pen.getColor()));
         turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
-        System.out.println(turtleModel.getY());
-        System.out.println(turtleWindow.getViewHeight()/2);
-        System.out.println(turtleView.getHeight()/2);
         turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
         turtleView.setTurtleRotation(turtleModel.getAngle());
+//        if (! turtleModel.getShowing()) {
+//            turtleView.setVisible(false);
+//        }
+        if (turtleModel.getClearedStatus()) {
+            pen.clear();
+            turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
+            turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
+            turtleView.setRotate(0);
+        }
     }
     public TurtleModel getModel() {
         return this.turtleModel;

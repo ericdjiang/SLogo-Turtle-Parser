@@ -6,9 +6,10 @@ import model.TurtleModel;
 
 public class Forward implements Command {
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel) {
-        System.out.println("Inside Forward::draw() method.");
-        return 0;
+    public double execute(List<Double> parameters, TurtleModel turtleModel) {
+        System.out.println("Moving forward by: "+ parameters.get(0));
+
+        return parameters.get(0);
     }
 
     @Override

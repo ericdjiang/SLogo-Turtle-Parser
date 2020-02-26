@@ -1,15 +1,19 @@
-package execution.turtle_commands;
+package execution.boolean_operations;
 
 import execution.Command;
 import model.TurtleModel;
 
 import java.util.List;
 
-public class Sum implements Command {
+public class Equal implements Command {
     @Override
     public double execute(List<Double> parameters, TurtleModel turtleModel) {
-        double sum = parameters.get(0) + parameters.get(1);
-        return sum;
+        if(parameters.get(0) == parameters.get(1)){
+            System.out.println(1);
+            return 1;
+        }
+        System.out.println(0);
+        return 0;
     }
 
     @Override

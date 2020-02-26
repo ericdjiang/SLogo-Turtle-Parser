@@ -18,8 +18,6 @@ public class Parser {
         this.myTurtleModel = myTurtleModel;
         addPatterns(language);
         parseText(commands);
-
-
     }
 
     private boolean validateMessage(){

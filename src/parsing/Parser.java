@@ -68,6 +68,14 @@ public class Parser {
 
     private void parseText(String commands)
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+        List<String> fullList = Arrays.asList(commands.split("\n"));
+        List<String> newList = new ArrayList<String>(fullList);
+        for(String line: fullList){
+            if(line.startsWith("#")){
+                newList.remove(line);
+            }
+        }
+        commands = String.join(" ", newList);
         List<String> symbolList = Arrays
             .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
 

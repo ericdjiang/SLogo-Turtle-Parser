@@ -18,7 +18,7 @@ public class And implements Command {
             consoleModel.setReturnVal(1);
             return 1;
         }
-        System.out.println(0);
+
         consoleModel.setReturnVal(0);
         return 0;
     }

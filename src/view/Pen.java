@@ -43,11 +43,12 @@ public class Pen {
     public Paint getColor() {
         return this.color;
     }
-    public void clear() {
+    public void clear(TurtleWindow root) {
         for (Object o : myLines) {
             Polyline p;
             p = (Polyline) o;
             p.getPoints().clear();
+            root.getChildren().remove(p);
         }
         myLines.clear();
     }

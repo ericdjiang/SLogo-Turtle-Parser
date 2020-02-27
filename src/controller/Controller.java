@@ -30,12 +30,13 @@ public class Controller {
     }
     public void update() {
         if (turtleModel.getClearedStatus()) {
-            pen.clear();
+            pen.clear(turtleWindow);
             turtleView.setX(turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);
             turtleView.setY(turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2);
             turtleView.setRotate(0);
             turtleModel.setCleared(false);
-        } else {
+        }
+        else {
             turtleView.setVisible(true);
             //       if (turtleModel.getPenStatus()) {
 
@@ -56,12 +57,6 @@ public class Controller {
             turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2);
             turtleView.setTurtleRotation(turtleModel.getAngle());
             turtleView.setVisible(turtleModel.getShowing());
-            if (turtleModel.getClearedStatus()) {
-                pen.clear();
-                turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);
-                turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2);
-                turtleView.setRotate(0);
-            }
         }
     }
     public TurtleModel getModel() {

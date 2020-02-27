@@ -21,7 +21,7 @@ public class If extends LoopCommand implements Command {
     String language = symbolList.get(0);
 
     int expEnd = getExpEnd(symbolList);
-    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel, methodModels);
     int loopGuard = (int) Math.round(loopGuardParser.getLastReturnValue());
 
     String loopBody = String.join(" ",symbolList.subList(expEnd+1, symbolList.size()));
@@ -33,7 +33,7 @@ public class If extends LoopCommand implements Command {
       if (loopGuard>0){
       try{
 //        System.out.println("parsing"+loopBody);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
+        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel, methodModels);
       } catch (Exception e) {
 
       }

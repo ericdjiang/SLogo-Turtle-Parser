@@ -21,7 +21,7 @@ public class IfElse extends LoopCommand implements Command {
     String language = symbolList.get(0);
 
     int expEnd = getExpEnd(symbolList);
-    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel, methodModels);
     int loopGuard = (int) Math.round(loopGuardParser.getLastReturnValue());
 
 
@@ -32,10 +32,10 @@ public class IfElse extends LoopCommand implements Command {
 //    System.out.println(loopBody);
 
     if (loopGuard > 0){
-       Parser parser = new Parser(loopBodies[0], language, turtleModel, variableModel, consoleModel);
+       Parser parser = new Parser(loopBodies[0], language, turtleModel, variableModel, consoleModel, methodModels);
     } else {
       System.out.println(loopBodies[1]);
-      Parser parser = new Parser(loopBodies[1], language, turtleModel, variableModel, consoleModel);
+      Parser parser = new Parser(loopBodies[1], language, turtleModel, variableModel, consoleModel, methodModels);
     }
 
 

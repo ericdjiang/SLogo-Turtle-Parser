@@ -22,7 +22,7 @@ public class DoTimes extends LoopCommand implements Command{
     String varName = symbolList.get(2);
 
     int loopGuardEnd = getLoopGuardEnd(symbolList);
-    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(3, loopGuardEnd)), language, turtleModel, variableModel, consoleModel);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(3, loopGuardEnd)), language, turtleModel, variableModel, consoleModel, methodModels);
     int loopLimit = (int) Math.round(loopGuardParser.getLastReturnValue());
 
 //    System.out.println(loopLimit);
@@ -41,7 +41,7 @@ public class DoTimes extends LoopCommand implements Command{
     for (int i = 0; i < loopLimit; i++) {
       try{
         variableModel.updateVariable(varName, i);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
+        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel , methodModels);
 
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {

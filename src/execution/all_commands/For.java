@@ -39,7 +39,7 @@ public class For implements Command {
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
         variableModel.updateVariable(varName, i);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
+        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel, methodModels);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {
         System.out.println("Error in dotimes");

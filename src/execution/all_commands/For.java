@@ -1,18 +1,20 @@
 package execution.all_commands;
 
 import execution.Command;
-import java.lang.reflect.InvocationTargetException;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import model.ConsoleModel;
+import model.MethodModel;
 import model.TurtleModel;
 import model.VariableModel;
 import parsing.Parser;
 
 public class For implements Command {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
+  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
 
@@ -37,7 +39,7 @@ public class For implements Command {
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
         variableModel.updateVariable(varName, i);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
+        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel, methodModels);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {
         System.out.println("Error in dotimes");

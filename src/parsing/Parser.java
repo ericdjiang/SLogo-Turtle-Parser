@@ -103,57 +103,76 @@ public class Parser {
                 } else { // if symbol is a number
                     argStack.push(symbol);
                 }
-                    System.out.println();
+//                    System.out.println();
+//
+//                    System.out.println(cursor);
+//                    System.out.println(cmdStack);
+//                    System.out.println(argStack);
 
-                    System.out.println(cursor);
-                    System.out.println(cmdStack);
-                    System.out.println(argStack);
-
-                    System.out.println(getNumParams(cmdStack.peek()));
+//                    System.out.println(getNumParams(cmdStack.peek()));
                 while (!cmdStack.isEmpty() &&
                     (
-//                        (cmdStack.peek())
-//                        ||
+                        (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
+                        ||
                         argStack.size() >= getNumParams(cmdStack.peek()) // for standard command
                     )
 
                 ) {
-                    if (cmdStack.size() >= 2 &&
+                    if(myMethodModels.containsKey(symbol)){
+                        MethodModel myMethodModel = myMethodModels.get(symbol);
+
+                        Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
+                        List<String> params = new ArrayList<>();
+                        while (cmdToExecute.getNumParams() > params.size()) {
+                            String popped = argStack.pop();
+                            params.add(popped);
+                        }
+                        Collections.reverse(params);
+
+                        for(int i = 0; i < params.size(); i++) {
+                            List <String> varNameAndValue = new ArrayList<>();
+                            varNameAndValue.add(myMethodModel.getVariableName(i));
+                            varNameAndValue.add(params.get(i));
+                            factory.getCommand(getSymbol("make")).execute(varNameAndValue, myTurtleModel, myVariableModel, myConsoleModel,
+                                myMethodModels);
+                        }
+
+                        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myTurtleModel, myVariableModel, myConsoleModel, myMethodModels);
+                        lastReturnValue = parser.getLastReturnValue();
+
+                    } else if (cmdStack.size() >= 2 &&
                         (
-                            getNumParams(cmdStack.size() - 2, cmdStack) == 1
-                                && getNumParams(cmdStack.size() - 2, cmdStack) > argStack.size()
+                            getNumParams(cmdStack.size() - 2, cmdStack) == 1 && getNumParams(cmdStack.size() - 2, cmdStack) > argStack.size()
                                 // and fd 30 bk 20
                                 ||
-                                getNumParams(cmdStack.size() - 2, cmdStack) == 2
-                                    && getNumParams(cmdStack.size() - 2, cmdStack) >= argStack
-                                    .size() // make :var sum 20 30
+                            getNumParams(cmdStack.size() - 2, cmdStack) == 2 && getNumParams(cmdStack.size() - 2, cmdStack) >= argStack.size() // make :var sum 20 30
                         )
                     ) {
                         break;
-                    }
+                    } else {
+                        Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
+                        List<String> params = new ArrayList<>();
+                        while (cmdToExecute.getNumParams() > params.size()) {
+                            String popped = argStack.pop();
 
-//                        System.out.println(argStack);
-                    Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
-                    List<String> params = new ArrayList<>();
-                    while (cmdToExecute.getNumParams() > params.size()) {
-                        String popped = argStack.pop();
+                            // check if the argument is a variable, and convert it to double if the command is not make
+                            if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
+                                && popped.matches(":[a-zA-Z_]+")) {
+                                System.out.println(cmdToExecute.getClass().getSimpleName());
+                                popped = Double.toString(myVariableModel.getValue(popped));
+                            }
 
-                        // check if the argument is a variable, and convert it to double if the command is not make
-                        if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
-                            && popped.matches(":[a-zA-Z_]+")) {
-                            System.out.println(cmdToExecute.getClass().getSimpleName());
-                            popped = Double.toString(myVariableModel.getValue(popped));
+                            params.add(popped);
+                        }
+                        Collections.reverse(params);
+                        Double returnValue = cmdToExecute
+                            .execute(params, myTurtleModel, myVariableModel, myConsoleModel,
+                                myMethodModels);
+                        this.lastReturnValue = returnValue;
+                        if (!cmdStack.isEmpty()) {
+                            argStack.push(returnValue.toString());
                         }
 
-                        params.add(popped);
-                    }
-                    Collections.reverse(params);
-                    Double returnValue = cmdToExecute
-                        .execute(params, myTurtleModel, myVariableModel, myConsoleModel,
-                            myMethodModels);
-                    this.lastReturnValue = returnValue;
-                    if (!cmdStack.isEmpty()) {
-                        argStack.push(returnValue.toString());
                     }
                 }
             }

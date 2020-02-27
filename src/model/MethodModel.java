@@ -20,6 +20,9 @@ public class MethodModel {
     return variableNames.size();
   }
 
+  public String getVariableName (int i) {
+    return variableNames.get(i);
+  }
   public String getMethodBody () {
     return methodBody;
   }

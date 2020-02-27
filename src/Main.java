@@ -1,5 +1,8 @@
 import controller.Controller;
+import java.util.HashMap;
+import java.util.Map;
 import model.ConsoleModel;
+import model.MethodModel;
 import model.TurtleModel;
 import view.TurtleWindow;
 import javafx.animation.KeyFrame;
@@ -26,6 +29,7 @@ public class Main extends Application {
     private Controller controller;
     private UserInterface UI;
     private TurtleModel turtleModel;
+    private Map<String, MethodModel> MethodModels = new HashMap<>();
 
 
     public static void main (String[] args) {

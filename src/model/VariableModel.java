@@ -36,6 +36,7 @@ public class VariableModel {
 
     public double getValue(String variableName){
         String variable = variableName.substring(1);
+        if(!myMap.containsKey(variable)) return 0;
         return myMap.get(variable);
     }
 

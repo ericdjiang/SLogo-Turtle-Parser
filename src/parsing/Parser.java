@@ -91,7 +91,7 @@ public class Parser {
         //FIXME: Only works for commands with only one parameter of type int
 
 
-        System.out.println("INSIDE Parser: " + commands);
+//        System.out.println("INSIDE Parser: " + commands);
 
         Stack<Command> cmdStack = new Stack<>();
         Stack<String> argStack = new Stack<>();

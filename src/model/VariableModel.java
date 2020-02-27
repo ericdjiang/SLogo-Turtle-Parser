@@ -20,25 +20,30 @@ public class VariableModel {
     }
 
     public void updateVariable(String variableName, double value){
+        String variable = variableName.substring(1);
         isNewVarAdded = true;
-        myMap.put(variableName,value);
-        myVariableNames.add(variableName);
+        myMap.put(variable,value);
+        myVariableNames.add(variable);
         myVariableVals.add(value);
-        System.out.println(variableName + value);
+        System.out.println(variable + value);
     }
 
 
     public boolean checkIfVariableExists(String variableName){
-        return myMap.containsKey(variableName);
+        String variable = variableName.substring(1);
+        return myMap.containsKey(variable);
     }
 
     public double getValue(String variableName){
-        return myMap.get(variableName);
+        String variable = variableName.substring(1);
+        return myMap.get(variable);
     }
 
     public double addVariables(String variable1, String variable2){
-        double varival = myMap.get(variable1);
-        double varival2 = myMap.get(variable2);
+        String var1 = variable1.substring(1);
+        String var2 = variable2.substring(1);
+        double varival = myMap.get(var1);
+        double varival2 = myMap.get(var2);
         double sum = varival +varival2;
         return sum;
     }

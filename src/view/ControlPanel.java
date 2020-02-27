@@ -58,15 +58,26 @@ public class ControlPanel extends VBox {
             try {
                 executeRun();
             } catch (InvocationTargetException e) {
+                System.out.println("SYNTAX ERROR1");
                 //e.printStackTrace();
             } catch (IllegalAccessException e) {
+                System.out.println("SYNTAX ERROR2");
                 //e.printStackTrace();
             } catch (NoSuchMethodException e) {
+                System.out.println("SYNTAX ERROR3");
                 //e.printStackTrace();
             } catch (InstantiationException e) {
+                System.out.println("SYNTAX ERROR4");
                 //e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-            Error notValid = new Error("ClassNotFound");
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+
+                System.out.println("SYNTAX ERROR8");
+                //e.printStackTrace();
+            }
+            catch (ClassNotFoundException e) {
+                System.out.println("SYNTAX ERROR5");
+                Error notValid = new Error("ClassNotFound");
                 //e.printStackTrace();
             }
         });

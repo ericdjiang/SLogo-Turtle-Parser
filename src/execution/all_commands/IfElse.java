@@ -5,13 +5,12 @@ import execution.LoopCommand;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
-
 import model.ConsoleModel;
 import model.TurtleModel;
 import model.VariableModel;
 import parsing.Parser;
 
-public class Repeat extends LoopCommand implements Command {
+public class IfElse extends LoopCommand implements Command {
   @Override
   public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
@@ -20,29 +19,24 @@ public class Repeat extends LoopCommand implements Command {
 
     int expEnd = getExpEnd(symbolList);
     Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel);
-    int numRepeats = (int) Math.round(loopGuardParser.getLastReturnValue());
+    int loopGuard = (int) Math.round(loopGuardParser.getLastReturnValue());
 
-    String loopBody = String.join(" ",symbolList.subList(expEnd+1, symbolList.size()));
+
+    String [] loopBodies = getLoopBodies(symbolList);
 
 //    System.out.println(language);
 //    System.out.println(numRepeats);
 //    System.out.println(loopBody);
 
-    double lastReturnValue = 0;
-
-    for (int i = 0; i < numRepeats; i++) {
-      try{
-//        System.out.println("parsing"+loopBody);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
-
-        lastReturnValue = parser.getLastReturnValue();
-      } catch (Exception e) {
-
-      }
+    if (loopGuard > 0){
+       Parser parser = new Parser(loopBodies[0], language, turtleModel, variableModel, consoleModel);
+    } else {
+      System.out.println(loopBodies[1]);
+      Parser parser = new Parser(loopBodies[1], language, turtleModel, variableModel, consoleModel);
     }
 
 
-    return lastReturnValue;
+    return 0;
   }
 
   @Override

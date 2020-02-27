@@ -15,7 +15,6 @@ public class For implements Command {
   public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
-    System.out.println(symbolList);
 
     String language = symbolList.get(0);
 
@@ -34,16 +33,18 @@ public class For implements Command {
 //        System.out.println(loopLimit);
 //        System.out.println(loopBody);
 
+    double lastReturnValue = 0;
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
         variableModel.updateVariable(varName, i);
         Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel);
+        lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {
         System.out.println("Error in dotimes");
       }
     }
 
-    return 0;
+    return lastReturnValue;
   }
 
   @Override

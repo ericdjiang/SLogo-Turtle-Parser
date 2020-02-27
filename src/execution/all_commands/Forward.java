@@ -12,14 +12,27 @@ public class Forward implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         double radians = Math.toRadians(turtleModel.getAngle());
         double xChange = Double.parseDouble(parameters.get(0)) * Math.sin(radians);
-        double yChange = -1 *  Double.parseDouble(parameters.get(0)) * Math.cos(radians);
+        double yChange = Double.parseDouble(parameters.get(0)) * Math.cos(radians);
         turtleModel.setX(turtleModel.getX() + xChange);
-        turtleModel.setY(turtleModel.getY() + yChange);
+        turtleModel.setY(turtleModel.getY() - yChange);
+        System.out.println(turtleModel.getY());
         return  Double.parseDouble(parameters.get(0));
     }
 
     @Override
     public int getNumParams() {
         return 1;
+    }
+
+    public static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 public class PenDown implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModelv) {
+        System.out.println("pen is down");
         turtleModel.makePenDown();
         return 1;
     }

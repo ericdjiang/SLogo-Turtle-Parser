@@ -9,9 +9,9 @@ import java.util.List;
 
 public class MakeVariable implements Command {
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        variableModel.updateVariable(parameters.get(0), Double.parseDouble(parameters.get(1)));
-        return Double.parseDouble(parameters.get(1));
+    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel){
+        variableModel.updateVariable(parameters.get(1), Double.parseDouble(parameters.get(0)));
+        return Double.parseDouble(parameters.get(0));
     }
 
     @Override

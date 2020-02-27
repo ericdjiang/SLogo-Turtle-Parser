@@ -15,7 +15,7 @@ public class ConsoleView extends TextArea {
     private final ResourceBundle myResources;
 
     private final VBox prompt = new VBox();
-    private final String style = "-fx-background-color: rgba(0,0,0,0.5);";
+    private final String style = "-fx-background-color: rgb(0,0,0);";
     private Text carot;
 
     public ConsoleView(ResourceBundle resources) {
@@ -23,6 +23,7 @@ public class ConsoleView extends TextArea {
         this.setPromptText(myResources.getString("EnterText"));
         this.prompt.setBackground(Background.EMPTY);
         this.prompt.setStyle(style);
+        this.setStyle(style);
         setOnKeyPressed(event -> addNewCarot(event.getCode()));
         addNewCarot(KeyCode.ENTER);
     }

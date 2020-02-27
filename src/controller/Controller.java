@@ -48,6 +48,19 @@ public class Controller {
                     index = 1;
                 }
                 pen.addPoint(point);
+//                if (point < turtleWindow.getViewHeight() && point < turtleWindow.getViewWidth() && point > 0 && point > 0) {
+//                    pen.addPoint(point);
+//                }
+//                else {
+//                    if (point > turtleWindow.getViewHeight()) {
+//                        point = turtleWindow.getViewHeight();
+//                    }
+//                    else if (point > turtleWindow.getViewWidth()) {
+//                        point = turtleWindow.getViewWidth();
+//                    }
+//                    pen.addPoint(point);
+//                }
+
             }
             turtleModel.clearList();
             turtleWindow.getChildren().add(pen.draw(pen.getColor()));

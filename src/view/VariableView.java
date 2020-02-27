@@ -6,12 +6,12 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
-
+//TODO separate into hboxs
 public class VariableView extends ScrollPane {
     private VBox content = new VBox();
     private ResourceBundle resources;
 
-    public VariableView(ResourceBundle resources) throws IOException {
+    public VariableView(ResourceBundle resources) {
         this.resources = resources;
         setContent(content);
     }

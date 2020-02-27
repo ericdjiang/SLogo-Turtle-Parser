@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -43,6 +44,7 @@ public class UserInterface {
     private Controller controller;
     private Pen pen;
     private String myLanguage;
+    private final HBox console = new HBox();
 
     public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
@@ -86,14 +88,13 @@ public class UserInterface {
             setCommandsWindow();
         });
         variableSwitchText.setOnMouseClicked(event -> setVariableWindow());
-
-        inputPanel.getChildren().add(commandPrompt);
+        setFooter();
+        inputPanel.getChildren().add(console);
         inputPanel.getChildren().add(controlPanel);
 
         mainView.setBottom(inputPanel);
         turtleWindow.getStyleClass().add("turtlewindow");
         mainView.setCenter(turtleWindow);
-        System.out.println(turtleWindow.getWidth());
         mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
         mainFrame.setRight(historyWindow);
@@ -118,6 +119,10 @@ public class UserInterface {
         historySwitchText.updateLanguage(myResources.getString("HistoryWindow"));
         referenceSwitchText.updateLanguage(myResources.getString("CommandWindow"));
         variableSwitchText.updateLanguage(myResources.getString("VariableWindow"));
+    }
+    private void setFooter() {
+        console.getChildren().add(commandPrompt.getPrompt());
+        console.getChildren().add(commandPrompt);
     }
     private void setHistoryWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());

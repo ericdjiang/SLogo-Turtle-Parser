@@ -13,6 +13,9 @@ public class ClearScreen implements Command {
         double originalX = turtleModel.getX();
         double originalY = turtleModel.getY();
         double distance = Math.sqrt(Math.pow(originalX,2) + Math.pow(originalY,2));
+        turtleModel.setX(0);
+        turtleModel.setY(0);
+        turtleModel.setAngle(0);
         turtleModel.setCleared(true);
         turtleModel.setX(0);
         turtleModel.setY(0);

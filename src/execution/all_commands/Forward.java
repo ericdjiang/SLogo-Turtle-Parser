@@ -12,7 +12,7 @@ public class Forward implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         double radians = Math.toRadians(turtleModel.getAngle());
         double xChange = Double.parseDouble(parameters.get(0)) * Math.sin(radians);
-        double yChange = -1 *  Double.parseDouble(parameters.get(0)) * Math.cos(radians);
+        double yChange = Double.parseDouble(parameters.get(0)) * Math.cos(radians);
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
         return  Double.parseDouble(parameters.get(0));

@@ -15,8 +15,6 @@ public class Controller {
     private TurtleView turtleView;
     private ConsoleModel consoleModel;
     private Pen pen;
-    private double oldx;
-    private double oldy;
     private int index = 1;
     private double point;
 
@@ -28,8 +26,6 @@ public class Controller {
         this.pen = new Pen();
         turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
         turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
-        oldy = turtleView.getY() + turtleView.getHeight() / 2;
-        oldx = turtleView.getX() + turtleView.getWidth() / 2;
         turtleWindow.getChildren().add(turtleView);
     }
     public void update() {
@@ -43,18 +39,16 @@ public class Controller {
                 index = 2;
             }
             else {
-                point = (double) o + turtleWindow.getViewHeight() / 2;
+                point = (double) o*-1 + turtleWindow.getViewHeight() / 2;
                 index = 1;
             }
             pen.addPoint(point);
         }
         turtleModel.clearList();
-        oldx = turtleModel.getX() + turtleWindow.getViewWidth() / 2;
-        oldy = turtleModel.getY() + turtleWindow.getViewHeight() / 2;
 
         turtleWindow.getChildren().add(pen.draw(pen.getColor()));
         turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
-        turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
+        turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
         turtleView.setTurtleRotation(turtleModel.getAngle());
 //        if (! turtleModel.getShowing()) {
 //            turtleView.setVisible(false);

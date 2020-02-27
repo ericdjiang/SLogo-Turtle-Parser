@@ -22,6 +22,7 @@ public class TurtleModel {
     this.myPoints = new ArrayList();
     myPoints.add(myX);
     myPoints.add(myY);
+    isShowing = true;
   }
 
   public void setX(double x){

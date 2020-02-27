@@ -88,4 +88,9 @@ public class TurtleModel {
   public boolean getClearedStatus() {
     return this.isCleared;
   }
+  public void trackPos() {
+    myPoints.clear();
+    myPoints.add(myX);
+    myPoints.add(myY);
+  }
 }

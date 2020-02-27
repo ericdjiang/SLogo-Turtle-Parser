@@ -18,6 +18,7 @@ public class Parser {
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
+    private ResourceBundle resourceBundle;
 
     private String myLanguage;
     private VariableModel myVariableModel;
@@ -41,13 +42,15 @@ public class Parser {
         this.myVariableModel = myVariableModel;
         this.myConsoleModel = myConsoleModel;
         this.myLanguage = language;
+        resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 
         addPatterns(language);
 
         try{
             parseText(commands);
         }catch( InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e){
-            myConsoleModel.setErrorMessage(" ERROR BAD INPUT");
+            String messgae = resourceBundle.getString("ErrorInput");
+            myConsoleModel.setErrorMessage(messgae);
         }
     }
 
@@ -239,7 +242,7 @@ public class Parser {
      * Returns language's type associated with the given text if one exists
      */
     private String getSymbol(String text){
-        final String ERROR = "NO MATCH";
+        final String ERROR = "NoMatch";
         for (Map.Entry<String, Pattern> e : mySymbols) {
             if (match(text, e.getValue())) {
 //                    System.out.println(e.getKey());

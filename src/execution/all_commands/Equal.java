@@ -4,9 +4,8 @@ import execution.Command;
 import model.ConsoleModel;
 import model.TurtleModel;
 
-import java.io.Console;
 import java.util.List;
-import model.TurtleModel;
+
 import model.VariableModel;
 
 public class Equal implements Command {

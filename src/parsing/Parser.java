@@ -110,7 +110,7 @@ public class Parser {
 //            String symbol = symbolList.get(cursor).strip();
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
-        if (symbolList.size()==1){ // for parsing within loop guard
+        if (symbolList.size()==1 && !symbolList.get(0).matches("[a-zA-Z_]+(\\?)?")){ // for parsing within loop guard
             if (symbolList.get(0).matches(":[a-zA-Z_]+")){
                 lastReturnValue = myVariableModel.getValue(symbolList.get(0));
             } else {
@@ -139,7 +139,7 @@ public class Parser {
                     System.out.println(cmdStack);
                     System.out.println(argStack);
 
-                while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
+                while (!cmdStack.isEmpty() &&
                     argStack.size() >= cmdStack.peek().getNumParams()
                 ) {
                     if(cmdStack.size()>=2 && cmdStack.get(cmdStack.size()-2).getNumParams() >= argStack.size()){

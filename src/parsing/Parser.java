@@ -47,7 +47,7 @@ public class Parser {
         try{
             parseText(commands);
         }catch( InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e){
-
+            myConsoleModel.setErrorMessage(" ERROR BAD INPUT");
         }
     }
 

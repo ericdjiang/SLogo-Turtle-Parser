@@ -13,8 +13,10 @@ public class VariableView extends ScrollPane {
 
     public VariableView(ResourceBundle resources) throws IOException {
         this.resources = resources;
-        content.getChildren().add(new Text("X=42"));
         setContent(content);
+    }
+    public void addVariable(Text t) {
+        this.content.getChildren().add(t);
     }
 
 

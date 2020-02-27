@@ -18,6 +18,7 @@ public class Parser {
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
+    private ResourceBundle resourceBundle;
 
     private String myLanguage;
     private VariableModel myVariableModel;
@@ -41,13 +42,15 @@ public class Parser {
         this.myVariableModel = myVariableModel;
         this.myConsoleModel = myConsoleModel;
         this.myLanguage = language;
+        resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 
         addPatterns(language);
 
         try{
             parseText(commands);
         }catch( InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e){
-            myConsoleModel.setErrorMessage(" ERROR BAD INPUT");
+            String messgae = resourceBundle.getString("ErrorInput");
+            myConsoleModel.setErrorMessage(messgae);
         }
     }
 
@@ -110,7 +113,7 @@ public class Parser {
 //            String symbol = symbolList.get(cursor).strip();
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
-        if (symbolList.size()==1 && !symbolList.get(0).matches("[a-zA-Z_]+(\\?)?")){ // for parsing within loop guard
+        if (symbolList.size()==1 && !symbolList.get(0).matches("[-+*\\/]?[a-zA-Z_]+(\\?)?")){ // for parsing within loop guard
             if (symbolList.get(0).matches(":[a-zA-Z_]+")){
                 lastReturnValue = myVariableModel.getValue(symbolList.get(0));
             } else {
@@ -127,17 +130,17 @@ public class Parser {
                 //if the symbol is a command
                 if (LOOP_MAPPINGS.containsKey(symbol)){
                     loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);
-                }else if (symbol.matches("^[a-zA-Z_]+(\\?)?$")) {
+                }else if (symbol.matches("^[-+*\\/a-zA-Z_]+(\\?)?$")) {
                     cmdStack.push(factory.getCommand(getSymbol(symbol)));
                 }
                 else { // if symbol is a number
                     argStack.push(symbol);
                 }
-                    System.out.println();
-
-                    System.out.println(cursor);
-                    System.out.println(cmdStack);
-                    System.out.println(argStack);
+//                    System.out.println();
+//
+//                    System.out.println(cursor);
+//                    System.out.println(cmdStack);
+//                    System.out.println(argStack);
 
                 while (!cmdStack.isEmpty() &&
                     argStack.size() >= cmdStack.peek().getNumParams()
@@ -155,7 +158,6 @@ public class Parser {
                         // check if the argument is a variable, and convert it to double if the command is not make
                         if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable") && popped.matches(":[a-zA-Z_]+")){
                             System.out.println(cmdToExecute.getClass().getSimpleName());
-                            System.out.println(popped);
                             popped = Double.toString(myVariableModel.getValue(popped));
                         }
 
@@ -239,7 +241,7 @@ public class Parser {
      * Returns language's type associated with the given text if one exists
      */
     private String getSymbol(String text){
-        final String ERROR = "NO MATCH";
+        final String ERROR = "NoMatch";
         for (Map.Entry<String, Pattern> e : mySymbols) {
             if (match(text, e.getValue())) {
 //                    System.out.println(e.getKey());

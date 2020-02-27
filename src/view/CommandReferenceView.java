@@ -16,6 +16,7 @@ import java.util.Scanner;
 
 public class CommandReferenceView extends ScrollPane {
     private HBox content = new HBox();
+    private HBox header = new HBox();
     private VBox functionNameList = new VBox();
     private VBox functionParameterList = new VBox();
     private VBox functionInstructionList = new VBox();
@@ -36,10 +37,15 @@ public class CommandReferenceView extends ScrollPane {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         functionReturnList.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
     }
     public void initializeReferences(String language) throws IOException {
         content.getChildren().clear();
         referenceList.clear();
+        functionNameList.getChildren().add(new Text("FUNCTION NAME"));
+        functionParameterList.getChildren().add(new Text("PARAMETERS"));
+        functionInstructionList.getChildren().add(new Text("DESCRIPTION"));
+        functionReturnList.getChildren().add(new Text("RETURN VALUE"));
         Scanner fileReader = new Scanner(new File("src/resources/parsing/EnglishHelp.properties"));
         while (fileReader.hasNextLine()) {
             String s = fileReader.nextLine();
@@ -48,10 +54,10 @@ public class CommandReferenceView extends ScrollPane {
             Text t2 = new Text(l[1]);
             Text t3 = new Text(l[2]);
             Text t4 = new Text(l[3]);
-            t1.setFont(Font.font(7));
-            t2.setFont(Font.font(7));
-            t3.setFont(Font.font(7));
-            t4.setFont(Font.font(7));
+            t1.setFont(Font.font(10));
+            t2.setFont(Font.font(10));
+            t3.setFont(Font.font(10));
+            t4.setFont(Font.font(10));
             t3.setWrappingWidth(300);
             functionNameList.getChildren().add(t1);
             functionParameterList.getChildren().add(t2);

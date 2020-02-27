@@ -47,6 +47,7 @@ public class Pen {
         for (Object o : myLines) {
             Polyline p = (Polyline) o;
             p.getPoints().clear();
+            myLines.remove(p);
         }
     }
 }

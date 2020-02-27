@@ -71,7 +71,7 @@ public class Parser {
         List<String> fullList = Arrays.asList(commands.split("\n"));
         List<String> newList = new ArrayList<String>(fullList);
         for(String line: fullList){
-            line.stripLeading();
+            line = line.stripLeading();
             if(line.startsWith("#")){
                 newList.remove(line);
             }

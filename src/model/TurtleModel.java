@@ -28,14 +28,12 @@ public class TurtleModel {
     //double newX = x + myZeroX;
     this.myX = x;
     addPoints(x);
-    System.out.println(this.myX);
   }
 
-  public void setY(double y){
+  public void setY(double y) {
     //double newY  = myZeroY - y;
     this.myY = y;
     addPoints(y);
-    System.out.println(this.myY);
   }
   private void addPoints(double p) {
     myPoints.add(p);

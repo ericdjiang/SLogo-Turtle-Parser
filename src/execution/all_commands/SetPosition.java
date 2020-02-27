@@ -18,6 +18,7 @@ public class SetPosition implements Command {
         System.out.println(turtleModel.getX());
         System.out.println(turtleModel.getY());
         double distanceTraveled = Math.sqrt(Math.pow(2, newX - orginalX) + Math.pow(2, newY - orginalY));
+        consoleModel.setReturnVal(distanceTraveled);
         return distanceTraveled;
     }
 

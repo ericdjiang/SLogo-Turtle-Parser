@@ -43,7 +43,7 @@ public class For implements Command {
         System.out.println("Error in dotimes");
       }
     }
-
+    consoleModel.setReturnVal(lastReturnValue);
     return lastReturnValue;
   }
 

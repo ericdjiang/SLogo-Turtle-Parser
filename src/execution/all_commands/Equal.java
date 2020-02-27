@@ -15,9 +15,11 @@ public class Equal implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         if(parameters.get(0).equals(parameters.get(1))){
             System.out.println(1);
+            consoleModel.setReturnVal(1);
             return 1;
         }
         System.out.println(0);
+        consoleModel.setReturnVal(0);
         return 0;
     }
 

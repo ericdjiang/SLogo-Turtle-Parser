@@ -47,6 +47,7 @@ public class DoTimes extends LoopCommand implements Command{
       }
     }
 
+    consoleModel.setReturnVal(lastReturnValue);
     return lastReturnValue;
   }
 

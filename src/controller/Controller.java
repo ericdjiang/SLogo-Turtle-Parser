@@ -37,7 +37,7 @@ public class Controller {
             turtleModel.setCleared(false);
         }
         else {
-            //       if (turtleModel.getPenStatus()) {
+            if (turtleModel.getPenStatus()) {
 
             for (Object o : turtleModel.getPointList()) {
                 if (index % 2 == 1) {
@@ -51,12 +51,17 @@ public class Controller {
             }
             turtleModel.clearList();
             turtleWindow.getChildren().add(pen.draw(pen.getColor()));
-            //  }
+             }
+            else {
+                turtleModel.trackPos();
+                pen.pickUp();
+            }
             turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);
             turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2);
             turtleView.setTurtleRotation(turtleModel.getAngle());
             turtleView.setVisible(turtleModel.getShowing());
         }
+
     }
     public TurtleModel getModel() {
         return this.turtleModel;

@@ -31,16 +31,18 @@ public class For implements Command {
 //        System.out.println(loopLimit);
 //        System.out.println(loopBody);
 
+    double lastReturnValue = 0;
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
         variableModel.updateVariable(varName, i);
         Parser parser = new Parser(loopBody, language, turtleModel, variableModel);
+        lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {
         System.out.println("Error in dotimes");
       }
     }
 
-    return 0;
+    return lastReturnValue;
   }
 
   @Override

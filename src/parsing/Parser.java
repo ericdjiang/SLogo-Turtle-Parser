@@ -175,7 +175,7 @@ public class Parser {
         int cursor, String symbol)
         throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         cmdStack.push(factory.getCommand(getSymbol(symbol)));
-        int loopEndIndex = getLoopEndIndex(symbolList, cursor);
+        int loopEndIndex = getLoopEndIndex(symbolList, cursor, symbol);
 
         List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
         argsWithLanguage.add(0, myLanguage);
@@ -184,12 +184,12 @@ public class Parser {
     }
 
 
-    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex){
+    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex, String cmdString){
         int openBracketCount = 0;
         int closeBracketCount = 0;
 
         int cursor = loopStartIndex; //the index of the command symbol
-        while ( openBracketCount > closeBracketCount || openBracketCount == 0) {
+        while ( openBracketCount > closeBracketCount || closeBracketCount < LOOP_MAPPINGS.get(cmdString)) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
             if (symbol.equals("]")){

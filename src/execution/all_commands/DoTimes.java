@@ -17,13 +17,13 @@ public class DoTimes extends LoopCommand implements Command{
     String language = symbolList.get(0);
     String varName = symbolList.get(2);
 
-    int expEnd = getLoopGuardEnd(symbolList);
-    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(3, expEnd)), language, turtleModel, variableModel);
+    int loopGuardEnd = getLoopGuardEnd(symbolList);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(3, loopGuardEnd)), language, turtleModel, variableModel);
     int loopLimit = (int) Math.round(loopGuardParser.getLastReturnValue());
 
 //    System.out.println(loopLimit);
 //    System.out.println(String.join(" ",symbolList.subList(loopGuardEnd+2, symbolList.size())));
-    String loopBody = String.join(" ",symbolList.subList(expEnd+2, symbolList.size()));
+    String loopBody = String.join(" ",symbolList.subList(loopGuardEnd+2, symbolList.size()));
 
     //DOTIMES [ variable limit ]
     //[ command(s) ]
@@ -33,11 +33,10 @@ public class DoTimes extends LoopCommand implements Command{
 //        System.out.println(loopBody);
 
     double lastReturnValue = 0;
+
     for (int i = 0; i < loopLimit; i++) {
-      System.out.println(i);
       try{
         variableModel.updateVariable(varName, i);
-        System.out.println(loopBody);
         Parser parser = new Parser(loopBody, language, turtleModel, variableModel);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {

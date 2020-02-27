@@ -11,6 +11,7 @@ public class HideTurtle implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         turtleModel.hideTurtle();
+        System.out.println("Hiding Turtle");
         return 0;
     }
 

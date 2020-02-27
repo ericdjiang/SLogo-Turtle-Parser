@@ -11,6 +11,7 @@ public class ShowTurtle implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         turtleModel.showTurtle();
+        System.out.println("Showing Turtle");
         return 1;
     }
 

@@ -1,19 +1,20 @@
 package view;
 
+import controller.Controller;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import parsing.Parser;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
 public class UserInterface {
 
-    private static final int HEIGHT = 600;
-    private static final int WIDTH = 850;
+    private static final int HEIGHT = 576;
+    private static final int WIDTH = 1024;
 
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
@@ -25,49 +26,53 @@ public class UserInterface {
     private BorderPane mainView = new BorderPane();
     private BorderPane mainFrame = new BorderPane();
     private ColorPicker colorPicker = new ColorPicker();
+    private ColorPicker penColorPicker = new ColorPicker();
     private ViewSwitchText historySwitchText;
     private ViewSwitchText referenceSwitchText;
     private ViewSwitchText variableSwitchText;
-    private TurtleView turtleWindow;
-    private Parser parser;
+    private TurtleWindow turtleWindow;
     private CommandReferenceView referenceView;
     private CommandHistoryView historyView;
     private VariableView variableView;
-    private Console commandPrompt;
+    private ConsoleView commandPrompt;
     private LanguageSelector languageSelector;
     private ControlPanel controlPanel;
     public CommandHistoryWindow historyWindow;
     private CommandReferenceWindow referenceWindow;
     private VariableWindow variableWindow;
-
+    private Controller controller;
+    private Pen pen;
     private String myLanguage;
 
-    public UserInterface(Stage stage, String language, TurtleView turtleView) throws IOException, InvocationTargetException, IllegalAccessException {
+    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
-        this.turtleWindow = turtleView;
+        this.turtleWindow = turtleWindow;
         this.referenceView = new CommandReferenceView(language);
-        this.commandPrompt = new Console(myResources);
+        this.commandPrompt = new ConsoleView(myResources);
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, turtleView, myLanguage);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel(), c.getModel(), variableView);
+        this.controller = c;
+        this.pen = c.getPen();
         stage.setTitle(myResources.getString("Title"));
-        //this.parser = new Parser();
     }
-    public Scene setupUI() throws IOException {
+    public Scene setupUI() {
         historySwitchText = new ViewSwitchText(myResources.getString("HistoryWindow"));
         referenceSwitchText = new ViewSwitchText(myResources.getString("CommandWindow"));
         variableSwitchText = new ViewSwitchText(myResources.getString("VariableWindow"));
 
         historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
-
         customizationPanel.getChildren().add(languageSelector);
         customizationPanel.getChildren().add(colorPicker);
+        penColorPicker.setValue(Color.BLACK);
+        customizationPanel.getChildren().add(penColorPicker);
+        //FIXME refactor button
         Button b = controlPanel.getTurtleSwitcher();
         customizationPanel.getChildren().add(b);
         b.getStyleClass().add("turtleswitch");
-
+        penColorPicker.setOnAction(event -> setPenColor());
         colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
         languageSelector.setOnAction(event -> {
             try {
@@ -86,10 +91,13 @@ public class UserInterface {
         inputPanel.getChildren().add(controlPanel);
 
         mainView.setBottom(inputPanel);
-        mainView.setTop(customizationPanel);
+        turtleWindow.getStyleClass().add("turtlewindow");
         mainView.setCenter(turtleWindow);
+        System.out.println(turtleWindow.getWidth());
+        mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
         mainFrame.setRight(historyWindow);
+
         Scene myScene = new Scene(mainFrame, WIDTH, HEIGHT);
         myScene.getStylesheets().add(STYLESHEET);
         return myScene;
@@ -97,11 +105,12 @@ public class UserInterface {
     private void setBackgroundColor(Pane turtleView) {
         turtleView.setBackground(new Background(new BackgroundFill(colorPicker.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
     }
+    private void setPenColor() {
+        pen.setColor(penColorPicker.getValue());
+    }
     private void updateLanguage() throws IOException {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
         myLanguage = r.getString(languageSelector.getValue());
-        //parser.addPatterns(myLanguage);
-        System.out.println(myLanguage);
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
         commandPrompt.updateLanguage(myResources);
         referenceView.initializeReferences(myLanguage);
@@ -110,7 +119,6 @@ public class UserInterface {
         referenceSwitchText.updateLanguage(myResources.getString("CommandWindow"));
         variableSwitchText.updateLanguage(myResources.getString("VariableWindow"));
     }
-    //probably refactor windows into another class and call a contructor to set right
     private void setHistoryWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
         historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);

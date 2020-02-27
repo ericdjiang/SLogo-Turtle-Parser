@@ -3,7 +3,7 @@
 
 1) The user types 'fd 50' in the command window, sees the turtle move in the display window leaving a trail, and has the command added to the environment's history.
    
-   The user input goes into the console visual which gets sent to the model. Based on the command, it will get the method. And then the command will be called on the turtle model and the visuals will be updated. 
+   The user input goes into the consoleView visual which gets sent to the model. Based on the command, it will get the method. And then the command will be called on the turtle model and the visuals will be updated. 
 
 2) The user types '50 fd' in the command window and sees an error message that the command was not formatted correctly.
     

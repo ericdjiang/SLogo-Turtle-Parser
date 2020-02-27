@@ -1,4 +1,7 @@
-import view.TurtleView;
+import controller.Controller;
+import model.ConsoleModel;
+import model.TurtleModel;
+import view.TurtleWindow;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -14,12 +17,15 @@ public class Main extends Application {
     /**
      * Start of the program.
      */
-    private final int FRAMES_PER_SECOND = 1;
+    private final int FRAMES_PER_SECOND = 60;
     private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private Scene myScene;
     private Timeline myAnimation;
-    private final TurtleView turtleView = new TurtleView();
+    private final TurtleWindow turtleWindow = new TurtleWindow();
+    private ConsoleModel consoleModel = new ConsoleModel();
+    private Controller controller;
     private UserInterface UI;
+    private TurtleModel turtleModel;
 
 
     public static void main (String[] args) {
@@ -29,9 +35,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        UI = new UserInterface(primaryStage, "English", turtleView);
+        turtleModel = new TurtleModel(0, 0, 0);
+        controller = new Controller(turtleModel, turtleWindow, consoleModel);
+        UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();
-
         primaryStage.setScene(myScene);
         primaryStage.show();
         primaryStage.setResizable(false);
@@ -45,6 +52,7 @@ public class Main extends Application {
     }
 
     private void step() {
+            controller.update();
     }
 
 }

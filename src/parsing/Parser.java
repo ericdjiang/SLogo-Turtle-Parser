@@ -54,8 +54,8 @@ public class Parser {
             parseText(commands);
         }catch( Exception e){
             System.out.println("error");
-//            String messgae = resourceBundle.getString("ErrorInput");
-//            myConsoleModel.setErrorMessage(messgae);
+            String messgae = resourceBundle.getString("ErrorInput");
+            myConsoleModel.setErrorMessage(messgae);
         }
     }
 

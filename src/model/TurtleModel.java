@@ -25,6 +25,7 @@ public class TurtleModel {
     myPoints.add(myX);
     myPoints.add(myY);
     isShowing = true;
+    penDown = true;
   }
 
   public void setX(double x){

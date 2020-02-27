@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TurtleModel {
   private double myX;
   private double myY;
@@ -9,26 +12,35 @@ public class TurtleModel {
   private double myZeroX;
   private double myZeroY;
   private boolean isCleared;
+  private List myPoints;
 
 
   public TurtleModel (double myX, double myY, double myAngle) {
     this.myX = myX;
     this.myY = myY;
     this.myAngle = myAngle;
+    this.myPoints = new ArrayList();
   }
 
   public void setX(double x){
     //double newX = x + myZeroX;
     this.myX = x;
+    addPoints(x);
     System.out.println(this.myX);
   }
 
   public void setY(double y){
     //double newY  = myZeroY - y;
     this.myY = y;
+    addPoints(y);
     System.out.println(this.myY);
   }
-
+  private void addPoints(double p) {
+    myPoints.add(p);
+  }
+  public List getPointList() {
+    return this.myPoints;
+  }
   public void setXY(double x, double y) {
     setX(x);
     setY(y);

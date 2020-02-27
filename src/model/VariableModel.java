@@ -44,7 +44,7 @@ public class VariableModel {
     }
     public String getVariable() {
         if (myVariableNames.size() > 0) {
-            return (String) myVariableNames.get(myVariableNames.size() - 1) + Double.toString((Double) myVariableVals.get(myVariableVals.size() - 1));
+            return (String) myVariableNames.get(myVariableNames.size() - 1) + ": " + Double.toString((Double) myVariableVals.get(myVariableVals.size() - 1));
         }
         else {
             return null;

@@ -30,7 +30,6 @@ public class Pen {
         myCoordinates = Arrays.asList(myPoints.toArray());
         p.getPoints().addAll(myCoordinates);
         p.setStroke(c);
-        myPoints.clear();
         return p;
     }
     public void setColor(Paint color) {

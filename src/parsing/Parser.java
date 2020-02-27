@@ -111,7 +111,11 @@ public class Parser {
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
         if (symbolList.size()==1){ // for parsing within loop guard
-            lastReturnValue = Double.parseDouble(symbolList.get(0));
+            if (symbolList.get(0).matches(":[a-zA-Z_]+")){
+                lastReturnValue = myVariableModel.getValue(symbolList.get(0));
+            } else {
+                lastReturnValue = Double.parseDouble(symbolList.get(0));
+            };
         }
 
         for (int cursor = 0; cursor < symbolList.size(); cursor++) {
@@ -162,8 +166,6 @@ public class Parser {
                   if (!cmdStack.isEmpty()) {
                     argStack.push(returnValue.toString());
                   }
-
-
                 }
             }
 

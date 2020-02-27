@@ -1,7 +1,9 @@
 package view;
 
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -24,6 +26,14 @@ public class CommandHistoryView extends ScrollPane {
         consoleInput.setWrappingWidth(500); //remove magic number
         this.content.getChildren().add(consoleInput);
         lineNum ++;
+    }
+    public void displayError(String input) {
+        if (input != null) {
+            Text error = new Text(lineNum + "\t" + input);
+            error.setFill(Color.RED);
+            this.content.getChildren().add(error);
+            lineNum++;
+        }
     }
     private void clearHistory() {
         content.getChildren().removeAll(commandList);

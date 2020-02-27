@@ -82,7 +82,8 @@ public class ControlPanel extends VBox {
     }
     private void updateInputHistory(String commands){
         historyView.updateHistory("\tInput: " + commands + "; Output: " + c.getConsoleModel().getReturnVal());
-        historyView.updateHistory(c.getConsoleModel().getErrorMessage());
+        historyView.displayError(c.getConsoleModel().getErrorMessage());
+        c.getConsoleModel().setErrorMessage(null);
     }
     private void executeRun(){
         String commands = consoleView.getText();

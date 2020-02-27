@@ -1,4 +1,4 @@
-package execution.turtle_commands;
+package execution.all_commands;
 
 import execution.Command;
 import model.ConsoleModel;
@@ -7,16 +7,16 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class SetTowards implements Command {
-
+public class HideTurtle implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        System.out.println("getting number of degrees turned" + parameters.get(0));
-        return Double.parseDouble(parameters.get(0));
+        turtleModel.hideTurtle();
+        System.out.println("Hiding Turtle");
+        return 0;
     }
 
     @Override
     public int getNumParams() {
-        return 1;
+        return 0;
     }
 }

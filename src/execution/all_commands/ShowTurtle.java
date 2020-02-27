@@ -1,4 +1,4 @@
-package execution.boolean_operations;
+package execution.all_commands;
 
 import execution.Command;
 import model.ConsoleModel;
@@ -7,18 +7,16 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class GreaterThan implements Command {
-
+public class ShowTurtle implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        if(Double.parseDouble(parameters.get(1)) > Double.parseDouble(parameters.get(0))) {
-            return 1;
-        }
-        return 0;
+        turtleModel.showTurtle();
+        System.out.println("Showing Turtle");
+        return 1;
     }
 
     @Override
     public int getNumParams() {
-        return 2;
+        return 0;
     }
 }

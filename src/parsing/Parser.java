@@ -55,10 +55,10 @@ public class Parser {
         try {
             parseText(commands);
         }catch( Exception e){
-            System.out.println("error");
-            String messgae = resourceBundle.getString("ErrorInput");
-            myConsoleModel.setErrorMessage(messgae);
-
+//            System.out.println("error");
+//            String messgae = resourceBundle.getString("ErrorInput");
+//            myConsoleModel.setErrorMessage(messgae);
+            e.printStackTrace();
         }
     }
 
@@ -133,7 +133,9 @@ public class Parser {
 //                    System.out.println(cmdStack.peek());
 //                    System.out.println(myMethodModels.containsKey(cmdStack.peek()));
                     if(myMethodModels.containsKey(cmdStack.peek())){
+
                         String methodName = cmdStack.pop();
+                        System.out.println("running method: "+methodName);
 
                         MethodModel myMethodModel = myMethodModels.get(methodName);
 
@@ -147,7 +149,12 @@ public class Parser {
                         for(int i = 0; i < params.size(); i++) {
                             List <String> varNameAndValue = new ArrayList<>();
                             varNameAndValue.add(myMethodModel.getVariableName(i));
-                            varNameAndValue.add(params.get(i));
+
+                            String value = params.get(i);
+                            if(value.matches(":[a-zA-Z_]+")) {
+                                value = Double.toString(myVariableModel.getValue(value));
+                            }
+                            varNameAndValue.add(value);
                             factory.getCommand(getSymbol("make")).execute(varNameAndValue, myTurtleModel, myVariableModel, myConsoleModel,
                                 myMethodModels);
                         }

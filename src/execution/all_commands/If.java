@@ -1,6 +1,7 @@
 package execution.all_commands;
 
 import execution.Command;
+import execution.LoopCommand;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -8,23 +9,29 @@ import model.TurtleModel;
 import model.VariableModel;
 import parsing.Parser;
 
-public class If implements Command {
+public class If extends LoopCommand implements Command {
   @Override
   public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     String language = symbolList.get(0);
 
-    String varName = symbolList.get(2);
-    int loopLimit = Integer.parseInt(symbolList.get(3));
-    String loopBody = String.join(" ",symbolList.subList(6, symbolList.size()));
+    int expEnd = getExpEnd(symbolList);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel);
+    int loopGuard = (int) Math.round(loopGuardParser.getLastReturnValue());
 
-    for (int i = 0; i < loopLimit; i++) {
+    String loopBody = String.join(" ",symbolList.subList(expEnd+1, symbolList.size()));
+
+//    System.out.println(language);
+//    System.out.println(numRepeats);
+//    System.out.println(loopBody);
+
+      if (loopGuard>0){
       try{
-        variableModel.updateVariable(varName, i);
+//        System.out.println("parsing"+loopBody);
         Parser parser = new Parser(loopBody, language, turtleModel, variableModel);
       } catch (Exception e) {
-        System.out.println("Error in dotimes");
+
       }
     }
 

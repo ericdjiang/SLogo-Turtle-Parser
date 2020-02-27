@@ -29,8 +29,16 @@ public class Controller {
         turtleWindow.getChildren().add(turtleView);
     }
     public void update() {
-        turtleView.setVisible(true);
- //       if (turtleModel.getPenStatus()) {
+        if (turtleModel.getClearedStatus()) {
+            pen.clear();
+            turtleView.setX(turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
+            turtleView.setY(turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
+            turtleView.setRotate(0);
+            turtleModel.setCleared(false);
+        }
+        else {
+            turtleView.setVisible(true);
+            //       if (turtleModel.getPenStatus()) {
 
             for (Object o : turtleModel.getPointList()) {
                 if (index % 2 == 1) {
@@ -42,23 +50,18 @@ public class Controller {
                 }
                 pen.addPoint(point);
             }
-        turtleModel.clearList();
+            turtleModel.clearList();
 
-        turtleWindow.getChildren().add(pen.draw(pen.getColor()));
-  //  }
-        turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
-        turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
-        turtleView.setTurtleRotation(turtleModel.getAngle());
-        if (turtleModel.getShowing()) {
-            turtleView.setVisible(false);
-            turtleModel.setCleared(false);
+            turtleWindow.getChildren().add(pen.draw(pen.getColor()));
+            //  }
+            turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);
+            turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2);
+            turtleView.setTurtleRotation(turtleModel.getAngle());
+            if (turtleModel.getShowing()) {
+                turtleView.setVisible(false);
+            }
         }
-        if (turtleModel.getClearedStatus()) {
-            pen.clear();
-            turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
-            turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
-            turtleView.setRotate(0);
-        }
+
     }
     public TurtleModel getModel() {
         return this.turtleModel;

@@ -20,6 +20,8 @@ public class TurtleModel {
     this.myY = myY;
     this.myAngle = myAngle;
     this.myPoints = new ArrayList();
+    myPoints.add(myX);
+    myPoints.add(myY);
   }
 
   public void setX(double x){
@@ -38,6 +40,9 @@ public class TurtleModel {
   }
   public List getPointList() {
     return this.myPoints;
+  }
+  public void clearList() {
+    myPoints.clear();
   }
   public void setXY(double x, double y) {
     setX(x);

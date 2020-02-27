@@ -43,6 +43,16 @@
   -fx-background-radius: 7;
   -fx-padding: 7;
 }
+.colorbutton {
+  -fx-pref-height: 32.5;
+  -fx-pref-width: 160;
+  -fx-font-size: 9.5;
+  -fx-text-fill: #000;
+  -fx-background-color: #eef;
+  -fx-border-radius: 7;
+  -fx-background-radius: 7;
+  -fx-padding: 7;
+}
 .button:hover {
   -fx-background-color: #aaa;
 }

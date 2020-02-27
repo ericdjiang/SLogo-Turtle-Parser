@@ -44,6 +44,9 @@ public class TurtleModel {
   }
   public void clearList() {
     myPoints.clear();
+  }
+  public void reInitCenter() {
+    clearList();
     myPoints.add(myZeroX);
     myPoints.add(myZeroY);
   }

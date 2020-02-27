@@ -1,4 +1,4 @@
-package view;
+package view.util;
 
 import controller.Controller;
 import java.util.HashMap;
@@ -18,9 +18,12 @@ import model.TurtleModel;
 import model.VariableModel;
 
 import parsing.Parser;
+import view.views.TurtleView;
+import view.views.VariableView;
+import view.views.CommandHistoryView;
+import view.views.ConsoleView;
 
 import javax.imageio.ImageIO;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
 
 public class ControlPanel extends VBox {

@@ -2,12 +2,9 @@ package controller;
 
 import model.ConsoleModel;
 import model.TurtleModel;
-import view.Pen;
-import view.TurtleView;
-import view.TurtleWindow;
-
-import java.util.ArrayList;
-import java.util.List;
+import view.util.Pen;
+import view.views.TurtleView;
+import view.layout.TurtleWindow;
 
 public class Controller {
     private TurtleModel turtleModel;

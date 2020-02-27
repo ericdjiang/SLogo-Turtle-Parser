@@ -1,8 +1,10 @@
-package view;
+package view.util;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polyline;
+import view.layout.TurtleWindow;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

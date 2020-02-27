@@ -1,4 +1,4 @@
-package view;
+package view.layout;
 
 import controller.Controller;
 import javafx.event.ActionEvent;
@@ -10,8 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import view.views.VariableView;
+import view.util.ControlPanel;
+import view.util.LanguageSelector;
+import view.util.Pen;
+import view.views.CommandHistoryView;
+import view.views.CommandReferenceView;
+import view.views.ConsoleView;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -136,6 +142,7 @@ public class UserInterface {
         pen.setColor(penColorPicker.getValue());
     }
     private void updateLanguage() throws IOException {
+
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
         myLanguage = r.getString(languageSelector.getValue());
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);

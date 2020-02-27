@@ -4,14 +4,14 @@ import java.util.Map;
 import model.ConsoleModel;
 import model.MethodModel;
 import model.TurtleModel;
-import view.TurtleWindow;
+import view.layout.TurtleWindow;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import view.UserInterface;
+import view.layout.UserInterface;
 
 /**
  * Feel free to completely change this code or delete it entirely. 

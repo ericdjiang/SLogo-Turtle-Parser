@@ -16,8 +16,9 @@ public class MakeVariable implements Command {
         return Double.parseDouble(parameters.get(1));
     }
 
-    @Override
-    public int getNumParams() {
-        return 2;
+        @Override
+        public int getNumParams() {
+            return 2;
+        }
+
     }
-}

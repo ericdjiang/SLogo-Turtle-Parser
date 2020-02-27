@@ -22,11 +22,21 @@ public class Parser {
     private String myLanguage;
     private VariableModel myVariableModel;
     private ConsoleModel myConsoleModel;
+    private Double lastReturnValue;
+
     private TurtleModel myTurtleModel;
+    private static final Map <String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
+       put("repeat",1);
+       put("dotimes", 2);
+       put("for", 2);
+
+       put("if", 1);
+       put("ifelse", 2);
+    }};
 
     public Parser(String commands, String language, TurtleModel myTurtleModel,
         VariableModel myVariableModel, ConsoleModel myConsoleModel)
-        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException, InstantiationException {
+        {
         this.myTurtleModel = myTurtleModel;
         this.myVariableModel = myVariableModel;
         this.myConsoleModel = myConsoleModel;
@@ -34,7 +44,11 @@ public class Parser {
 
         addPatterns(language);
 
-        parseText(commands);
+        try{
+            parseText(commands);
+        }catch( InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e){
+
+        }
     }
 
     private boolean validateMessage() {
@@ -44,7 +58,7 @@ public class Parser {
     private void parseText(String commands)
 
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
-        List<String> inputCommands = Arrays
+        List<String> symbolList = Arrays
             .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
 
 //        for (String line : lines) {
@@ -84,82 +98,90 @@ public class Parser {
 //
 //        }
         //FIXME: Only works for commands with only one parameter of type int
-        Stack<List<String>> stack = new Stack();
 
-        stack.push(inputCommands);
 
-        while (!stack.isEmpty()) {
-            List<String> symbolList = stack.pop();
+//        System.out.println("INSIDE Parser: " + commands);
 
-            Stack<Command> cmdStack = new Stack<>();
-            Stack<String> argStack = new Stack<>();
+        Stack<Command> cmdStack = new Stack<>();
+        Stack<String> argStack = new Stack<>();
 
-            // iterate thru commands in popped element;
-            int loopEndIndex = -1;
+        // iterate thru commands in popped element;
+        int loopEndIndex = -1;
 //            String symbol = symbolList.get(cursor).strip();
 //            Command factoryCommand = factory.getCommand(getSymbol(symbol));
 //            cmdStack.push(factoryCommand);
+        if (symbolList.size()==1){ // for parsing within loop guard
+            lastReturnValue = Double.parseDouble(symbolList.get(0));
+        }
 
-            for (int cursor = 0; cursor < symbolList.size(); cursor++) {
+        for (int cursor = 0; cursor < symbolList.size(); cursor++) {
 
-                if (cursor > loopEndIndex) {
-                    String symbol = symbolList.get(cursor).strip();
-                    //if the symbol is a command
-                    if (symbol.equals("repeat")) {
-                        loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 2);
-                    } else if (symbol.equals("dotimes")){
-                        loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 5);
-                    } else if (symbol.equals("for")) {
-                        loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol, 7);
-                    }
+            if (cursor > loopEndIndex) {
+                String symbol = symbolList.get(cursor).strip();
+//                    System.out.println(symbol);
 
-                    else if (symbol.matches("^[a-zA-Z]+$")) {
-                        cmdStack.push(factory.getCommand(getSymbol(symbol)));
-                    } else { // if symbol is a number
-                        argStack.push(symbol);
-                    }
+                //if the symbol is a command
+                if (LOOP_MAPPINGS.containsKey(symbol)){
+                    loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);
+                }else if (symbol.matches("^[a-zA-Z]+$")) {
+                    cmdStack.push(factory.getCommand(getSymbol(symbol)));
+                }
+                else { // if symbol is a number
+                    argStack.push(symbol);
+                }
 //                    System.out.println();
 //
 //                    System.out.println(cursor);
 //                    System.out.println(cmdStack);
 //                    System.out.println(argStack);
 
-                    while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
-                        argStack.size() >= cmdStack.peek().getNumParams()
-                    ) {
-                        if(cmdStack.size()>=2 && cmdStack.get(cmdStack.size()-2).getNumParams() > argStack.size()){
-                            break;
-                        }
-                        Command cmdToExecute = cmdStack.pop();
-                        List<String> params = new ArrayList<>();
-                        while (cmdToExecute.getNumParams() > params.size()) {
-                            String popped = argStack.pop();
-                            params.add(popped);
-                        }
-
-
-                        Double returnValue = cmdToExecute
-                            .execute(params, myTurtleModel, myVariableModel, myConsoleModel);
-                        if (!cmdStack.isEmpty()) {
-                            argStack.push(returnValue.toString());
-
-                        }
-
+                while (!cmdStack.isEmpty() && !argStack.isEmpty() &&
+                    argStack.size() >= cmdStack.peek().getNumParams()
+                ) {
+                    if(cmdStack.size()>=2 && cmdStack.get(cmdStack.size()-2).getNumParams() > argStack.size()){
+                        break;
                     }
-                }
 
+//                        System.out.println(argStack);
+                    Command cmdToExecute = cmdStack.pop();
+                    List<String> params = new ArrayList<>();
+                    while (cmdToExecute.getNumParams() > params.size()) {
+                        String popped = argStack.pop();
+
+                        // check if the argument is a variable, and convert it to double if the command is not make
+                        if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable") && popped.matches(":[a-zA-Z_]+")){
+                            popped = Double.toString(myVariableModel.getValue(popped));
+                        }
+
+                        params.add(popped);
+                    }
+                    Collections.reverse(params);
+                  Double returnValue = cmdToExecute
+                      .execute(params, myTurtleModel, myVariableModel, myConsoleModel);
+                  this.lastReturnValue = returnValue;
+                  if (!cmdStack.isEmpty()) {
+                    argStack.push(returnValue.toString());
+                  }
+
+
+                }
             }
+
         }
+
 
 
     }
 
+    public Double getLastReturnValue(){
+        return lastReturnValue;
+    };
+
     private int handleLoop(List<String> symbolList, Stack<Command> cmdStack, Stack<String> argStack,
-        int cursor, String symbol, int loopStartIndex)
+        int cursor, String symbol)
         throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        int loopEndIndex;
         cmdStack.push(factory.getCommand(getSymbol(symbol)));
-        loopEndIndex = getLoopEndIndex(symbolList, cursor+loopStartIndex);
+        int loopEndIndex = getLoopEndIndex(symbolList, cursor, symbol);
 
         List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
         argsWithLanguage.add(0, myLanguage);
@@ -168,18 +190,18 @@ public class Parser {
     }
 
 
-    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex){
-        int openBracketCount = 1;
+    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex, String cmdString){
+        int openBracketCount = 0;
         int closeBracketCount = 0;
 
-        int cursor = loopStartIndex; //the start of the opening bracket
-        while (openBracketCount > closeBracketCount) {
+        int cursor = loopStartIndex; //the index of the command symbol
+        while ( openBracketCount > closeBracketCount || closeBracketCount < LOOP_MAPPINGS.get(cmdString)) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
-            if( symbol.equals("[") ){
-                openBracketCount += 1;
-            } else if (symbol.equals("]")){
+            if (symbol.equals("]")){
                 closeBracketCount += 1;
+            } else if (symbol.equals("[")){
+                openBracketCount += 1;
             }
         }
         return cursor;

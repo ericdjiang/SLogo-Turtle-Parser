@@ -52,9 +52,10 @@ public class Parser {
 
         try{
             parseText(commands);
-        }catch( InvocationTargetException | IllegalAccessException | NoSuchMethodException | ClassNotFoundException | InstantiationException e){
-            String messgae = resourceBundle.getString("ErrorInput");
-            myConsoleModel.setErrorMessage(messgae);
+        }catch( Exception e){
+            System.out.println("error");
+//            String messgae = resourceBundle.getString("ErrorInput");
+//            myConsoleModel.setErrorMessage(messgae);
         }
     }
 
@@ -149,7 +150,13 @@ public class Parser {
                 while (!cmdStack.isEmpty() &&
                     argStack.size() >= cmdStack.peek().getNumParams()
                 ) {
-                    if(cmdStack.size()>=2 && cmdStack.get(cmdStack.size()-2).getNumParams() >= argStack.size()){
+                    if(cmdStack.size()>=2 &&
+                        (
+                        cmdStack.get(cmdStack.size()-2).getNumParams() == 1 && cmdStack.get(cmdStack.size()-2).getNumParams() > argStack.size() // and fd 30 bk 20
+                        ||
+                        cmdStack.get(cmdStack.size()-2).getNumParams() == 2 && cmdStack.get(cmdStack.size()-2).getNumParams() >= argStack.size() // make :var sum 20 30
+                        )
+                    ){
                         break;
                     }
 

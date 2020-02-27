@@ -24,7 +24,7 @@ public class LoopCommand {
   public String[] getLoopBodies(List <String> symbolList) {
     String[] loopBodies = new String[2];
 
-    int openBracketCount = 0;
+    int openBracketCount =  0;
     int closeBracketCount = 0;
 
     int cursor = 0;

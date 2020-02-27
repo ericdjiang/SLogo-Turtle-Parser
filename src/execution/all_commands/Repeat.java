@@ -42,7 +42,9 @@ public class Repeat extends LoopCommand implements Command {
     }
 
 
+    consoleModel.setReturnVal(lastReturnValue);
     return lastReturnValue;
+
   }
 
   @Override

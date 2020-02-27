@@ -7,15 +7,12 @@ import model.VariableModel;
 
 import java.util.List;
 
-public class ClearScreen implements Command {
+public class PenUp implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        double originalX = turtleModel.getX();
-        double originalY = turtleModel.getY();
-        double distance = Math.sqrt(Math.pow(2,originalX) + Math.pow(2, originalY));
-        turtleModel.setCleared(true);
-        consoleModel.setReturnVal(distance);
-        return distance;
+        turtleModel.makePenUp();
+        consoleModel.setReturnVal(0);
+        return 0;
     }
 
     @Override

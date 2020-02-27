@@ -15,9 +15,11 @@ public class And implements Command {
         double param2 = Double.parseDouble(parameters.get(1));
         if(param1!= 0 && param2 != 0){
             System.out.println(1);
+            consoleModel.setReturnVal(1);
             return 1;
         }
         System.out.println(0);
+        consoleModel.setReturnVal(0);
         return 0;
     }
 

@@ -105,7 +105,7 @@ public class ControlPanel extends VBox {
         return this.turtleSwitchButton;
     }
     private void updateInputHistory(String commands){
-        historyView.updateHistory(new Text("Input: " + commands), new Text("Output: " + c.getConsoleModel().getReturnVal()));
+        historyView.updateHistory("\tInput: " + commands + "; Output: " + c.getConsoleModel().getReturnVal());
     }
     private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         String commands = consoleView.getText();

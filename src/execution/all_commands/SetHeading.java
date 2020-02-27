@@ -16,6 +16,7 @@ public class SetHeading implements Command {
 
         System.out.println("turns turtle to an absolute heading by " +parameters.get(0) + " degrees");
         turtleModel.setAngle(Double.parseDouble(parameters.get(0)));
+        consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
         return Double.parseDouble(parameters.get(0));
     }
 

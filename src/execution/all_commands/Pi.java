@@ -13,6 +13,7 @@ public class Pi implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
 
         System.out.println(Math.PI);
+        consoleModel.setReturnVal(Math.PI);
         return Math.PI;
     }
 

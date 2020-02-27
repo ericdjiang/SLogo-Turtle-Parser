@@ -53,7 +53,7 @@ public class UserInterface {
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel(), c.getModel());
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel(), c.getModel(), variableView);
         this.controller = c;
         this.pen = c.getPen();
         stage.setTitle(myResources.getString("Title"));

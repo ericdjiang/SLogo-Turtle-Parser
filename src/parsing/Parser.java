@@ -196,7 +196,7 @@ public class Parser {
     private int getNumParams(String symbol)
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
         {
-            System.out.println("Getting factory for symbol: "+ symbol);
+//            System.out.println("Getting factory for symbol: "+ symbol);
             return factory.getCommand(getSymbol(symbol)).getNumParams();
         }
 

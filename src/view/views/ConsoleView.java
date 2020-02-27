@@ -1,10 +1,9 @@
-package view;
+package view.views;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;

@@ -18,7 +18,7 @@ public class Backward implements Command {
         System.out.println(turtleModel.getAngle());
         double radians = oppositeangle * (Math.PI/180);
         double xChange = distance * Math.sin(radians);
-        double yChange = -1 * distance * Math.cos(radians);
+        double yChange = distance * Math.cos(radians);
         System.out.println(xChange);
         System.out.println(yChange);
         turtleModel.setX(turtleModel.getX() + xChange);

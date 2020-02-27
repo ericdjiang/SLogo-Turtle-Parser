@@ -24,7 +24,14 @@ public class SetTowards implements Command {
                 return -180;
             }
         }
-        double angle = Math.toDegrees(Math.atan(differenceY/differenceX));
+        double angle = Math.toDegrees(Math.atan(differenceX/differenceY));
+        if(differenceX<0&&differenceY<0){
+            angle = angle + 180;
+        }
+        if(differenceX>0&&differenceY<0){
+            angle = angle + 180;
+        }
+
         turtleModel.setAngle(angle);
         consoleModel.setReturnVal(angle);
 

@@ -6,7 +6,7 @@ import model.ConsoleModel;
 import model.TurtleModel;
 
 import java.util.List;
-import model.TurtleModel;
+
 import model.VariableModel;
 
 public class NotEqual implements Command {

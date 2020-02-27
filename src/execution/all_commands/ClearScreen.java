@@ -12,9 +12,8 @@ public class ClearScreen implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         double originalX = turtleModel.getX();
         double originalY = turtleModel.getY();
-        turtleModel.setXY(0,0);
         double distance = Math.sqrt(Math.pow(2,originalX) + Math.pow(2, originalY));
-        turtleModel.clearPen();
+        turtleModel.setCleared(true);
         return distance;
     }
 

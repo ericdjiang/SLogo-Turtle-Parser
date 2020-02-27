@@ -14,7 +14,7 @@ public class Forward implements Command {
         System.out.println("Forward: "+ parameters.get(0));
 
         double xChange = Double.parseDouble(parameters.get(0)) * Math.sin(radians);
-        double yChange = -1 * Double.parseDouble(parameters.get(0)) * Math.cos(radians);
+        double yChange =  Double.parseDouble(parameters.get(0)) * Math.cos(radians);
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));

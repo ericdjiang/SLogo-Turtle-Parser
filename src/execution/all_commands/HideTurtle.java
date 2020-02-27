@@ -12,6 +12,7 @@ public class HideTurtle implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         turtleModel.hideTurtle();
         System.out.println("Hiding Turtle");
+        consoleModel.setReturnVal(0);
         return 0;
     }
 

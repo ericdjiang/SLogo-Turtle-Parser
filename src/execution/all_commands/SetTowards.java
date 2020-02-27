@@ -52,6 +52,7 @@ public class SetTowards implements Command {
         turtleModel.setAngle(originalAngle + angle);
         System.out.println(angle);
         //FIXME: This is not the correct implementation
+        consoleModel.setReturnVal(angle);
         return angle;
     }
 

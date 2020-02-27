@@ -42,7 +42,7 @@ public class For implements Command {
         System.out.println("Error in dotimes");
       }
     }
-
+    consoleModel.setReturnVal(0);
     return 0;
   }
 

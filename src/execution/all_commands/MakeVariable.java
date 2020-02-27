@@ -11,6 +11,8 @@ public class MakeVariable implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         variableModel.updateVariable(parameters.get(0), Double.parseDouble(parameters.get(1)));
+
+        consoleModel.setReturnVal(Double.parseDouble(parameters.get(1)));
         return Double.parseDouble(parameters.get(1));
     }
 

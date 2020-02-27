@@ -15,6 +15,7 @@ public class Home implements Command {
         turtleModel.setXY(0,0);
         double distance = Math.sqrt(Math.pow(2,originalX) + Math.pow(2, originalY));
         System.out.println(distance);
+        consoleModel.setReturnVal(distance);
         return distance;
     }
 

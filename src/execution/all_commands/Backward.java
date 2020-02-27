@@ -23,6 +23,7 @@ public class Backward implements Command {
         System.out.println(yChange);
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
+        consoleModel.setReturnVal(distance);
         return distance;
     }
 

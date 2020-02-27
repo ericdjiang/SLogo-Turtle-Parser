@@ -12,6 +12,7 @@ public class Left implements Command {
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         System.out.println("Rotating Left by: "+ parameters.get(0));
         turtleModel.setAngle(turtleModel.getAngle() - Double.parseDouble(parameters.get(0)));
+        consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
         return Double.parseDouble(parameters.get(0)) ;
     }
 

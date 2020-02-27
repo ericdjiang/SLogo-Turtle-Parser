@@ -32,7 +32,7 @@ public class Repeat implements Command {
       }
     }
 
-
+    consoleModel.setReturnVal(0);
     return 0;
   }
 

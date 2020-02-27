@@ -37,7 +37,7 @@ public class DoTimes implements Command {
       }
     }
 
-
+    consoleModel.setReturnVal(0);
     return 0;
   }
 

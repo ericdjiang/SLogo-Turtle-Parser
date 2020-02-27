@@ -58,7 +58,6 @@ public class TurtleModel {
     return this.myX;
   }
   public double getY() {
-   // System.out.println(myY);
     return this.myY;
   }
   public double getAngle() {

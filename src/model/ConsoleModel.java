@@ -5,7 +5,7 @@ public class ConsoleModel {
     private String errorMessage;
     public ConsoleModel() {
         returnVal = 0;
-        errorMessage = "";
+        errorMessage = null;
     }
     public void setReturnVal(double d) {
         this.returnVal = d;

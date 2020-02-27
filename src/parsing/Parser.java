@@ -3,12 +3,12 @@ package parsing;
 import execution.Command;
 import execution.CommandFactory;
 
-import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
 import model.ConsoleModel;
+import model.MethodModel;
 import model.TurtleModel;
 import model.VariableModel;
 
@@ -25,6 +25,8 @@ public class Parser {
     private ConsoleModel myConsoleModel;
     private Double lastReturnValue;
 
+    private Map<String, MethodModel> myMethodModels;
+
     private TurtleModel myTurtleModel;
     private static final Map <String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
        put("repeat",1);
@@ -36,12 +38,14 @@ public class Parser {
     }};
 
     public Parser(String commands, String language, TurtleModel myTurtleModel,
-        VariableModel myVariableModel, ConsoleModel myConsoleModel)
+        VariableModel myVariableModel, ConsoleModel myConsoleModel, Map<String, MethodModel>myMethodModels)
         {
         this.myTurtleModel = myTurtleModel;
         this.myVariableModel = myVariableModel;
         this.myConsoleModel = myConsoleModel;
         this.myLanguage = language;
+        this.myMethodModels = myMethodModels;
+
         resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
 
         addPatterns(language);
@@ -165,7 +169,7 @@ public class Parser {
                     }
                     Collections.reverse(params);
                   Double returnValue = cmdToExecute
-                      .execute(params, myTurtleModel, myVariableModel, myConsoleModel);
+                      .execute(params, myTurtleModel, myVariableModel, myConsoleModel, myMethodModels);
                   this.lastReturnValue = returnValue;
                   if (!cmdStack.isEmpty()) {
                     argStack.push(returnValue.toString());

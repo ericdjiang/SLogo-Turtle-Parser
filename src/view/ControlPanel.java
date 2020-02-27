@@ -1,6 +1,8 @@
 package view;
 
 import controller.Controller;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,6 +13,7 @@ import javafx.scene.text.Text;
 
 import model.ConsoleModel;
 
+import model.MethodModel;
 import model.TurtleModel;
 import model.VariableModel;
 
@@ -39,6 +42,8 @@ public class ControlPanel extends VBox {
     private VariableModel variableModel;
     private VariableView variableView;
 
+    private Map<String, MethodModel> methodModels;
+
 
     public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView) {
         this.resources = resources;
@@ -53,6 +58,7 @@ public class ControlPanel extends VBox {
         this.c = c;
 
         this.variableModel = new VariableModel();
+        this.methodModels = new HashMap<>();
 
         runButton = makeButton("Run", event -> {
         executeRun();
@@ -89,7 +95,7 @@ public class ControlPanel extends VBox {
         String commands = consoleView.getText();
         resources.getBaseBundleName();
 
-        parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel());
+        parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel(), methodModels);
 
         updateInputHistory(commands);
         updateVariableView();

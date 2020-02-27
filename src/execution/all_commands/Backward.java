@@ -2,15 +2,17 @@ package execution.all_commands;
 
 import execution.Command;
 import java.util.List;
+import java.util.Map;
 
 import model.ConsoleModel;
+import model.MethodModel;
 import model.TurtleModel;
 import model.VariableModel;
 
 public class Backward implements Command {
     @Override
 
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
+    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
         double distance = Double.parseDouble(parameters.get(0));
         double oppositeangle = turtleModel.getAngle() + 180;
         double radians = oppositeangle * (Math.PI/180);

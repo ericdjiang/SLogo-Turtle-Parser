@@ -49,10 +49,7 @@ public class Controller {
         turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
         turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
         turtleView.setTurtleRotation(turtleModel.getAngle());
-        if (turtleModel.getShowing()) {
-            turtleView.setVisible(false);
-            turtleModel.setCleared(false);
-        }
+        turtleView.setVisible(turtleModel.getShowing());
         if (turtleModel.getClearedStatus()) {
             pen.clear();
             turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);

@@ -6,6 +6,9 @@ import view.Pen;
 import view.TurtleView;
 import view.TurtleWindow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
     private TurtleModel turtleModel;
     private TurtleWindow turtleWindow;
@@ -14,6 +17,8 @@ public class Controller {
     private Pen pen;
     private double oldx;
     private double oldy;
+    private int index = 1;
+    private double point;
 
     public Controller(TurtleModel turtleBackEnd, TurtleWindow turtleFrontEnd, ConsoleModel consoleModel) {
         this.turtleModel = turtleBackEnd;
@@ -30,8 +35,20 @@ public class Controller {
     public void update() {
         turtleView.setVisible(true);
 //        if (turtleModel.getPenStatus()) {
-       pen.addPoint(oldx, oldy, turtleModel.getX() + turtleWindow.getViewWidth() / 2, turtleModel.getY() + turtleWindow.getViewHeight() / 2);
+//        pen.addPoint(oldx, oldy, turtleModel.getX() + turtleWindow.getViewWidth() / 2, turtleModel.getY() + turtleWindow.getViewHeight() / 2);
 //        }
+        for (Object o : turtleModel.getPointList()) {
+            if (index%2 == 1) {
+                point = (double) o + turtleWindow.getViewWidth() / 2;
+                index = 2;
+            }
+            else {
+                point = (double) o + turtleWindow.getViewHeight() / 2;
+                index = 1;
+            }
+            pen.addPoint(point);
+        }
+        turtleModel.clearList();
         oldx = turtleModel.getX() + turtleWindow.getViewWidth() / 2;
         oldy = turtleModel.getY() + turtleWindow.getViewHeight() / 2;
 

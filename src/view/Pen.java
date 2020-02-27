@@ -19,7 +19,7 @@ public class Pen {
     public Pen() {
         this.myPoints = new ArrayList();
         this.color = Color.BLACK;
-        this.myLines = new ArrayList();
+        this.myLines = new ArrayList<Polyline>();
     }
     public void addPoint(double p) {
         myPoints.add(p);
@@ -43,11 +43,13 @@ public class Pen {
     public Paint getColor() {
         return this.color;
     }
-    public void clear() {
+    public void clear(TurtleWindow root) {
         for (Object o : myLines) {
-            Polyline p = (Polyline) o;
+            Polyline p;
+            p = (Polyline) o;
             p.getPoints().clear();
-            myLines.remove(p);
+            root.getChildren().remove(p);
         }
+        myLines.clear();
     }
 }

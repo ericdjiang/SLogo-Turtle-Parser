@@ -55,31 +55,7 @@ public class ControlPanel extends VBox {
         this.variableModel = new VariableModel();
 
         runButton = makeButton("Run", event -> {
-            try {
-                executeRun();
-            } catch (InvocationTargetException e) {
-                System.out.println("SYNTAX ERROR1");
-                //e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                System.out.println("SYNTAX ERROR2");
-                //e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                System.out.println("SYNTAX ERROR3");
-                //e.printStackTrace();
-            } catch (InstantiationException e) {
-                System.out.println("SYNTAX ERROR4");
-                //e.printStackTrace();
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-
-                System.out.println("SYNTAX ERROR8");
-                //e.printStackTrace();
-            }
-            catch (ClassNotFoundException e) {
-                System.out.println("SYNTAX ERROR5");
-                Error notValid = new Error("ClassNotFound");
-                //e.printStackTrace();
-            }
+        executeRun();
         });
         clearButton = makeButton("Clear", event -> clearConsole());
         turtleSwitchButton = makeButton("TurtleSelect", event -> turtleView.switchTurtleImage());
@@ -106,8 +82,10 @@ public class ControlPanel extends VBox {
     }
     private void updateInputHistory(String commands){
         historyView.updateHistory("\tInput: " + commands + "; Output: " + c.getConsoleModel().getReturnVal());
+        historyView.displayError(c.getConsoleModel().getErrorMessage());
+        c.getConsoleModel().setErrorMessage(null);
     }
-    private void executeRun() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+    private void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();
 
@@ -130,6 +108,10 @@ public class ControlPanel extends VBox {
         runButton.setText(resources.getString("Run"));
         clearButton.setText(resources.getString("Clear"));
         this.myLanguage = language;
+    }
+
+    public void sendErrorToConsoleModel(String errorMessage){
+        cm.setErrorMessage(errorMessage);
     }
 
 

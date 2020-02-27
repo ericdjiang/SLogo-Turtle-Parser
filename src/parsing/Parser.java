@@ -23,6 +23,9 @@ public class Parser {
        put("repeat",1);
        put("dotimes", 2);
        put("for", 2);
+
+       put("if", 1);
+       put("ifelse", 2);
     }};
 
     public Parser(String commands, String language, TurtleModel myTurtleModel,
@@ -172,7 +175,7 @@ public class Parser {
         int cursor, String symbol)
         throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         cmdStack.push(factory.getCommand(getSymbol(symbol)));
-        int loopEndIndex = getLoopEndIndex(symbolList, cursor, symbol);
+        int loopEndIndex = getLoopEndIndex(symbolList, cursor);
 
         List<String> argsWithLanguage = new ArrayList<>(symbolList.subList(cursor + 1, loopEndIndex));
         argsWithLanguage.add(0, myLanguage);
@@ -181,15 +184,18 @@ public class Parser {
     }
 
 
-    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex, String cmdType){
+    private int getLoopEndIndex(List<String> symbolList, int loopStartIndex){
+        int openBracketCount = 0;
         int closeBracketCount = 0;
 
-        int cursor = loopStartIndex; //the start of the opening bracket
-        while (LOOP_MAPPINGS.get(cmdType) > closeBracketCount) {
+        int cursor = loopStartIndex; //the index of the command symbol
+        while ( openBracketCount > closeBracketCount || openBracketCount == 0) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
             if (symbol.equals("]")){
                 closeBracketCount += 1;
+            } else if (symbol.equals("[")){
+                openBracketCount += 1;
             }
         }
         return cursor;

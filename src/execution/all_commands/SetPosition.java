@@ -16,6 +16,7 @@ public class SetPosition implements Command {
         double newY = Double.parseDouble(parameters.get(1));
         turtleModel.setXY(newX, newY);
         double distanceTraveled = Math.sqrt(Math.pow(newX - orginalX,2) + Math.pow(newY - orginalY,2));
+        consoleModel.setReturnVal(distanceTraveled);
         return distanceTraveled;
     }
 

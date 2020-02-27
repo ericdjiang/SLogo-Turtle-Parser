@@ -11,7 +11,11 @@ public class GreaterThan implements Command {
 
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
-        if(Double.parseDouble(parameters.get(1)) > Double.parseDouble(parameters.get(0))) return 1;
+        if(Double.parseDouble(parameters.get(1)) > Double.parseDouble(parameters.get(0))) {
+            consoleModel.setReturnVal(1);
+            return 1;
+        }
+        consoleModel.setReturnVal(0);
         return 0;
     }
 

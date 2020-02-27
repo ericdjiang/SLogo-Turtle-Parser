@@ -12,6 +12,11 @@ public class ArcTangent implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         double angle = Double.parseDouble(parameters.get(0));
+<<<<<<< HEAD
+=======
+        System.out.println("Arctangent of " + parameters.get(0));
+        consoleModel.setReturnVal(Math.atan((angle*Math.PI)/180));
+>>>>>>> master
         return Math.atan((angle*Math.PI)/180);
     }
 

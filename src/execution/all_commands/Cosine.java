@@ -12,6 +12,7 @@ public class Cosine implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel) {
         double angle = Double.parseDouble(parameters.get(0));
+        consoleModel.setReturnVal(Math.cos((angle*Math.PI)/180));
         return Math.cos((angle*Math.PI)/180);
     }
 

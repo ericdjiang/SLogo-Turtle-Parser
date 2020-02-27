@@ -3,7 +3,6 @@ package parsing;
 import execution.Command;
 import execution.CommandFactory;
 
-import java.io.Console;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -161,7 +160,7 @@ public class Parser {
                     }
                     Collections.reverse(params);
                   Double returnValue = cmdToExecute
-                      .execute(params, myTurtleModel, myVariableModel, myConsoleModel);
+                      .execute(params, myTurtleModel, myVariableModel, myConsoleModel, );
                   this.lastReturnValue = returnValue;
                   if (!cmdStack.isEmpty()) {
                     argStack.push(returnValue.toString());

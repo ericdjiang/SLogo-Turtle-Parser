@@ -37,7 +37,6 @@ public class Controller {
             turtleModel.setCleared(false);
         }
         else {
-            turtleView.setVisible(true);
             //       if (turtleModel.getPenStatus()) {
 
             for (Object o : turtleModel.getPointList()) {

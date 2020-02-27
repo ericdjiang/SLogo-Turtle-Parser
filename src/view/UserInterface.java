@@ -53,6 +53,7 @@ public class UserInterface {
     private final HBox console = new HBox();
     private Button backgroundButton;
     private Button penButton;
+    private Button turtleButton;
 
     public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
@@ -78,12 +79,12 @@ public class UserInterface {
         customizationPanel.getChildren().add(languageSelector);
 
         StackPane backGroundColorBox = new StackPane();
-        backgroundButton.getStyleClass().add("colorButton");
-        penButton.getStyleClass().add("colorButton");
+        backgroundButton.getStyleClass().add("colorbutton");
+        penButton.getStyleClass().add("colorbutton");
         backGroundColorBox.getChildren().add(colorPicker);
         colorPicker.setOnMouseClicked(e-> colorPicker.hide());
         backGroundColorBox.getChildren().add(backgroundButton);
-        backGroundColorBox.getStyleClass().add("colorBox");
+        backGroundColorBox.getStyleClass().add("colorbox");
         StackPane penColorBox = new StackPane();
         penColorBox.getChildren().add(penColorPicker);
         penColorBox.getChildren().add(penButton);
@@ -94,9 +95,9 @@ public class UserInterface {
         penColorPicker.getStyleClass().add("colorpicker");
         colorPicker.getStyleClass().add("colorpicker");
         //FIXME refactor button
-        Button b = controlPanel.getTurtleSwitcher();
-        customizationPanel.getChildren().add(b);
-        b.getStyleClass().add("turtleswitch");
+        turtleButton = controlPanel.getTurtleSwitcher();
+        customizationPanel.getChildren().add(turtleButton);
+        turtleButton.getStyleClass().add("turtleswitch");
         penColorPicker.setOnAction(event -> setPenColor());
         colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
         penColorPicker.hide();
@@ -146,6 +147,7 @@ public class UserInterface {
         variableSwitchText.updateLanguage(myResources.getString("VariableWindow"));
         penButton.setText(myResources.getString("ChoosePen"));
         backgroundButton.setText(myResources.getString("ChooseBackGround"));
+        turtleButton.setText(myResources.getString("ChooseTurtle"));
     }
     private void setFooter() {
         console.getChildren().add(commandPrompt.getPrompt());

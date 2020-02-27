@@ -29,7 +29,7 @@ public class MakeUserInstruction extends LoopCommand implements Command {
 
     methodModels.put(methodName, myMethodModel);
 
-    System.out.println(methodModels.get(methodName).getVariableNames());
+    System.out.println("DONE MAKING METHOD BODY FOR METHOD NAME: " + methodName);
 //    System.out.println(language);
 //    System.out.println(numRepeats);
 //    System.out.println(loopBody);

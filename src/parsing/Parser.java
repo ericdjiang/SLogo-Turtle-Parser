@@ -55,8 +55,9 @@ public class Parser {
         try {
             parseText(commands);
         } catch (Exception e) {
-            String messgae = resourceBundle.getString("ErrorInput");
-            myConsoleModel.setErrorMessage(messgae);
+//            String messgae = resourceBundle.getString("ErrorInput");
+//            myConsoleModel.setErrorMessage(messgae);
+                e.printStackTrace();
         }
     }
 
@@ -114,16 +115,21 @@ public class Parser {
                     (
                         (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
                         ||
-                        argStack.size() >= getNumParams(cmdStack.peek()) // for standard command
+                        (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
                     )
 
                 ) {
-                    if(myMethodModels.containsKey(symbol)){
-                        MethodModel myMethodModel = myMethodModels.get(symbol);
 
-                        Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
+//                    System.out.println("Peeking");
+//                    System.out.println(cmdStack.peek());
+//                    System.out.println(myMethodModels.containsKey(cmdStack.peek()));
+                    if(myMethodModels.containsKey(cmdStack.peek())){
+                        String methodName = cmdStack.pop();
+
+                        MethodModel myMethodModel = myMethodModels.get(methodName);
+
                         List<String> params = new ArrayList<>();
-                        while (cmdToExecute.getNumParams() > params.size()) {
+                        while (myMethodModel.getNumVariables() > params.size()) {
                             String popped = argStack.pop();
                             params.add(popped);
                         }
@@ -158,7 +164,6 @@ public class Parser {
                             // check if the argument is a variable, and convert it to double if the command is not make
                             if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
                                 && popped.matches(":[a-zA-Z_]+")) {
-                                System.out.println(cmdToExecute.getClass().getSimpleName());
                                 popped = Double.toString(myVariableModel.getValue(popped));
                             }
 
@@ -191,7 +196,7 @@ public class Parser {
     private int getNumParams(String symbol)
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
         {
-            System.out.println(symbol);
+            System.out.println("Getting factory for symbol: "+ symbol);
             return factory.getCommand(getSymbol(symbol)).getNumParams();
         }
 

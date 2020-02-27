@@ -18,6 +18,8 @@ public class TurtleModel {
   public TurtleModel (double myX, double myY, double myAngle) {
     this.myX = myX;
     this.myY = myY;
+    this.myZeroX = myX;
+    this.myZeroY = myY;
     this.myAngle = myAngle;
     this.myPoints = new ArrayList();
     myPoints.add(myX);
@@ -26,13 +28,11 @@ public class TurtleModel {
   }
 
   public void setX(double x){
-    //double newX = x + myZeroX;
     this.myX = x;
     addPoints(x);
   }
 
   public void setY(double y) {
-    //double newY  = myZeroY - y;
     this.myY = y;
     addPoints(y);
   }
@@ -44,6 +44,8 @@ public class TurtleModel {
   }
   public void clearList() {
     myPoints.clear();
+    myPoints.add(myZeroX);
+    myPoints.add(myZeroY);
   }
   public void setXY(double x, double y) {
     setX(x);
@@ -53,11 +55,9 @@ public class TurtleModel {
     this.myAngle = a;
   }
   public double getX() {
-   // System.out.println(myX);
     return this.myX;
   }
   public double getY() {
-   // System.out.println(myY);
     return this.myY;
   }
   public double getAngle() {

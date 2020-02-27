@@ -19,6 +19,7 @@ public class ClearScreen implements Command {
         turtleModel.setY(0);
         turtleModel.setAngle(0);
         turtleModel.setCleared(true);
+        turtleModel.clearList();
         consoleModel.setReturnVal(distance);
         return distance;
     }

@@ -51,5 +51,6 @@ public class Pen {
             root.getChildren().remove(p);
         }
         myLines.clear();
+        myPoints.clear();
     }
 }

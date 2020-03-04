@@ -25,7 +25,7 @@ public class Tell implements Command {
             }
         }
         turtleModelContainer.setActiveTurtles(newActiveTurtles);
-        return 1;
+        return Integer.parseInt(symbolList.get(symbolList.size()-1));
     }
 
     @Override

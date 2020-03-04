@@ -1,6 +1,5 @@
 package model;
 
-import jdk.dynalink.linker.support.TypeUtilities;
 import view.layout.TurtleWindow;
 import view.views.TurtleView;
 
@@ -15,16 +14,17 @@ public class TurtleContainer {
     public TurtleContainer(TurtleWindow turtlewindow){
         turtleWindow = turtlewindow;
         turtleViews = new ArrayList<>();
-        turtleModelContainer = new TurtleModelContainer();
+        turtleModelContainer = new TurtleModelContainer(this);
     }
 
-    public void addTurtle(int id){
+    public TurtleModel addTurtle(int id){
         TurtleModel turtleModel = turtleModelContainer.addToTurtleModels(id);
         TurtleView turtleView = new TurtleView(id);
         turtleViews.add(turtleView);
         turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
         turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
         turtleWindow.getChildren().add(turtleView);
+        return turtleModel;
     }
 
     public List<TurtleView> getTurtleViews(){

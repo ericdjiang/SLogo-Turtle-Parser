@@ -106,7 +106,8 @@ public class ControlPanel extends VBox {
         parser = new Parser(commands, myLanguage, variableModel, c.getConsoleModel(), methodModels, turtleContainer.getTurtleModelContainer());
         updateInputHistory(commands);
         updateVariableView();
-        saveToFile(commands);
+        //saveToFile(commands);
+        // FIXME: Find a way to only save some commands not all of them
     }
     private void updateVariableView() {
         Text t = new Text(variableModel.getVariable());

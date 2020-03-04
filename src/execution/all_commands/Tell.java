@@ -16,7 +16,7 @@ public class Tell implements Command {
         for(int i = 2; i < symbolList.size(); i ++){
             int id = Integer.parseInt(symbolList.get(i));
             if(!turtleModelContainer.getTurtleIds().contains(id)){
-                TurtleModel turtleModel = turtleModelContainer.addToTurtleModels(id);
+                TurtleModel turtleModel = turtleModelContainer.addTurtle(id);
                 newActiveTurtles.add(turtleModel);
             }
                 else{

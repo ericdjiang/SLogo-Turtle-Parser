@@ -2,12 +2,9 @@ package controller;
 
 import model.ConsoleModel;
 import model.TurtleModel;
-import view.Pen;
-import view.TurtleView;
-import view.TurtleWindow;
-
-import java.util.ArrayList;
-import java.util.List;
+import view.util.Pen;
+import view.views.TurtleView;
+import view.layout.TurtleWindow;
 
 public class Controller {
     private TurtleModel turtleModel;
@@ -48,6 +45,19 @@ public class Controller {
                     index = 1;
                 }
                 pen.addPoint(point);
+//                if (point < turtleWindow.getViewHeight() && point < turtleWindow.getViewWidth() && point > 0 && point > 0) {
+//                    pen.addPoint(point);
+//                }
+//                else {
+//                    if (point > turtleWindow.getViewHeight()) {
+//                        point = turtleWindow.getViewHeight();
+//                    }
+//                    else if (point > turtleWindow.getViewWidth()) {
+//                        point = turtleWindow.getViewWidth();
+//                    }
+//                    pen.addPoint(point);
+//                }
+
             }
             turtleModel.clearList();
             turtleWindow.getChildren().add(pen.draw(pen.getColor()));

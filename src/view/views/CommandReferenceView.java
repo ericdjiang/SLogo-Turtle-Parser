@@ -1,4 +1,4 @@
-package view;
+package view.views;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
@@ -8,15 +8,12 @@ import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
-
+//TODO add more languages and refactor
 public class CommandReferenceView extends ScrollPane {
     private HBox content = new HBox();
-    private HBox header = new HBox();
     private VBox functionNameList = new VBox();
     private VBox functionParameterList = new VBox();
     private VBox functionInstructionList = new VBox();

@@ -12,16 +12,23 @@ public class VariableModel {
     private List myVariableNames;
     private List myVariableVals;
     private boolean isNewVarAdded;
+    private String oldVariable;
+    private double oldVariableVal;
 
     public VariableModel(){
         myMap = new HashMap<>();
         myVariableNames = new ArrayList();
         myVariableVals = new ArrayList();
+        this.oldVariable=null;
     }
 
     public void updateVariable(String variableName, double value){
         String variable = variableName.substring(1);
-        isNewVarAdded = true;
+        if (! variable.equals(oldVariable) || value != oldVariableVal) {
+            isNewVarAdded = true;
+        }
+        oldVariable = variable;
+        oldVariableVal = value;
         myMap.put(variable,value);
         myVariableNames.add(variable);
         myVariableVals.add(value);
@@ -48,6 +55,7 @@ public class VariableModel {
         double sum = varival +varival2;
         return sum;
     }
+    //TODO impelment memory
     public String getVariable() {
         if (myVariableNames.size() > 0) {
             return (String) myVariableNames.get(myVariableNames.size() - 1) + ": " + Double.toString((Double) myVariableVals.get(myVariableVals.size() - 1));

@@ -1,6 +1,7 @@
-package view;
+package view.layout;
 
 import javafx.scene.layout.VBox;
+import view.views.VariableView;
 
 public class VariableWindow extends VBox {
 

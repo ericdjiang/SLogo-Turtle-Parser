@@ -103,7 +103,7 @@ public class ControlPanel extends VBox {
         c.getConsoleModel().setErrorMessage(null);
     }
 
-    public void executeRun(){
+    private void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();
         parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel(), methodModels);
@@ -131,7 +131,7 @@ public class ControlPanel extends VBox {
         cm.setErrorMessage(errorMessage);
     }
 
-    public void addUploadedText(File file){
+    private void addUploadedText(File file){
         try {
             Scanner s = new Scanner(file);
             while (s.hasNextLine()){
@@ -162,8 +162,5 @@ public class ControlPanel extends VBox {
         } catch (IOException e) {
             //e.printStackTrace();
         }
-
     }
-
-
 }

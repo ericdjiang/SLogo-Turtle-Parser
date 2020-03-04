@@ -7,15 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
-import parsing.Parser;
+import model.*;
 
 public class MakeUserInstruction extends LoopCommand implements Command {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+  public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     // to varname [ :var1 :var2 ] [ command1 command2 ]

@@ -1,17 +1,14 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
 import java.util.Map;
 
 public class Minus implements Command {
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
         System.out.println("Negative of " + parameters.get(0));
         consoleModel.setReturnVal(-1*Double.parseDouble(parameters.get(0)));
         return -1*Double.parseDouble(parameters.get(0));

@@ -1,20 +1,20 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
 import java.util.Map;
 
 public class HideTurtle implements Command {
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-        turtleModel.hideTurtle();
-        System.out.println("Hiding Turtle");
-        consoleModel.setReturnVal(0);
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+        for (TurtleModel turtleModel: turtleModelContainer.getActiveTurtles()){
+            turtleModel.hideTurtle();
+            System.out.println("Hiding Turtle");
+            consoleModel.setReturnVal(0);
+        }
+
         return 0;
     }
 

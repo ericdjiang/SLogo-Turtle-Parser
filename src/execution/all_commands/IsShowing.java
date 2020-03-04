@@ -1,18 +1,19 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
 import java.util.Map;
 
 public class IsShowing implements Command {
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-        if(turtleModel.getShowing()) return 1;
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+        if(turtleModelContainer.getActiveTurtles().get(turtleModelContainer.getActiveTurtles().size()-1).getShowing()) {
+            consoleModel.setReturnVal(1);
+            return 1;
+        }
+        consoleModel.setReturnVal(0);
         return 0;
     }
 

@@ -24,10 +24,10 @@ public class TurtleModel {
     this.myZeroY = myY;
     this.myAngle = myAngle;
     this.myPoints = new ArrayList();
-    myPoints.add(myX);
-    myPoints.add(myY);
-    isShowing = true;
-    penDown = true;
+    this.myPoints.add(myX);
+    this.myPoints.add(myY);
+    this.isShowing = true;
+    this.penDown = true;
   }
 
   public void setX(double x){
@@ -95,5 +95,8 @@ public class TurtleModel {
     myPoints.clear();
     myPoints.add(myX);
     myPoints.add(myY);
+  }
+  public int getModelId(){
+    return myId;
   }
 }

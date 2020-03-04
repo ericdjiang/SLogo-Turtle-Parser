@@ -2,19 +2,15 @@ package execution.all_commands;
 
 import execution.Command;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
+import model.*;
 
 import java.util.List;
 import java.util.Map;
 
-import model.VariableModel;
-
 public class NotEqual implements Command {
         @Override
 
-        public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+        public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
             if(! parameters.get(0).equals(parameters.get(1))){
                 System.out.println(1);
                 consoleModel.setReturnVal(1);

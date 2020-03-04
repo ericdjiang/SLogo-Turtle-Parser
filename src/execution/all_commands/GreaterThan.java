@@ -4,15 +4,12 @@ import execution.Command;
 import java.util.List;
 import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 public class GreaterThan implements Command {
 
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
         if(Double.parseDouble(parameters.get(1)) > Double.parseDouble(parameters.get(0))) {
             consoleModel.setReturnVal(1);
             return 1;

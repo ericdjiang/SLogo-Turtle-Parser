@@ -3,16 +3,11 @@ package parsing;
 import execution.Command;
 import execution.CommandFactory;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import javafx.stage.FileChooser;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 public class Parser {
 
@@ -30,7 +25,7 @@ public class Parser {
     private Map<String, MethodModel> myMethodModels;
 
 
-    private TurtleModel myTurtleModel;
+    private TurtleModelContainer turtleModelContainer;
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
         put("repeat", 1);
         put("dotimes", 2);
@@ -40,25 +35,26 @@ public class Parser {
         put("ifelse", 2);
 
         put("to", 2);
+        put("tell",1);
     }};
 
-    public Parser(String commands, String language, TurtleModel myTurtleModel,
-        VariableModel myVariableModel, ConsoleModel myConsoleModel,
-        Map<String, MethodModel> myMethodModels) {
-        this.myTurtleModel = myTurtleModel;
+    public Parser(String commands, String language,
+                  VariableModel myVariableModel, ConsoleModel myConsoleModel,
+                  Map<String, MethodModel> myMethodModels, TurtleModelContainer turtlemodelcontainer) {
         this.myVariableModel = myVariableModel;
         this.myConsoleModel = myConsoleModel;
         this.myLanguage = language;
         this.myMethodModels = myMethodModels;
         resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         addPatterns(language);
+        turtleModelContainer = turtlemodelcontainer;
         try {
             parseText(commands);
         }catch( Exception e){
 //            System.out.println("error");
             String messgae = resourceBundle.getString("ErrorInput");
             myConsoleModel.setErrorMessage(messgae);
-          //  e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -156,11 +152,11 @@ public class Parser {
                                 value = Double.toString(myVariableModel.getValue(value));
                             }
                             varNameAndValue.add(value);
-                            factory.getCommand(getSymbol("make")).execute(varNameAndValue, myTurtleModel, myVariableModel, myConsoleModel,
-                                myMethodModels);
+                            factory.getCommand(getSymbol("make")).execute(varNameAndValue, myVariableModel, myConsoleModel,
+                                myMethodModels,turtleModelContainer );
                         }
 
-                        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myTurtleModel, myVariableModel, myConsoleModel, myMethodModels);
+                        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myVariableModel, myConsoleModel, myMethodModels,turtleModelContainer );
                         lastReturnValue = parser.getLastReturnValue();
 
                     } else if (cmdStack.size() >= 2 &&
@@ -188,8 +184,8 @@ public class Parser {
                         }
                         Collections.reverse(params);
                         Double returnValue = cmdToExecute
-                            .execute(params, myTurtleModel, myVariableModel, myConsoleModel,
-                                myMethodModels);
+                            .execute(params, myVariableModel, myConsoleModel,
+                                myMethodModels,turtleModelContainer );
                         this.lastReturnValue = returnValue;
                         if (!cmdStack.isEmpty()) {
                             argStack.push(returnValue.toString());

@@ -9,10 +9,14 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class TurtleView extends Rectangle {
-    private Image ig = new Image("file:src/resources/images/turtle1.png");
-    private ImagePattern turtlePattern = new ImagePattern(ig);
+    private Image ig;
+    private ImagePattern turtlePattern;
+    private int myId;
 
-    public TurtleView() {
+    public TurtleView(int id) {
+        ig = new Image("file:src/resources/images/turtle1.png");
+        myId = id;
+        turtlePattern = new ImagePattern(ig);
         setFill(turtlePattern);
         setWidth(50);
         setHeight(50);
@@ -30,4 +34,7 @@ public class TurtleView extends Rectangle {
         File selected = fc.showOpenDialog(s);
         setImage(selected.getName());
     }
+    public int getViewId(){
+        return myId;
+}
 }

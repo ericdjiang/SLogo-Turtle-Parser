@@ -1,10 +1,8 @@
 import controller.Controller;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.stage.FileChooser;
 import model.ConsoleModel;
 import model.MethodModel;
 import model.TurtleModel;
@@ -45,7 +43,7 @@ public class Main extends Application {
         myAnimation = new Timeline();
         turtleModel = new TurtleModel(1,0, 0, 0);
         controller = new Controller(turtleModel, turtleWindow, consoleModel);
-        UI = new UserInterface(primaryStage, "English", turtleWindow, controller,primaryStage );
+        UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();
         primaryStage.setScene(myScene);
         primaryStage.show();

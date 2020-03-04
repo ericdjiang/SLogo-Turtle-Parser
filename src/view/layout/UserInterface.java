@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import view.views.VariableView;
 import view.util.ControlPanel;
@@ -21,12 +20,9 @@ import view.views.CommandReferenceView;
 import view.views.ConsoleView;
 
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class UserInterface {
 
@@ -65,7 +61,7 @@ public class UserInterface {
     private Button penButton;
     private Button turtleButton;
 
-    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c, Stage primaryStage) throws IOException, InvocationTargetException, IllegalAccessException {
+    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
         this.turtleWindow = turtleWindow;
@@ -74,7 +70,7 @@ public class UserInterface {
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel(), c.getModel(), variableView, primaryStage);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel(), c.getModel(), variableView);
         this.controller = c;
         this.pen = c.getPen();
         this.backgroundButton = makeButton("ChooseBackGround", e-> colorPicker.show());

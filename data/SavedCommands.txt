@@ -1,29 +1,20 @@
-to poly [ :numsides :length ]
+to angle [ ]
 [
-  repeat :numsides
-  [
-    fd :length 
-    rt quotient 360 :numsides
-  ]
+  rt 30
+  fd 50
+  lt 105
+  fd 25
+  bk 25
+  rt 105
+  bk 50
 ]
 
-to square [ :side ]
+tell [ 1 2 3 4 5 6 7 8 9 10 11 12 ]
+st
+pd
+repeat 12
 [
-  poly 4 :side
+  rt product id 30
+  setpc id
 ]
-
-to triangle [ :side ]
-[
-  poly 3 :side
-]
-
-
-to house [ :size ]
-[
-  square :size
-  fd :size rt 30
-  triangle :size
-]
-
-
-house 100
+angle

@@ -55,7 +55,7 @@ public class ControlPanel extends VBox {
 
 
 
-    public ControlPanel(ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView, Stage primaryStage) {
+    public ControlPanel(ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView) {
         this.resources = resources;
         this.historyView = historyView;
         this.consoleView = consoleView;
@@ -65,10 +65,9 @@ public class ControlPanel extends VBox {
         this.variableView = variableView;
         this.cm = cm;
         this.c = c;
-
         this.variableModel = new VariableModel();
         this.methodModels = new HashMap<>();
-        uploadButton = makeButton("UploadFile", event-> openFileChooser(primaryStage));
+        uploadButton = makeButton("UploadFile", event-> openFileChooser());
         runButton = makeButton("Run", event -> {
         executeRun();
         });
@@ -143,9 +142,10 @@ public class ControlPanel extends VBox {
             //e.printStackTrace();
         }
     }
-    private void openFileChooser(Stage primarystage){
+    private void openFileChooser(){
         FileChooser fileChooser = new FileChooser();
-        File fileChosen = fileChooser.showOpenDialog(primarystage);
+        Stage s = new Stage();
+        File fileChosen = fileChooser.showOpenDialog(s);
         if(fileChosen != null){
             addUploadedText(fileChosen);
         }

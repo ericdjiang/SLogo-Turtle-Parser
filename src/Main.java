@@ -43,8 +43,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        turtleContainer.addTurtle(0);
-        turtleContainer.getTurtleModelContainer().makeTurtleActive(0);
+        turtleContainer.addTurtle(1);
+        turtleContainer.getTurtleModelContainer().makeTurtleActive(1);
         controller = new Controller(turtleWindow, consoleModel,turtleContainer );
         UI = new UserInterface(primaryStage, "English", turtleWindow, controller, turtleContainer);
         myScene = UI.setupUI();

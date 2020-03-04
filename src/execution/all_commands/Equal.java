@@ -9,7 +9,7 @@ import java.util.Map;
 public class Equal implements Command {
     @Override
 
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         if(parameters.get(0).equals(parameters.get(1))){
             System.out.println(1);
             consoleModel.setReturnVal(1);

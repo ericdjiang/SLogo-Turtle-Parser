@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class PenDown implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
-        for (TurtleModel turtleModel: turtleModelContainer.getActiveTurtles()){
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+        TurtleModel turtleModel = currentTurtleModel;
             turtleModel.makePenDown();
-        }
+
 
         consoleModel.setReturnVal(1);
         return 1;

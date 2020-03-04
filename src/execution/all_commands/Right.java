@@ -8,10 +8,10 @@ import model.*;
 
 public class Right implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
-       for(TurtleModel turtleModel: turtleModelContainer.getActiveTurtles()){
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+       TurtleModel turtleModel = currentTurtleModel;
            turtleModel.setAngle(turtleModel.getAngle() + Double.parseDouble(parameters.get(0)));
-       }
+
 
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
         return Double.parseDouble(parameters.get(0));

@@ -9,7 +9,7 @@ import model.*;
 public class And implements Command {
 
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         double param1 = Double.parseDouble(parameters.get(0));
         double param2 = Double.parseDouble(parameters.get(1));
         if(param1!= 0 && param2 != 0){

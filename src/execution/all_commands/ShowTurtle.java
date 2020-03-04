@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class ShowTurtle implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
-       for(TurtleModel turtleModel: turtleModelContainer.getActiveTurtles()){
-           turtleModel.showTurtle();
-       }
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+
+           currentTurtleModel.showTurtle();
+
 
         System.out.println("Showing Turtle");
         consoleModel.setReturnVal(1);

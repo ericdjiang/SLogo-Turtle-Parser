@@ -122,6 +122,7 @@ public class ControlPanel extends VBox {
     public void updateLanguage(ResourceBundle resources, String language) {
         runButton.setText(resources.getString("Run"));
         clearButton.setText(resources.getString("Clear"));
+        uploadButton.setText(resources.getString("UploadFile"));
         this.myLanguage = language;
     }
 

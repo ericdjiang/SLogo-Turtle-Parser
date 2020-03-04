@@ -33,10 +33,10 @@ public class Parser {
 
         put("if", 1);
         put("ifelse", 2);
-
         put("to", 2);
-        put("tell",1);
+        put("tell", 1);
     }};
+
 
     public Parser(String commands, String language,
                   VariableModel myVariableModel, ConsoleModel myConsoleModel,
@@ -49,7 +49,12 @@ public class Parser {
         addPatterns(language);
         turtleModelContainer = turtlemodelcontainer;
         try {
-            parseText(commands);
+            Stack<TurtleModel> turtleModelStack = new Stack<>();
+            turtleModelStack.addAll(turtleModelContainer.getTurtleModels());
+           while (!turtleModelContainer.getTurtleModelStack().isEmpty()){
+              TurtleModel turtleModel = turtleModelContainer.getTurtleModelStack().pop();
+               parseText(commands, turtleModel);
+           }
         }catch( Exception e){
 //            System.out.println("error");
             String messgae = resourceBundle.getString("ErrorInput");
@@ -62,7 +67,7 @@ public class Parser {
         return false;
     }
 
-    private void parseText(String commands)
+    private void parseText(String commands, TurtleModel currentTurtle)
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
         List<String> fullList = Arrays.asList(commands.split("\n"));
         List<String> newList = new ArrayList<String>(fullList);
@@ -105,7 +110,8 @@ public class Parser {
                 //if the symbol is a command
                 if (LOOP_MAPPINGS.containsKey(symbol)) {
                     loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);
-                } else if (symbol.matches("^[-+*\\/a-zA-Z_]+(\\?)?$")) {
+                }
+                else if (symbol.matches("^[-+*\\/a-zA-Z_]+(\\?)?$")) {
                     cmdStack.push(symbol); //factory.getCommand(getSymbol(symbol))
                 } else { // if symbol is a number
                     argStack.push(symbol);
@@ -153,7 +159,7 @@ public class Parser {
                             }
                             varNameAndValue.add(value);
                             factory.getCommand(getSymbol("make")).execute(varNameAndValue, myVariableModel, myConsoleModel,
-                                myMethodModels,turtleModelContainer );
+                                myMethodModels,turtleModelContainer, currentTurtle);
                         }
 
                         Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myVariableModel, myConsoleModel, myMethodModels,turtleModelContainer );
@@ -185,7 +191,7 @@ public class Parser {
                         Collections.reverse(params);
                         Double returnValue = cmdToExecute
                             .execute(params, myVariableModel, myConsoleModel,
-                                myMethodModels,turtleModelContainer );
+                                myMethodModels,turtleModelContainer,currentTurtle );
                         this.lastReturnValue = returnValue;
                         if (!cmdStack.isEmpty()) {
                             argStack.push(returnValue.toString());
@@ -216,7 +222,7 @@ public class Parser {
         public Double getLastReturnValue () {
             return lastReturnValue;
         }
-        ;
+
 
         private int handleLoop
         (List < String > symbolList, Stack < String > cmdStack, Stack < String > argStack,

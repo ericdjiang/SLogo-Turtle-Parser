@@ -9,7 +9,7 @@ import java.util.Map;
 public class Or implements Command {
 
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         if(Double.parseDouble(parameters.get(0)) != 0 || Double.parseDouble(parameters.get(1)) != 0){
             System.out.println(1);
             consoleModel.setReturnVal(1);

@@ -9,7 +9,7 @@ import java.util.Map;
 public class Pi implements Command {
 
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
 
         System.out.println(Math.PI);
         consoleModel.setReturnVal(Math.PI);

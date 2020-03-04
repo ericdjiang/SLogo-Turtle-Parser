@@ -8,9 +8,8 @@ import model.*;
 
 public class SetTowards implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
-       double angle = 0;
-        for(TurtleModel turtleModel : turtleModelContainer.getActiveTurtles()){
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+            TurtleModel turtleModel = currentTurtleModel;
            double differenceX = Double.parseDouble(parameters.get(0)) - turtleModel.getX() ;
            double differenceY = Double.parseDouble(parameters.get(1)) - turtleModel.getY() ;
            if(differenceX == 0){
@@ -25,7 +24,7 @@ public class SetTowards implements Command {
                    return -180;
                }
            }
-           angle = Math.toDegrees(Math.atan(differenceX/differenceY));
+           double angle = Math.toDegrees(Math.atan(differenceX/differenceY));
            if(differenceX<0&&differenceY<0){
                angle = angle + 180;
            }
@@ -34,7 +33,7 @@ public class SetTowards implements Command {
            }
 
            turtleModel.setAngle(angle);
-       }
+
 
         consoleModel.setReturnVal(angle);
 

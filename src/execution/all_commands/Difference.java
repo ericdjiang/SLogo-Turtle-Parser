@@ -9,7 +9,7 @@ import java.util.Map;
 public class Difference implements Command {
 
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         double difference = Double.parseDouble(parameters.get(0)) - Double.parseDouble(parameters.get(1));
         consoleModel.setReturnVal(difference);
         return difference;

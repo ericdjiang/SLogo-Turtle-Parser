@@ -8,12 +8,11 @@ import java.util.Map;
 
 public class HideTurtle implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
-        for (TurtleModel turtleModel: turtleModelContainer.getActiveTurtles()){
-            turtleModel.hideTurtle();
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+            currentTurtleModel.hideTurtle();
             System.out.println("Hiding Turtle");
             consoleModel.setReturnVal(0);
-        }
+
 
         return 0;
     }

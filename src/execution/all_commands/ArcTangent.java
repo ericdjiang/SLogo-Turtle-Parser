@@ -9,7 +9,7 @@ import java.util.Map;
 public class ArcTangent implements Command {
 
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         double angle = Double.parseDouble(parameters.get(0));
         System.out.println("Arctangent of " + parameters.get(0));
         consoleModel.setReturnVal(Math.atan((angle*Math.PI)/180));

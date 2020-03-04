@@ -9,9 +9,9 @@ import model.*;
 public class Backward implements Command {
     @Override
 
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         double distance = Double.parseDouble(parameters.get(0));
-        for(TurtleModel turtleModel : turtleModelContainer.getActiveTurtles()){
+        TurtleModel turtleModel = currentTurtleModel;
             double oppositeangle = turtleModel.getAngle() + 180;
             double radians = oppositeangle * (Math.PI/180);
             double yChange = distance * Math.cos(radians);
@@ -21,7 +21,6 @@ public class Backward implements Command {
             turtleModel.setX(turtleModel.getX() + xChange);
             turtleModel.setY(turtleModel.getY() + yChange);
 
-        }
         consoleModel.setReturnVal(distance);
         return distance;
     }

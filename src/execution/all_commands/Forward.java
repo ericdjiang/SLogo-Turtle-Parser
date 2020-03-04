@@ -8,9 +8,9 @@ import model.*;
 
 public class Forward implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
         double distance = 0;
-        for (TurtleModel turtleModel : turtleModelContainer.getActiveTurtles()){
+        TurtleModel turtleModel = currentTurtleModel;
             double radians = Math.toRadians(turtleModel.getAngle());
             System.out.println("Forward: "+ parameters.get(0));
             distance = Double.parseDouble(parameters.get(0));
@@ -19,7 +19,7 @@ public class Forward implements Command {
             turtleModel.setX(turtleModel.getX() + xChange);
             turtleModel.setY(turtleModel.getY() + yChange);
 
-        }
+
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
         return distance;
     }

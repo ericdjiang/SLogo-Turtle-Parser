@@ -39,7 +39,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        turtleModel = new TurtleModel(0, 0, 0);
+        turtleModel = new TurtleModel(1,0, 0, 0);
         controller = new Controller(turtleModel, turtleWindow, consoleModel);
         UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
         myScene = UI.setupUI();

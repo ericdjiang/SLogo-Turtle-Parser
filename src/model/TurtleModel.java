@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TurtleModel {
+  private int myId;
   private double myX;
   private double myY;
   private double myAngle;
@@ -15,7 +16,8 @@ public class TurtleModel {
   private List myPoints;
 
 
-  public TurtleModel (double myX, double myY, double myAngle) {
+  public TurtleModel (int id,double myX, double myY, double myAngle) {
+    this.myId = id;
     this.myX = myX;
     this.myY = myY;
     this.myZeroX = myX;

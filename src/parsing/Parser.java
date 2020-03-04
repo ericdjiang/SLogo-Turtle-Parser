@@ -3,10 +3,12 @@ package parsing;
 import execution.Command;
 import execution.CommandFactory;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import javafx.stage.FileChooser;
 import model.ConsoleModel;
 import model.MethodModel;
 import model.TurtleModel;
@@ -26,6 +28,7 @@ public class Parser {
     private Double lastReturnValue;
 
     private Map<String, MethodModel> myMethodModels;
+
 
     private TurtleModel myTurtleModel;
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
@@ -47,18 +50,15 @@ public class Parser {
         this.myConsoleModel = myConsoleModel;
         this.myLanguage = language;
         this.myMethodModels = myMethodModels;
-
         resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-
         addPatterns(language);
-
         try {
             parseText(commands);
         }catch( Exception e){
 //            System.out.println("error");
-//            String messgae = resourceBundle.getString("ErrorInput");
-//            myConsoleModel.setErrorMessage(messgae);
-            e.printStackTrace();
+            String messgae = resourceBundle.getString("ErrorInput");
+            myConsoleModel.setErrorMessage(messgae);
+          //  e.printStackTrace();
         }
     }
 

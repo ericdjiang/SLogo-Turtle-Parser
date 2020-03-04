@@ -1,6 +1,8 @@
 package view.util;
 
 import controller.Controller;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -11,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.ConsoleModel;
 
 import model.MethodModel;
@@ -25,6 +29,7 @@ import view.views.ConsoleView;
 
 import javax.imageio.ImageIO;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class ControlPanel extends VBox {
     private ResourceBundle resources;
@@ -34,6 +39,7 @@ public class ControlPanel extends VBox {
     private ConsoleView consoleView;
     private Button runButton;
     private Button clearButton;
+    private Button uploadButton;
     private Button turtleSwitchButton;
     private TurtleView turtleView;
     private Parser parser;
@@ -48,7 +54,8 @@ public class ControlPanel extends VBox {
     private Map<String, MethodModel> methodModels;
 
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView) {
+
+    public ControlPanel(ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView, Stage primaryStage) {
         this.resources = resources;
         this.historyView = historyView;
         this.consoleView = consoleView;
@@ -56,13 +63,12 @@ public class ControlPanel extends VBox {
         this.myLanguage = language;
         this.model = model;
         this.variableView = variableView;
-
         this.cm = cm;
         this.c = c;
 
         this.variableModel = new VariableModel();
         this.methodModels = new HashMap<>();
-
+        uploadButton = makeButton("UploadFile", event-> openFileChooser(primaryStage));
         runButton = makeButton("Run", event -> {
         executeRun();
         });
@@ -70,6 +76,7 @@ public class ControlPanel extends VBox {
         turtleSwitchButton = makeButton("TurtleSelect", event -> turtleView.switchTurtleImage());
         getChildren().add(runButton);
         getChildren().add(clearButton);
+        getChildren().add(uploadButton);
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes
@@ -86,6 +93,7 @@ public class ControlPanel extends VBox {
         result.setOnAction(handler);
         return result;
     }
+
     public Button getTurtleSwitcher() {
         return this.turtleSwitchButton;
     }
@@ -94,14 +102,14 @@ public class ControlPanel extends VBox {
         historyView.displayError(c.getConsoleModel().getErrorMessage());
         c.getConsoleModel().setErrorMessage(null);
     }
-    private void executeRun(){
+
+    public void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();
-
         parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel(), methodModels);
-
         updateInputHistory(commands);
         updateVariableView();
+        saveToFile(commands);
     }
     private void updateVariableView() {
         Text t = new Text(variableModel.getVariable());
@@ -121,6 +129,40 @@ public class ControlPanel extends VBox {
 
     public void sendErrorToConsoleModel(String errorMessage){
         cm.setErrorMessage(errorMessage);
+    }
+
+    public void addUploadedText(File file){
+        try {
+            Scanner s = new Scanner(file);
+            while (s.hasNextLine()){
+                consoleView.appendText(s.nextLine());
+                consoleView.appendText("\n");
+            }
+            executeRun();
+        } catch (FileNotFoundException e) {
+            //e.printStackTrace();
+        }
+    }
+    private void openFileChooser(Stage primarystage){
+        FileChooser fileChooser = new FileChooser();
+        File fileChosen = fileChooser.showOpenDialog(primarystage);
+        if(fileChosen != null){
+            addUploadedText(fileChosen);
+        }
+    }
+
+    private void saveToFile(String text){
+        File file = new File("data/SavedCommands.txt");
+        try {
+            FileWriter writer = new FileWriter(file,false);
+            BufferedWriter br = new BufferedWriter(writer);
+            br.write(text);
+            br.close();
+            writer.close();
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+
     }
 
 

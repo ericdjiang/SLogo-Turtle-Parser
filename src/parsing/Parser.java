@@ -125,7 +125,7 @@ public class Parser {
         while (cmdToExecute.getNumParams() > params.size()) {
             String popped = argStack.pop();
 
-            // check if the argument is a variable, and convert it to double if the command is not make
+            // check if the argument is a variable, and convert it to double if the command is not "MAKE"
             if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
                 && popped.matches(":[a-zA-Z_]+")) {
                 popped = Double.toString(myVariableModel.getValue(popped));
@@ -133,7 +133,10 @@ public class Parser {
 
             params.add(popped);
         }
+
         Collections.reverse(params);
+
+        // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
         Double returnValue = cmdToExecute
             .execute(params, myVariableModel, myConsoleModel,
                 myMethodModels, currentTurtle );

@@ -14,8 +14,6 @@ public class Tell implements MultipleTurtlesCommand {
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
-        boolean hasBeenChanged = turtleModelContainer.getHasBeenChanged();
-        if(!hasBeenChanged){
             for(int i = 2; i < symbolList.size(); i ++){
                 int id = Integer.parseInt(symbolList.get(i));
                 int difference = id - turtleModelContainer.getTurtleIds().size();
@@ -32,8 +30,6 @@ public class Tell implements MultipleTurtlesCommand {
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);
-        }
-        turtleModelContainer.setHasBeenChangedTrue();
         return Integer.parseInt(symbolList.get(symbolList.size()-1));
     }
 

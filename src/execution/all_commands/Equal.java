@@ -11,7 +11,7 @@ public class Equal implements Command {
     private static final int SECOND = 1;
     @Override
 
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
         if(parameters.get(FIRST).equals(parameters.get(SECOND))){
             consoleModel.setReturnVal(1);
             return 1;

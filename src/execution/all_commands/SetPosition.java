@@ -11,7 +11,7 @@ public class SetPosition implements Command {
     private static final int SECOND = 1;
     private static final int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
             double orginalX = turtleModel.getX();
             double orginalY = turtleModel.getY();
             double newX = Double.parseDouble(parameters.get(FIRST));

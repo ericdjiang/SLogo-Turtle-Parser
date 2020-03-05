@@ -10,7 +10,7 @@ public class Home implements Command {
     private static final int CENTER = 0;
     private static final int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel){
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel){
             double originalX = turtleModel.getX();
             double originalY = turtleModel.getY();
             turtleModel.setXY(CENTER,CENTER);

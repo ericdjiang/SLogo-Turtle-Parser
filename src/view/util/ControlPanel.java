@@ -90,7 +90,7 @@ public class ControlPanel extends VBox {
         return this.turtleSwitchButton;
     }
     private void updateInputHistory(String commands){
-        historyView.updateHistory("\tInput: " + commands + "; Output: " + c.getConsoleModel().getReturnVal());
+        historyView.updateHistory(commands, c.getConsoleModel().getReturnVal());
         historyView.displayError(c.getConsoleModel().getErrorMessage());
         c.getConsoleModel().setErrorMessage(null);
     }
@@ -104,9 +104,9 @@ public class ControlPanel extends VBox {
         updateVariableView();
     }
     private void updateVariableView() {
-        Text t = new Text(variableModel.getVariable());
         if (variableModel.newVarAdded()) {
-            variableView.addVariable(t);
+            variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
+            variableModel.clearVarInfo();
         }
         variableModel.varReceived();
     }

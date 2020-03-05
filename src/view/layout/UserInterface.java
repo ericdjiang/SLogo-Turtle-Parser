@@ -65,7 +65,7 @@ public class UserInterface {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
         this.turtleWindow = turtleWindow;
-        this.referenceView = new CommandReferenceView(language);
+        this.referenceView = new CommandReferenceView(myResources);
         this.commandPrompt = new ConsoleView(myResources);
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);

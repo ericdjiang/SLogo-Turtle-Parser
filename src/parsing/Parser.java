@@ -94,95 +94,106 @@ public class Parser {
                 // if the command is a loop command, find the index of the closing loop bracket and store it in loopEndIndex so that the program can skip all symbols until we reach this index
                 loopEndIndex = pushToStack(symbolList, cmdStack, argStack, loopEndIndex, cursor, symbol);
 
-                /**
-                   Debugging
-                   System.out.println();
-
-                    System.out.println(cursor);
-                    System.out.println(cmdStack);
-                    System.out.println(argStack);
-
-                    System.out.println(getNumParams(cmdStack.peek()));
-                **/
-
-                while (!cmdStack.isEmpty() &&
-                    (
-                        (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
-                        ||
-                        (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
-                    )
-
-                ) {
-
-                    if(myMethodModels.containsKey(cmdStack.peek())){
-
-                        String methodName = cmdStack.pop();
-                        System.out.println("running method: "+methodName);
-
-                        MethodModel myMethodModel = myMethodModels.get(methodName);
-
-                        List<String> params = new ArrayList<>();
-                        while (myMethodModel.getNumVariables() > params.size()) {
-                            String popped = argStack.pop();
-                            params.add(popped);
-                        }
-                        Collections.reverse(params);
-
-                        for(int i = 0; i < params.size(); i++) {
-                            List <String> varNameAndValue = new ArrayList<>();
-                            varNameAndValue.add(myMethodModel.getVariableName(i));
-
-                            String value = params.get(i);
-                            if(value.matches(":[a-zA-Z_]+")) {
-                                value = Double.toString(myVariableModel.getValue(value));
-                            }
-                            varNameAndValue.add(value);
-                            factory.getCommand(getSymbol("make")).execute(varNameAndValue, myVariableModel, myConsoleModel,
-                                myMethodModels, currentTurtle);
-                        }
-
-                        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myVariableModel, myConsoleModel, myMethodModels,turtleModelContainer );
-                        lastReturnValue = parser.getLastReturnValue();
-
-                    } else if (cmdStack.size() >= 2 &&
-                        (
-                            getNumParams(cmdStack.size() - 2, cmdStack) == 1 && getNumParams(cmdStack.size() - 2, cmdStack) > argStack.size()
-                                // and fd 30 bk 20
-                                ||
-                            getNumParams(cmdStack.size() - 2, cmdStack) == 2 && getNumParams(cmdStack.size() - 2, cmdStack) >= argStack.size() // make :var sum 20 30
-                        )
-                    ) {
-                        break;
-                    } else {
-                        Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
-                        List<String> params = new ArrayList<>();
-                        while (cmdToExecute.getNumParams() > params.size()) {
-                            String popped = argStack.pop();
-
-                            // check if the argument is a variable, and convert it to double if the command is not make
-                            if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
-                                && popped.matches(":[a-zA-Z_]+")) {
-                                popped = Double.toString(myVariableModel.getValue(popped));
-                            }
-
-                            params.add(popped);
-                        }
-                        Collections.reverse(params);
-                        Double returnValue = cmdToExecute
-                            .execute(params, myVariableModel, myConsoleModel,
-                                myMethodModels, currentTurtle );
-                        this.lastReturnValue = returnValue;
-                        if (!cmdStack.isEmpty()) {
-                            argStack.push(returnValue.toString());
-                        }
-
-                    }
-                }
+                // pop commands and args off the stack and handle them
+                handleStacks(currentTurtle, cmdStack, argStack);
             }
 
         }
 
 
+    }
+
+    private void handleStacks(TurtleModel currentTurtle, Stack<String> cmdStack,
+        Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        while (cmdAndArgsExist(cmdStack, argStack)) {
+            if(myMethodModels.containsKey(cmdStack.peek())){ // if the popped command is a user generated method
+                parseUserMethod(currentTurtle, cmdStack, argStack);
+            } else if (checkInsufficientParameters(cmdStack, argStack)) {
+                break;
+            } else { // if the popped command is a default method
+                parseDefaultMethod(currentTurtle, cmdStack, argStack);
+            }
+        }
+    }
+
+    private void parseDefaultMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
+        Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
+        List<String> params = new ArrayList<>();
+        while (cmdToExecute.getNumParams() > params.size()) {
+            String popped = argStack.pop();
+
+            // check if the argument is a variable, and convert it to double if the command is not make
+            if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
+                && popped.matches(":[a-zA-Z_]+")) {
+                popped = Double.toString(myVariableModel.getValue(popped));
+            }
+
+            params.add(popped);
+        }
+        Collections.reverse(params);
+        Double returnValue = cmdToExecute
+            .execute(params, myVariableModel, myConsoleModel,
+                myMethodModels, currentTurtle );
+        this.lastReturnValue = returnValue;
+        if (!cmdStack.isEmpty()) {
+            argStack.push(returnValue.toString());
+        }
+    }
+
+    private boolean checkInsufficientParameters(Stack<String> cmdStack, Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return cmdStack.size() >= 2 &&
+            (
+                getNumParams(cmdStack.size() - 2, cmdStack) == 1 && getNumParams(cmdStack.size() - 2, cmdStack) > argStack.size()
+                    // and fd 30 bk 20
+                    ||
+                getNumParams(cmdStack.size() - 2, cmdStack) == 2 && getNumParams(cmdStack.size() - 2, cmdStack) >= argStack.size() // make :var sum 20 30
+            );
+    }
+
+    private void parseUserMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
+        Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String methodName = cmdStack.pop();
+        System.out.println("running method: "+methodName);
+
+        MethodModel myMethodModel = myMethodModels.get(methodName);
+
+        List<String> params = new ArrayList<>();
+        while (myMethodModel.getNumVariables() > params.size()) {
+            String popped = argStack.pop();
+            params.add(popped);
+        }
+        Collections.reverse(params);
+
+        for(int i = 0; i < params.size(); i++) {
+            List <String> varNameAndValue = new ArrayList<>();
+            varNameAndValue.add(myMethodModel.getVariableName(i));
+
+            String value = params.get(i);
+            if(value.matches(":[a-zA-Z_]+")) {
+                value = Double.toString(myVariableModel.getValue(value));
+            }
+            varNameAndValue.add(value);
+            factory.getCommand(getSymbol("make")).execute(varNameAndValue, myVariableModel, myConsoleModel,
+                myMethodModels, currentTurtle);
+        }
+
+        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myVariableModel, myConsoleModel, myMethodModels,turtleModelContainer );
+        lastReturnValue = parser.getLastReturnValue();
+    }
+
+    private boolean cmdAndArgsExist(Stack<String> cmdStack, Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        return !cmdStack.isEmpty() &&
+            (
+                (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
+                ||
+                (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
+            );
     }
 
     private int pushToStack(List<String> symbolList, Stack<String> cmdStack, Stack<String> argStack,
@@ -320,5 +331,18 @@ public class Parser {
             // THIS IS THE IMPORTANT LINE
             return regex.matcher(text).matches();
         }
+
+    private void printDebugging(Stack<String> cmdStack, Stack<String> argStack, int cursor)
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //                printDebugging(cmdStack, argStack, cursor);
+
+        System.out.println();
+
+        System.out.println(cursor);
+        System.out.println(cmdStack);
+        System.out.println(argStack);
+
+        System.out.println(getNumParams(cmdStack.peek()));
+    }
     }
 

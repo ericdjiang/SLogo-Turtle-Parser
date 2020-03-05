@@ -14,18 +14,24 @@ public class VariableModel {
     private boolean isNewVarAdded;
     private String oldVariable;
     private double oldVariableVal;
+    private List<String> varNames;
+    private List<String> varVals;
 
     public VariableModel(){
         myMap = new HashMap<>();
         myVariableNames = new ArrayList();
         myVariableVals = new ArrayList();
+        varNames = new ArrayList();
+        varVals = new ArrayList<>();
         this.oldVariable=null;
     }
 
     public void updateVariable(String variableName, double value){
         String variable = variableName.substring(1);
-        if (! variable.equals(oldVariable) || value != oldVariableVal) {
+        if (! myMap.containsKey(variable) || (myMap.containsKey(variable) && myMap.get(variable) != value)) {
             isNewVarAdded = true;
+            varNames.add(variable);
+            varVals.add(Double.toString(value));
         }
         oldVariable = variable;
         oldVariableVal = value;
@@ -33,6 +39,7 @@ public class VariableModel {
         myVariableNames.add(variable);
         myVariableVals.add(value);
         System.out.println(variable + value);
+
     }
 
 
@@ -56,9 +63,17 @@ public class VariableModel {
         return sum;
     }
     //TODO impelment memory
-    public String getVariable() {
+    public List getVariableName() {
         if (myVariableNames.size() > 0) {
-            return (String) myVariableNames.get(myVariableNames.size() - 1) + ": " + Double.toString((Double) myVariableVals.get(myVariableVals.size() - 1));
+            return varNames;
+        }
+        else {
+            return null;
+        }
+    }
+    public List getVariableInfo() {
+        if (myVariableNames.size() > 0) {
+            return varVals;
         }
         else {
             return null;
@@ -69,5 +84,9 @@ public class VariableModel {
     }
     public void varReceived() {
         isNewVarAdded = false;
+    }
+    public void clearVarInfo() {
+        varNames.clear();
+        varVals.clear();
     }
 }

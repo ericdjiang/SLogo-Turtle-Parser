@@ -18,10 +18,7 @@ import model.TurtleModel;
 import model.VariableModel;
 
 import parsing.Parser;
-import view.views.TurtleView;
-import view.views.VariableView;
-import view.views.CommandHistoryView;
-import view.views.ConsoleView;
+import view.views.*;
 
 import javax.imageio.ImageIO;
 import java.util.ResourceBundle;
@@ -44,11 +41,12 @@ public class ControlPanel extends VBox {
 
     private VariableModel variableModel;
     private VariableView variableView;
+    private LibraryView libraryView;
 
     private Map<String, MethodModel> methodModels;
 
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView) {
+    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView, LibraryView libraryView) {
         this.resources = resources;
         this.historyView = historyView;
         this.consoleView = consoleView;
@@ -56,6 +54,7 @@ public class ControlPanel extends VBox {
         this.myLanguage = language;
         this.model = model;
         this.variableView = variableView;
+        this.libraryView = libraryView;
 
         this.cm = cm;
         this.c = c;
@@ -90,7 +89,7 @@ public class ControlPanel extends VBox {
         return this.turtleSwitchButton;
     }
     private void updateInputHistory(String commands){
-        historyView.updateHistory("\tInput: " + commands + "; Output: " + c.getConsoleModel().getReturnVal());
+        historyView.updateHistory(commands, c.getConsoleModel().getReturnVal());
         historyView.displayError(c.getConsoleModel().getErrorMessage());
         c.getConsoleModel().setErrorMessage(null);
     }
@@ -102,13 +101,20 @@ public class ControlPanel extends VBox {
 
         updateInputHistory(commands);
         updateVariableView();
+        updateLibraryView();
     }
     private void updateVariableView() {
-        Text t = new Text(variableModel.getVariable());
         if (variableModel.newVarAdded()) {
-            variableView.addVariable(t);
+            variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
+            variableModel.clearVarInfo();
         }
         variableModel.varReceived();
+    }
+    private void updateLibraryView() {
+        for (String k :  methodModels.keySet()) {
+            Text t = new Text("Method: " + methodModels.get(k).getMethodName() + "\tParameters: " + "\tBody: " + methodModels.get(k).getMethodBody());
+            libraryView.addMethod(t);
+        }
     }
     private void clearConsole() {
         consoleView.clear();

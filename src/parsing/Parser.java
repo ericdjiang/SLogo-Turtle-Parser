@@ -49,8 +49,6 @@ public class Parser {
         addPatterns(language);
         turtleModelContainer = turtlemodelcontainer;
         try {
-            Stack<TurtleModel> turtleModelStack = new Stack<>();
-            turtleModelStack.addAll(turtleModelContainer.getTurtleModels());
            for(int i = 0; i< turtlemodelcontainer.getActiveTurtles().size(); i ++){
               TurtleModel turtleModel = turtlemodelcontainer.getActiveTurtles().get(i);
                parseText(commands, turtleModel);

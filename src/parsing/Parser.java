@@ -51,8 +51,8 @@ public class Parser {
         try {
             Stack<TurtleModel> turtleModelStack = new Stack<>();
             turtleModelStack.addAll(turtleModelContainer.getTurtleModels());
-           while (!turtleModelContainer.getTurtleModelStack().isEmpty()){
-              TurtleModel turtleModel = turtleModelContainer.getTurtleModelStack().pop();
+           for(int i = 0; i< turtlemodelcontainer.getActiveTurtles().size(); i ++){
+              TurtleModel turtleModel = turtlemodelcontainer.getActiveTurtles().get(i);
                parseText(commands, turtleModel);
            }
         }catch( Exception e){

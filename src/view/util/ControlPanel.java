@@ -1,6 +1,8 @@
 package view.util;
 
 import controller.Controller;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -11,11 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import model.ConsoleModel;
-
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import model.*;
 
 import parsing.Parser;
 import view.views.TurtleView;
@@ -25,20 +25,27 @@ import view.views.ConsoleView;
 
 import javax.imageio.ImageIO;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class ControlPanel extends VBox {
     private ResourceBundle resources;
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    private static final String SAVEDCOMMANDSFILE = "data/SavedCommands.txt";
+    private static final String UPLOADFILE = "UploadFile";
+    private static final String RUN = "Run";
+    private static final String CLEAR = "Clear";
+    private static final String TURTLESELECT = "TurtleSelect";
+    private static final String INPUT = "\tInput: ";
+    private static final String OUTPUT = "; Output: ";
     private CommandHistoryView historyView;
     private ConsoleView consoleView;
     private Button runButton;
     private Button clearButton;
+    private Button uploadButton;
     private Button turtleSwitchButton;
-    private TurtleView turtleView;
     private Parser parser;
     private String myLanguage;
-    private TurtleModel model;
     private Controller c;
     private ConsoleModel cm;
 
@@ -46,30 +53,34 @@ public class ControlPanel extends VBox {
     private VariableView variableView;
 
     private Map<String, MethodModel> methodModels;
+    private TurtleContainer turtleContainer;
 
 
-    public ControlPanel (ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, TurtleView turtleView, String language, Controller c, ConsoleModel cm, TurtleModel model, VariableView variableView) {
+
+    public ControlPanel(ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, String language, Controller c, ConsoleModel cm, VariableView variableView, TurtleContainer turtlecontainer) {
         this.resources = resources;
         this.historyView = historyView;
         this.consoleView = consoleView;
-        this.turtleView = turtleView;
         this.myLanguage = language;
-        this.model = model;
         this.variableView = variableView;
-
         this.cm = cm;
         this.c = c;
-
         this.variableModel = new VariableModel();
         this.methodModels = new HashMap<>();
-
-        runButton = makeButton("Run", event -> {
+        uploadButton = makeButton(UPLOADFILE, event-> openFileChooser());
+        runButton = makeButton(RUN, event -> {
         executeRun();
         });
-        clearButton = makeButton("Clear", event -> clearConsole());
-        turtleSwitchButton = makeButton("TurtleSelect", event -> turtleView.switchTurtleImage());
+        clearButton = makeButton(CLEAR, event -> clearConsole());
+        turtleSwitchButton = makeButton(TURTLESELECT, event -> {
+            for(TurtleView turtleView : turtleContainer.getTurtleViews()){
+                turtleView.switchTurtleImage();
+            }
+        });
         getChildren().add(runButton);
         getChildren().add(clearButton);
+        getChildren().add(uploadButton);
+        turtleContainer = turtlecontainer;
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes
@@ -86,6 +97,7 @@ public class ControlPanel extends VBox {
         result.setOnAction(handler);
         return result;
     }
+
     public Button getTurtleSwitcher() {
         return this.turtleSwitchButton;
     }
@@ -94,14 +106,15 @@ public class ControlPanel extends VBox {
         historyView.displayError(c.getConsoleModel().getErrorMessage());
         c.getConsoleModel().setErrorMessage(null);
     }
+
     private void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();
-
-        parser = new Parser(commands, myLanguage, model, variableModel, c.getConsoleModel(), methodModels);
-
+        parser = new Parser(commands, myLanguage, variableModel, c.getConsoleModel(), methodModels, turtleContainer.getTurtleModelContainer());
         updateInputHistory(commands);
         updateVariableView();
+        //saveToFile(commands);
+        // FIXME: Find a way to only save some commands not all of them
     }
     private void updateVariableView() {
         if (variableModel.newVarAdded()) {
@@ -114,8 +127,9 @@ public class ControlPanel extends VBox {
         consoleView.clear();
     }
     public void updateLanguage(ResourceBundle resources, String language) {
-        runButton.setText(resources.getString("Run"));
-        clearButton.setText(resources.getString("Clear"));
+        runButton.setText(resources.getString(RUN));
+        clearButton.setText(resources.getString(CLEAR));
+        uploadButton.setText(resources.getString(UPLOADFILE));
         this.myLanguage = language;
     }
 
@@ -123,5 +137,37 @@ public class ControlPanel extends VBox {
         cm.setErrorMessage(errorMessage);
     }
 
+    private void addUploadedText(File file){
+        try {
+            Scanner s = new Scanner(file);
+            while (s.hasNextLine()){
+                consoleView.appendText(s.nextLine());
+                consoleView.appendText("\n");
+            }
+            executeRun();
+        } catch (FileNotFoundException e) {
+            //e.printStackTrace();
+        }
+    }
+    private void openFileChooser(){
+        FileChooser fileChooser = new FileChooser();
+        Stage s = new Stage();
+        File fileChosen = fileChooser.showOpenDialog(s);
+        if(fileChosen != null){
+            addUploadedText(fileChosen);
+        }
+    }
 
+    private void saveToFile(String text){
+        File file = new File(SAVEDCOMMANDSFILE);
+        try {
+            FileWriter writer = new FileWriter(file,false);
+            BufferedWriter br = new BufferedWriter(writer);
+            br.write(text);
+            br.close();
+            writer.close();
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
+    }
 }

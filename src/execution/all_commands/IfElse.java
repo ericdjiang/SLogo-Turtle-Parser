@@ -7,21 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import execution.MultipleTurtlesCommand;
+import model.*;
 import parsing.Parser;
 
-public class IfElse extends LoopCommand implements Command {
+public class IfElse extends LoopCommand implements MultipleTurtlesCommand {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+  public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     String language = symbolList.get(0);
 
     int expEnd = getExpEnd(symbolList);
-    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel, methodModels);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, variableModel, consoleModel, methodModels, turtleModelContainer);
     int loopGuard = (int) Math.round(loopGuardParser.getLastReturnValue());
 
 
@@ -32,10 +30,10 @@ public class IfElse extends LoopCommand implements Command {
 //    System.out.println(loopBody);
 
     if (loopGuard > 0){
-       Parser parser = new Parser(loopBodies[0], language, turtleModel, variableModel, consoleModel, methodModels);
+       Parser parser = new Parser(loopBodies[0], language, variableModel, consoleModel, methodModels, turtleModelContainer);
     } else {
       System.out.println(loopBodies[1]);
-      Parser parser = new Parser(loopBodies[1], language, turtleModel, variableModel, consoleModel, methodModels);
+      Parser parser = new Parser(loopBodies[1], language, variableModel, consoleModel, methodModels,turtleModelContainer );
     }
 
 

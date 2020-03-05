@@ -1,8 +1,11 @@
 import controller.Controller;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import model.ConsoleModel;
 import model.MethodModel;
+import model.TurtleContainer;
 import model.TurtleModel;
 import view.layout.TurtleWindow;
 import javafx.animation.KeyFrame;
@@ -30,6 +33,7 @@ public class Main extends Application {
     private UserInterface UI;
     private TurtleModel turtleModel;
     private Map<String, MethodModel> MethodModels = new HashMap<>();
+    private TurtleContainer turtleContainer = new TurtleContainer(turtleWindow);
 
 
     public static void main (String[] args) {
@@ -39,9 +43,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         myAnimation = new Timeline();
-        turtleModel = new TurtleModel(0, 0, 0);
-        controller = new Controller(turtleModel, turtleWindow, consoleModel);
-        UI = new UserInterface(primaryStage, "English", turtleWindow, controller);
+        turtleContainer.addTurtle(1);
+        turtleContainer.getTurtleModelContainer().makeTurtleActive(1);
+        controller = new Controller(turtleWindow, consoleModel,turtleContainer );
+        UI = new UserInterface(primaryStage, "English", turtleWindow, controller, turtleContainer);
         myScene = UI.setupUI();
         primaryStage.setScene(myScene);
         primaryStage.show();

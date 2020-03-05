@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.TurtleContainer;
 import view.views.VariableView;
 import view.util.ControlPanel;
 import view.util.LanguageSelector;
@@ -61,7 +62,7 @@ public class UserInterface {
     private Button penButton;
     private Button turtleButton;
 
-    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c) throws IOException, InvocationTargetException, IllegalAccessException {
+    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c, TurtleContainer turtleContainer) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         this.myLanguage = language;
         this.turtleWindow = turtleWindow;
@@ -70,7 +71,7 @@ public class UserInterface {
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, c.getView(), myLanguage, c, c.getConsoleModel(), c.getModel(), variableView);
+        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, myLanguage, c, c.getConsoleModel(), variableView,turtleContainer );
         this.controller = c;
         this.pen = c.getPen();
         this.backgroundButton = makeButton("ChooseBackGround", e-> colorPicker.show());
@@ -192,6 +193,7 @@ public class UserInterface {
         result.setOnAction(handler);
         return result;
     }
+
 }
 
 

@@ -7,21 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import execution.MultipleTurtlesCommand;
+import model.*;
 import parsing.Parser;
 
-public class Repeat extends LoopCommand implements Command {
+public class Repeat extends LoopCommand implements MultipleTurtlesCommand {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+  public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     String language = symbolList.get(0);
 
     int expEnd = getExpEnd(symbolList);
-    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, turtleModel, variableModel, consoleModel, methodModels);
+    Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(1, expEnd)), language, variableModel, consoleModel, methodModels, turtleModelContainer);
     int numRepeats = (int) Math.round(loopGuardParser.getLastReturnValue());
 
     String loopBody = String.join(" ",symbolList.subList(expEnd+1, symbolList.size()));
@@ -35,7 +33,7 @@ public class Repeat extends LoopCommand implements Command {
     for (int i = 0; i < numRepeats; i++) {
       try{
 //        System.out.println("parsing"+loopBody);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel, methodModels);
+        Parser parser = new Parser(loopBody, language, variableModel, consoleModel, methodModels,turtleModelContainer);
 
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {

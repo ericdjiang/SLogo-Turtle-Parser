@@ -13,6 +13,8 @@ public class Parser {
 
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";
+    private static final String ERROR_STRING = "ErrorInput";
+    private static final String MAKE_VAR = "MakeVariable";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
     private ResourceBundle resourceBundle;
@@ -58,8 +60,8 @@ public class Parser {
            }
         }catch( Exception e){
 //            System.out.println("error");
-            String messgae = resourceBundle.getString("ErrorInput");
-            myConsoleModel.setErrorMessage(messgae);
+            String message = resourceBundle.getString(ERROR_STRING);
+            myConsoleModel.setErrorMessage(message);
             e.printStackTrace();
         }
     }
@@ -126,7 +128,7 @@ public class Parser {
             String popped = argStack.pop();
 
             // check if the argument is a variable, and convert it to double if the command is not "MAKE"
-            if (!cmdToExecute.getClass().getSimpleName().equals("MakeVariable")
+            if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
                 && popped.matches(":[a-zA-Z_]+")) {
                 popped = Double.toString(myVariableModel.getValue(popped));
             }

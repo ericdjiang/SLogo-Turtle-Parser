@@ -1,6 +1,7 @@
 package execution.all_commands;
 
 import execution.Command;
+import execution.MultipleTurtlesCommand;
 import model.*;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Tell implements Command {
+public class Tell implements MultipleTurtlesCommand {
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));

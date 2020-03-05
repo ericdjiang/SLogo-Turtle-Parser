@@ -157,7 +157,7 @@ public class Parser {
                             }
                             varNameAndValue.add(value);
                             factory.getCommand(getSymbol("make")).execute(varNameAndValue, myVariableModel, myConsoleModel,
-                                myMethodModels,turtleModelContainer, currentTurtle);
+                                myMethodModels, currentTurtle);
                         }
 
                         Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myVariableModel, myConsoleModel, myMethodModels,turtleModelContainer );
@@ -189,7 +189,7 @@ public class Parser {
                         Collections.reverse(params);
                         Double returnValue = cmdToExecute
                             .execute(params, myVariableModel, myConsoleModel,
-                                myMethodModels,turtleModelContainer,currentTurtle );
+                                myMethodModels, currentTurtle );
                         this.lastReturnValue = returnValue;
                         if (!cmdStack.isEmpty()) {
                             argStack.push(returnValue.toString());

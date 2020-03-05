@@ -7,14 +7,14 @@ import java.util.Map;
 import model.*;
 
 public class Right implements Command {
+    private static final int FIRST = 0;
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
-       TurtleModel turtleModel = currentTurtleModel;
-           turtleModel.setAngle(turtleModel.getAngle() + Double.parseDouble(parameters.get(0)));
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+           turtleModel.setAngle(turtleModel.getAngle() + Double.parseDouble(parameters.get(FIRST)));
 
 
-        consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
-        return Double.parseDouble(parameters.get(0));
+        consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
+        return Double.parseDouble(parameters.get(FIRST));
     }
 
     @Override

@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class IsPenDown implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
-        if(currentTurtleModel.getPenStatus()){
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+        if(turtleModel.getPenStatus()){
             consoleModel.setReturnVal(1);
             return 1;
         }

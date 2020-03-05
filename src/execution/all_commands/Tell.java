@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Tell implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
         boolean hasBeenChanged = turtleModelContainer.getHasBeenChanged();
@@ -21,13 +21,13 @@ public class Tell implements Command {
                 if(difference > 0){
                     for(int k = 0; k < difference; k ++ ){
                         int newId = turtleModelContainer.getTurtleIds().get(turtleModelContainer.getTurtleIds().size()-1) + 1;
-                        TurtleModel turtleModel = turtleModelContainer.addTurtle(id);
-                        newActiveTurtles.add(turtleModel);
+                        TurtleModel newTurtleModel = turtleModelContainer.addTurtle(id);
+                        newActiveTurtles.add(newTurtleModel);
                     }
                 }
                 else{
-                    TurtleModel turtleModel = turtleModelContainer.getTurleModel(id);
-                    newActiveTurtles.add(turtleModel);
+                    TurtleModel newTurtleModel = turtleModelContainer.getTurleModel(id);
+                    newActiveTurtles.add(newTurtleModel);
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);

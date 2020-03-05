@@ -7,18 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 public class Home implements Command {
+    private static final int CENTER = 0;
+    private static final int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel){
-        double distance = 0;
-        TurtleModel turtleModel = currentTurtleModel;
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel){
             double originalX = turtleModel.getX();
             double originalY = turtleModel.getY();
-            turtleModel.setXY(0,0);
-            distance = Math.sqrt(Math.pow(originalX,2) + Math.pow( originalY,2));
-            System.out.println(distance);
-
-
-        consoleModel.setReturnVal(distance);
+            turtleModel.setXY(CENTER,CENTER);
+            double distance = Math.sqrt(Math.pow(originalX,SQUARED) + Math.pow( originalY,SQUARED));
+            consoleModel.setReturnVal(distance);
         return distance;
     }
 

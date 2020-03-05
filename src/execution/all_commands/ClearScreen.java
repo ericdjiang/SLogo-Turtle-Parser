@@ -7,16 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 public class ClearScreen implements Command {
+    private final static int CENTER = 0;
+    private final static int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
-        double distance = 0;
-      TurtleModel turtleModel = currentTurtleModel;
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+
             double originalX = turtleModel.getX();
             double originalY = turtleModel.getY();
-            distance = Math.sqrt(Math.pow(originalX,2) + Math.pow(originalY,2));
-            turtleModel.setX(0);
-            turtleModel.setY(0);
-            turtleModel.setAngle(0);
+            double distance = Math.sqrt(Math.pow(originalX,SQUARED) + Math.pow(originalY,SQUARED));
+            turtleModel.setX(CENTER);
+            turtleModel.setY(CENTER);
+            turtleModel.setAngle(CENTER);
             turtleModel.setCleared(true);
             turtleModel.reInitCenter();
 

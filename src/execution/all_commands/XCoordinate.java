@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class XCoordinate implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
-        return turtleModelContainer.getActiveTurtles().get(turtleModelContainer.getActiveTurtles().size()-1).getX();
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+        return turtleModel.getX();
     }
 
     @Override

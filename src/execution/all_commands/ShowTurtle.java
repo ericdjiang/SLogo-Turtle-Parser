@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class ShowTurtle implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
 
-           currentTurtleModel.showTurtle();
+           turtleModel.showTurtle();
 
 
         System.out.println("Showing Turtle");

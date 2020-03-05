@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Minus implements Command {
+    private static final int FIRST = 0;
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel currentTurtleModel) {
-        System.out.println("Negative of " + parameters.get(0));
-        consoleModel.setReturnVal(-1*Double.parseDouble(parameters.get(0)));
-        return -1*Double.parseDouble(parameters.get(0));
+    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+        consoleModel.setReturnVal(-1*Double.parseDouble(parameters.get(FIRST)));
+        return -1*Double.parseDouble(parameters.get(FIRST));
     }
 
     @Override

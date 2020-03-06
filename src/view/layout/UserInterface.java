@@ -13,12 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.TurtleContainer;
 import view.views.VariableView;
+import view.views.*;
 import view.util.ControlPanel;
 import view.util.LanguageSelector;
 import view.util.Pen;
-import view.views.CommandHistoryView;
-import view.views.CommandReferenceView;
-import view.views.ConsoleView;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -54,6 +52,8 @@ public class UserInterface {
     public CommandHistoryWindow historyWindow;
     private CommandReferenceWindow referenceWindow;
     private VariableWindow variableWindow;
+    private LibraryView libraryView;
+    private LibraryWindow libraryWindow;
     private Controller controller;
     private Pen pen;
     private String myLanguage;
@@ -72,6 +72,7 @@ public class UserInterface {
         this.variableView = new VariableView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
         this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, myLanguage, c, c.getConsoleModel(), variableView,turtleContainer );
+        this.libraryView = new LibraryView(myResources);
         this.controller = c;
         this.pen = c.getPen();
         this.backgroundButton = makeButton("ChooseBackGround", e-> colorPicker.show());
@@ -169,6 +170,8 @@ public class UserInterface {
     private void setCommandsWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
         referenceWindow = new CommandReferenceWindow(historySwitchText, referenceSwitchText, variableSwitchText, referenceView);
+        //libraryWindow = new LibraryWindow(historySwitchText, referenceSwitchText, variableSwitchText, libraryView);
+        //mainFrame.setRight(libraryWindow);
         mainFrame.setRight(referenceWindow);
     }
     private void setVariableWindow() {

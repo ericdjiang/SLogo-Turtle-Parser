@@ -18,10 +18,7 @@ import javafx.stage.Stage;
 import model.*;
 
 import parsing.Parser;
-import view.views.TurtleView;
-import view.views.VariableView;
-import view.views.CommandHistoryView;
-import view.views.ConsoleView;
+import view.views.*;
 
 import javax.imageio.ImageIO;
 import java.util.ResourceBundle;
@@ -44,10 +41,10 @@ public class ControlPanel extends VBox {
 
     private VariableModel variableModel;
     private VariableView variableView;
+    private LibraryView libraryView;
 
     private Map<String, MethodModel> methodModels;
     private TurtleContainer turtleContainer;
-
 
 
     public ControlPanel(ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, String language, Controller c, ConsoleModel cm, VariableView variableView, TurtleContainer turtlecontainer) {
@@ -56,6 +53,7 @@ public class ControlPanel extends VBox {
         this.consoleView = consoleView;
         this.myLanguage = language;
         this.variableView = variableView;
+        this.libraryView = libraryView;
         this.cm = cm;
         this.c = c;
         this.variableModel = new VariableModel();
@@ -95,7 +93,7 @@ public class ControlPanel extends VBox {
         return this.turtleSwitchButton;
     }
     private void updateInputHistory(String commands){
-        historyView.updateHistory("\tInput: " + commands + "; Output: " + c.getConsoleModel().getReturnVal());
+        historyView.updateHistory(commands, c.getConsoleModel().getReturnVal());
         historyView.displayError(c.getConsoleModel().getErrorMessage());
         c.getConsoleModel().setErrorMessage(null);
     }
@@ -108,13 +106,20 @@ public class ControlPanel extends VBox {
         updateVariableView();
         //saveToFile(commands);
         // FIXME: Find a way to only save some commands not all of them
+        updateLibraryView();
     }
     private void updateVariableView() {
-        Text t = new Text(variableModel.getVariable());
         if (variableModel.newVarAdded()) {
-            variableView.addVariable(t);
+            variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
+            variableModel.clearVarInfo();
         }
         variableModel.varReceived();
+    }
+    private void updateLibraryView() {
+        for (String k :  methodModels.keySet()) {
+            Text t = new Text("Method: " + methodModels.get(k).getMethodName() + "\tParameters: " + "\tBody: " + methodModels.get(k).getMethodBody());
+            libraryView.addMethod(t);
+        }
     }
     private void clearConsole() {
         consoleView.clear();

@@ -16,7 +16,7 @@ public class ConsoleView extends TextArea {
     private final VBox prompt = new VBox();
     private final String style = "-fx-background-color: rgb(0,0,0);";
     private Text carot;
-
+//TODO fix text box rising when too many enters
     public ConsoleView(ResourceBundle resources) {
         this.myResources = resources;
         this.setPromptText(myResources.getString("EnterText"));
@@ -25,6 +25,7 @@ public class ConsoleView extends TextArea {
         this.setStyle(style);
         setOnKeyPressed(event -> addNewCarot(event.getCode()));
         addNewCarot(KeyCode.ENTER);
+
     }
     public Node getPrompt() {
         return this.prompt;
@@ -33,7 +34,8 @@ public class ConsoleView extends TextArea {
         this.setPromptText(resources.getString("EnterText"));
     }
     private void addNewCarot(KeyCode code) {
-        if (code == KeyCode.ENTER) {
+        if (code == KeyCode.ENTER && prompt.getHeight() <= 114) {
+            System.out.println(prompt.getHeight());
             carot = new Text(">");
             carot.setFill(Color.WHITE);
             prompt.getChildren().add(carot);

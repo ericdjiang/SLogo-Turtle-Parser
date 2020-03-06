@@ -72,6 +72,7 @@ public class Parser {
 
     private void parseText(String commands, TurtleModel currentTurtle)
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+
         commands = removeComments(commands);
 
         // separate the user input string into list where each element is either a command or number

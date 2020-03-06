@@ -1,5 +1,6 @@
 package view.views;
 
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -9,41 +10,42 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
-//TODO separate into hboxs
+
 public class VariableView extends InformationView {
+    private static final String STYLE = "vbox";
 
     public VariableView(ResourceBundle resources) {
         super(resources);
-        Text i = new Text("VARIABLE");
-        i.setWrappingWidth(250);
-        Text o = new Text("VALUE");
-        o.setWrappingWidth(250);
-        header.getChildren().add(i);
-        header.getChildren().add(o);
+        setHeader();
     }
     public void addVariable(List<String> varName, List<String> varVal) {
         for (int i = 0; i < varName.size(); i ++) {
-            Text name = new Text(varName.get(i));
-            name.setFont(Font.font(10));
-            name.setWrappingWidth(250);
-            Text val = new Text(varVal.get(i));
-            val.setFont(Font.font(10));
-            val.setWrappingWidth(250);
             VBox variableNames = new VBox();
             VBox variableVals = new VBox();
-            HBox entry = new HBox();
+            Text name = new Text(varName.get(i));
+            Text val = new Text(varVal.get(i));
+            name.setWrappingWidth(250);
+            val.setWrappingWidth(250);
             variableNames.getChildren().add(name);
             variableVals.getChildren().add(val);
-            entry.getChildren().add(variableNames);
-            entry.getChildren().add(variableVals);
-            variableNames.getStyleClass().add("vbox");
-            variableVals.getStyleClass().add("vbox");
-            entry.getStyleClass().add("vbox");
-            super.addEntry(entry);
+            createAndAddEntry(variableNames, variableVals);
         }
     }
-
-
-
-
+    private void createAndAddEntry(Node names, Node vals) {
+        HBox entry = new HBox();
+        entry.getChildren().add(names);
+        entry.getChildren().add(vals);
+        names.getStyleClass().add(STYLE);
+        vals.getStyleClass().add(STYLE);
+        entry.getStyleClass().add(STYLE);
+        super.addEntry(entry);
+    }
+    private void setHeader() {
+        Text heading1 = new Text("VARIABLE");
+        heading1.setWrappingWidth(250);
+        Text heading2 = new Text("VALUE");
+        heading2.setWrappingWidth(250);
+        header.getChildren().add(heading1);
+        header.getChildren().add(heading2);
+    }
 }

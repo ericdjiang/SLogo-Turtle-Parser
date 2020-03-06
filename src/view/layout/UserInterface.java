@@ -1,17 +1,13 @@
 package view.layout;
 
 import controller.Controller;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.TurtleContainer;
+import view.util.ColorSelector;
 import view.views.VariableView;
 import view.util.ControlPanel;
 import view.util.LanguageSelector;
@@ -19,8 +15,6 @@ import view.util.Pen;
 import view.views.CommandHistoryView;
 import view.views.CommandReferenceView;
 import view.views.ConsoleView;
-
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
@@ -39,8 +33,6 @@ public class UserInterface {
     private HBox inputPanel = new HBox();
     private BorderPane mainView = new BorderPane();
     private BorderPane mainFrame = new BorderPane();
-    private ColorPicker colorPicker = new ColorPicker();
-    private ColorPicker penColorPicker = new ColorPicker();
     private ViewSwitchText historySwitchText;
     private ViewSwitchText referenceSwitchText;
     private ViewSwitchText variableSwitchText;
@@ -51,16 +43,16 @@ public class UserInterface {
     private ConsoleView commandPrompt;
     private LanguageSelector languageSelector;
     private ControlPanel controlPanel;
-    public CommandHistoryWindow historyWindow;
-    private CommandReferenceWindow referenceWindow;
-    private VariableWindow variableWindow;
+    public InformationWindow historyWindow;
+    private InformationWindow referenceWindow;
+    private InformationWindow variableWindow;
     private Controller controller;
     private Pen pen;
     private String myLanguage;
     private final HBox console = new HBox();
-    private Button backgroundButton;
-    private Button penButton;
     private Button turtleButton;
+    private ColorSelector backgroundColorSelector;
+    private ColorSelector penColorSelector;
 
     public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c, TurtleContainer turtleContainer) throws IOException, InvocationTargetException, IllegalAccessException {
         this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
@@ -74,59 +66,27 @@ public class UserInterface {
         this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, myLanguage, c, c.getConsoleModel(), variableView,turtleContainer );
         this.controller = c;
         this.pen = c.getPen();
-        this.backgroundButton = makeButton("ChooseBackGround", e-> colorPicker.show());
-        this.penButton = makeButton("ChoosePen", e-> penColorPicker.show());
+        this.backgroundColorSelector = new ColorSelector(myResources.getString("ChooseBackground"));
+        this.penColorSelector = new ColorSelector(myResources.getString("ChoosePen"));
         stage.setTitle(myResources.getString("Title"));
     }
     public Scene setupUI() {
         historySwitchText = new ViewSwitchText(myResources.getString("HistoryWindow"));
         referenceSwitchText = new ViewSwitchText(myResources.getString("CommandWindow"));
         variableSwitchText = new ViewSwitchText(myResources.getString("VariableWindow"));
-        historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
-        customizationPanel.getChildren().add(languageSelector);
-
-        StackPane backGroundColorBox = new StackPane();
-        backgroundButton.getStyleClass().add("colorbutton");
-        penButton.getStyleClass().add("colorbutton");
-        backGroundColorBox.getChildren().add(colorPicker);
-        colorPicker.setOnMouseClicked(e-> colorPicker.hide());
-        backGroundColorBox.getChildren().add(backgroundButton);
-        backGroundColorBox.getStyleClass().add("colorbox");
-        StackPane penColorBox = new StackPane();
-        penColorBox.getChildren().add(penColorPicker);
-        penColorBox.getChildren().add(penButton);
-        customizationPanel.getChildren().add(penColorBox);
-        customizationPanel.getChildren().add(backGroundColorBox);
-
-        penColorPicker.setValue(Color.BLACK);
-        penColorPicker.getStyleClass().add("colorpicker");
-        colorPicker.getStyleClass().add("colorpicker");
-        //FIXME refactor button
-        turtleButton = controlPanel.getTurtleSwitcher();
-        customizationPanel.getChildren().add(turtleButton);
-        turtleButton.getStyleClass().add("turtleswitch");
-        penColorPicker.setOnAction(event -> setPenColor());
-        colorPicker.setOnAction(event -> setBackgroundColor(turtleWindow));
-        penColorPicker.hide();
-        colorPicker.hide();
-        languageSelector.setOnAction(event -> {
-            try {
-                updateLanguage();
-            } catch (IOException e) {
-//                    e.printStackTrace();
-            }
-        });
+        historyWindow = new InformationWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
+        setCustomizationPanel();
         historySwitchText.setOnMouseClicked(event -> setHistoryWindow());
         referenceSwitchText.setOnMouseClicked(event -> {
             setCommandsWindow();
         });
         variableSwitchText.setOnMouseClicked(event -> setVariableWindow());
         setFooter();
+
         inputPanel.getChildren().add(console);
         inputPanel.getChildren().add(controlPanel);
 
         mainView.setBottom(inputPanel);
-        turtleWindow.getStyleClass().add("turtlewindow");
         mainView.setCenter(turtleWindow);
         mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
@@ -137,13 +97,13 @@ public class UserInterface {
         return myScene;
     }
     private void setBackgroundColor(Pane turtleView) {
-        turtleView.setBackground(new Background(new BackgroundFill(colorPicker.getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
+        turtleView.setBackground(new Background(new BackgroundFill(backgroundColorSelector.getColorPicker().getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
+        //backgroundColorSelector.setButtonColor(backgroundColorSelector.getColorPicker().getValue());
     }
     private void setPenColor() {
-        pen.setColor(penColorPicker.getValue());
+        pen.setColor(penColorSelector.getColorPicker().getValue());
     }
     private void updateLanguage() throws IOException {
-
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
         myLanguage = r.getString(languageSelector.getValue());
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
@@ -153,8 +113,8 @@ public class UserInterface {
         historySwitchText.updateLanguage(myResources.getString("HistoryWindow"));
         referenceSwitchText.updateLanguage(myResources.getString("CommandWindow"));
         variableSwitchText.updateLanguage(myResources.getString("VariableWindow"));
-        penButton.setText(myResources.getString("ChoosePen"));
-        backgroundButton.setText(myResources.getString("ChooseBackGround"));
+        penColorSelector.updateLanguage(myResources.getString("ChoosePen"));
+        backgroundColorSelector.updateLanguage(myResources.getString("ChooseBackground"));
         turtleButton.setText(myResources.getString("ChooseTurtle"));
     }
     private void setFooter() {
@@ -163,37 +123,37 @@ public class UserInterface {
     }
     private void setHistoryWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
-        historyWindow = new CommandHistoryWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
+        historyWindow = new InformationWindow(historySwitchText, referenceSwitchText, variableSwitchText, historyView);
         mainFrame.setRight(historyWindow);
     }
     private void setCommandsWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
-        referenceWindow = new CommandReferenceWindow(historySwitchText, referenceSwitchText, variableSwitchText, referenceView);
+        referenceWindow = new InformationWindow(historySwitchText, referenceSwitchText, variableSwitchText, referenceView);
         mainFrame.setRight(referenceWindow);
     }
     private void setVariableWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
-        variableWindow = new VariableWindow(historySwitchText, referenceSwitchText, variableSwitchText, variableView);
+        variableWindow = new InformationWindow(historySwitchText, referenceSwitchText, variableSwitchText, variableView);
         mainFrame.setRight(variableWindow);
     }
-
-    private Button makeButton(String property, EventHandler<ActionEvent> handler) {
-        // represent all supported image suffixes
-        ResourceBundle resources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
-        final String IMAGEFILE_SUFFIXES = String
-                .format(".*\\.(%s)", String.join("|", ImageIO.getReaderFileSuffixes()));
-        Button result = new Button();
-        String label = resources.getString(property);
-        if (label.matches(IMAGEFILE_SUFFIXES)) {
-            result.setGraphic(new ImageView(
-                    new Image(getClass().getResourceAsStream(DEFAULT_RESOURCE_FOLDER + label))));
-        } else {
-            result.setText(label);
-        }
-        result.setOnAction(handler);
-        return result;
+    private void setCustomizationPanel() {
+        customizationPanel.getChildren().add(languageSelector);
+        customizationPanel.getChildren().add(penColorSelector);
+        customizationPanel.getChildren().add(backgroundColorSelector);
+        //FIXME refactor button
+        turtleButton = controlPanel.getTurtleSwitcher();
+        customizationPanel.getChildren().add(turtleButton);
+        turtleButton.getStyleClass().add("turtleswitch");
+        penColorSelector.getColorPicker().setOnAction(event -> setPenColor());
+        backgroundColorSelector.getColorPicker().setOnAction(event -> setBackgroundColor(turtleWindow));
+        languageSelector.setOnAction(event -> {
+            try {
+                updateLanguage();
+            } catch (IOException e) {
+//                    e.printStackTrace();
+            }
+        });
     }
-
 }
 
 

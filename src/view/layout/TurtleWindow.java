@@ -17,6 +17,7 @@ public class TurtleWindow extends Pane {
         this.setHeight(viewHeight);
         this.setBorder(new Border(new BorderStroke(Color.BLACK,
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        this.getStyleClass().add("turtlewindow");
     }
     public double getViewWidth() {
         return this.viewWidth;

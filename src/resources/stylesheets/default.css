@@ -3,13 +3,13 @@
   -fx-font-family: "Arial Black";
   -fx-base: #eef;
   -fx-background-color: #eee;
-  -fx-text-alignment: justify;
 }
 .color-picker {
   -fx-pref-height: 32.5;
 }
 .vbox {
   -fx-border-color: #000;
+  -fx-font-size: 10pt;
 }
 .combo-box {
   -fx-pref-height: 32.5;

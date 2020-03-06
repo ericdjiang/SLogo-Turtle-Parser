@@ -93,7 +93,7 @@ public class Parser {
                 commandSeq = "tell " + commandSeq;
             }
             firstOne = false;
-            System.out.println(splitByTell.size());
+            System.out.println(commandSeq);
             for(currentIndex = 0; currentIndex < turtlemodelcontainer.getActiveTurtles().size(); currentIndex ++){
                 try {
                     parseText(commandSeq,turtlemodelcontainer.getActiveTurtles().get(currentIndex));
@@ -156,6 +156,7 @@ public class Parser {
                     if (cursor > loopEndIndex) { // make sure that we DO NOT parse any symbols in between the last stored loopEndIndex ( we will send the loop body to another parser via a cmd); only parse if our current cursor is after the latest loopEndIndex
                         // symbol represents the space delimited command or parameter (e.g. fd or 30 or :variable)
                         String symbol = symbolList.get(cursor).strip();
+                        System.out.println(symbol);
 
                         // push the symbol to the correct stack (cmdStack or argStack based on its regular expression match).
                         // if the command is a loop command, find the index of the closing loop bracket and store it in loopEndIndex so that the program can skip all symbols until we reach this index

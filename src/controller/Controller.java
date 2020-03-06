@@ -47,8 +47,8 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
-       // for(int t = 1; t < turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
-            TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(1);
+        for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
+            TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
             int id = turtleModel.getModelId();
             TurtleView turtleView = turtleContainer.getTurtleView(id);
 
@@ -156,7 +156,7 @@ public class Controller {
 
         }
 
-  //  }
+    }
 
 
     public Pen getPen() {

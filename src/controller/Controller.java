@@ -1,9 +1,11 @@
 package controller;
 
+import javafx.scene.Node;
 import model.ConsoleModel;
 import model.TurtleContainer;
 import model.TurtleModel;
 import view.util.Pen;
+import view.views.CustomizationView;
 import view.views.TurtleView;
 import view.layout.TurtleWindow;
 
@@ -11,6 +13,7 @@ public class Controller {
     private TurtleWindow turtleWindow;
     private ConsoleModel consoleModel;
     private TurtleContainer turtleContainer;
+    private CustomizationView customization;
     private Pen pen;
     private int index = 1;
     private double point;
@@ -19,13 +22,23 @@ public class Controller {
         this.turtleContainer = turtleContainer;
         this.turtleWindow = turtleFrontEnd;
         this.consoleModel = consoleModel;
+        this.customization = new CustomizationView();
         this.pen = new Pen();
 
     }
     public void update() {
         for(int i =0; i < turtleContainer.getTurtleModelContainer().getTurtleModels().size(); i++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurtleModels().get(i);
+            customization.updateTurtleX(turtleModel.getX());
+            customization.updateTurtleY(turtleModel.getY());
+            customization.updatePenOffset();
+            customization.updatePenThickness();
             int id = turtleModel.getModelId();
+            customization.updateTurtleID(id);
+            customization.updateHeading(turtleModel.getAngle());
+            customization.updatePenStatus(turtleModel.getPenStatus());
+            customization.updatePenColor(pen.getColor());
+            customization.updateBackgroundColor(turtleWindow.getColor());
             TurtleView turtleView = turtleContainer.getTurtleView(id);
             if (turtleModel.getClearedStatus()) {
                 pen.clear(turtleWindow);
@@ -72,7 +85,6 @@ public class Controller {
                 turtleView.setTurtleRotation(turtleModel.getAngle());
                 turtleView.setVisible(turtleModel.getShowing());
             }
-
         }
 
     }
@@ -80,4 +92,7 @@ public class Controller {
         return this.pen;
     }
     public ConsoleModel getConsoleModel() { return this.consoleModel; }
+    public CustomizationView getStats() {
+        return this.customization;
+    }
 }

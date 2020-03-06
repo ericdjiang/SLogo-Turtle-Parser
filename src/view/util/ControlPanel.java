@@ -36,14 +36,13 @@ public class ControlPanel extends VBox {
     private static final String RUN = "Run";
     private static final String CLEAR = "Clear";
     private static final String TURTLESELECT = "TurtleSelect";
+    private static final String DASH = "ToggleDash";
     private CommandHistoryView historyView;
     private ConsoleView consoleView;
     private Button runButton;
     private Button clearButton;
     private Button uploadButton;
     private Button turtleSwitchButton;
-    private Button penColorButton;
-    private Button backgroundColorButton;
     private Parser parser;
     private String myLanguage;
     private Controller c;
@@ -100,12 +99,6 @@ public class ControlPanel extends VBox {
 
     public Button getTurtleSwitcher() {
         return this.turtleSwitchButton;
-    }
-    public Button getPenColorButton() {
-        return this.penColorButton;
-    }
-    public Button getBackGroundColorButton() {
-        return this.backgroundColorButton;
     }
     private void updateInputHistory(String commands){
         historyView.updateHistory(commands, c.getConsoleModel().getReturnVal());

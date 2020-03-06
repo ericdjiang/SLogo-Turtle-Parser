@@ -28,12 +28,24 @@ public class Parser {
     private Double lastReturnValue;
 
     private Map<String, MethodModel> myMethodModels;
+    private int currentIndex;
+    private String poppedCommand;
 
 
     private TurtleModelContainer turtleModelContainer;
 
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
+    private static final List<String> MTCOMMANDS = new ArrayList<>(){{
+        add("repeat");
+        add("dotimes");
+        add("if");
+        add("ifelse");
+        add("to");
+        add("tell");
+        add("turtles");
+    }};
+
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
         put("repeat", 1);
         put("dotimes", 2);
@@ -56,31 +68,72 @@ public class Parser {
         resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         addPatterns(language);
         turtleModelContainer = turtlemodelcontainer;
-        try {
-           for(int i = 0; i< turtlemodelcontainer.getActiveTurtles().size(); i ++){
-              TurtleModel turtleModel = turtlemodelcontainer.getActiveTurtles().get(i);
-               parseText(commands, turtleModel);
-           }
-        }catch( Exception e){
-//            System.out.println("error");
-            String message = resourceBundle.getString(ERROR_STRING);
-            myConsoleModel.setErrorMessage(message);
-            e.printStackTrace();
-        }
+        this.currentIndex = 0;
+        this.poppedCommand = "";
+        splitAndParseText(commands,turtlemodelcontainer);
     }
 
     private boolean validateMessage() {
         return false;
     }
+    private void splitAndParseText(String commands, TurtleModelContainer turtlemodelcontainer) {
+        boolean firstOne = true;
+        List<String> splitByTell = new ArrayList<>(Arrays.asList(commands.split("tell")));
+        for(String commandSeq : splitByTell){
+            commandSeq = removeComments(commandSeq);
+            if(commandSeq.equals("")) continue;
+            if(commands.contains("tell")){
+                if(!firstOne){
+                    commandSeq = "tell " + commandSeq;
+                }
+            }
+            firstOne = false;
+            for(currentIndex = 0; currentIndex < turtlemodelcontainer.getActiveTurtles().size(); currentIndex ++){
+                try {
+                    parseText(commandSeq,turtlemodelcontainer.getActiveTurtles().get(currentIndex));
+                } catch( Exception e){
+//            System.out.println("error");
+                    String message = resourceBundle.getString(ERROR_STRING);
+                    myConsoleModel.setErrorMessage(message);
+                    e.printStackTrace();
+                }
+
+
+    }}}
+//
+//    private List<String> cutByTell(String commands){
+//        String tellCommand = "tell";
+//        List<String> params = new ArrayList<>();
+//        List<String> symbolList = Arrays
+//                .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
+//        List<String> newSymbolList = new ArrayList<>(symbolList);
+//        List<String> commandsAfterTell = new ArrayList<>(symbolList);
+//        if(symbolList.contains(tellCommand)){
+//            int index = symbolList.indexOf(tellCommand);
+//             commandsAfterTell = symbolList.subList(12,symbolList.size());
+//            newSymbolList.remove(index);
+//            for(int i = index; i < symbolList.size(); i++){
+//                params.add(symbolList.get(i));
+//                newSymbolList.remove(i);
+//                if(symbolList.get(i).equals("]")){
+//                    break;
+//                }
+//                i = i -1;
+//            }
+//        }
+//        return commandsAfterTell;
+//    }
+
+
 
     private void parseText(String commands, TurtleModel currentTurtle)
         throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
 
-        commands = removeComments(commands);
 
-        // separate the user input string into list where each element is either a command or number
         List<String> symbolList = Arrays
-            .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
+                .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
+        // separate the user input string into list where each element is either a command or number
+
         Stack<String> cmdStack = new Stack<>();
         Stack<String> argStack = new Stack<>();
 
@@ -102,10 +155,10 @@ public class Parser {
 
                 // pop commands and args off the stack and handle them
                 handleStacks(currentTurtle, cmdStack, argStack);
+
             }
 
         }
-
 
     }
 
@@ -126,10 +179,10 @@ public class Parser {
     private void parseDefaultMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
         Stack<String> argStack)
         throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        String poppedCommand = cmdStack.pop();
+        poppedCommand = cmdStack.pop();
         List<String> params = new ArrayList<>();
         Double returnValue = 0.0;
-        if(LOOP_MAPPINGS.containsKey(poppedCommand)){
+        if(MTCOMMANDS.contains(poppedCommand)){
            MultipleTurtlesCommand cmdToExecute = mtFactory.getCommand(getSymbol(poppedCommand));
 
             while (cmdToExecute.getNumParams() > params.size()) {
@@ -172,8 +225,8 @@ public class Parser {
             returnValue = cmdToExecute
                     .execute(params, myVariableModel, myConsoleModel,
                             myMethodModels, currentTurtle );
-        }
 
+        }
         this.lastReturnValue = returnValue;
         if (!cmdStack.isEmpty()) {
             argStack.push(returnValue.toString());
@@ -275,7 +328,7 @@ public class Parser {
     private int getNumParams(int index, Stack<String> commandStack)
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String command = commandStack.get(index);
-        if(LOOP_MAPPINGS.containsKey(command)){
+        if(MTCOMMANDS.contains(command)){
             return mtFactory.getCommand(getSymbol(command)).getNumParams();
         }
         return factory.getCommand(getSymbol(command)).getNumParams();
@@ -285,7 +338,7 @@ public class Parser {
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
         {
 //            System.out.println("Getting factory for symbol: "+ symbol);
-            if(LOOP_MAPPINGS.containsKey(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
+            if(MTCOMMANDS.contains(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
             return factory.getCommand(getSymbol(symbol)).getNumParams();
         }
 

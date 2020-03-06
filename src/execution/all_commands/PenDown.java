@@ -11,7 +11,7 @@ public class PenDown implements Command {
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
             turtleModel.makePenDown();
 
-
+        System.out.println("inside pen down");
         consoleModel.setReturnVal(1);
         return 1;
     }

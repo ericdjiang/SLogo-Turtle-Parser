@@ -85,7 +85,7 @@ public class Parser {
             commandSeq = removeComments(commandSeq);
             if(commandSeq.equals("")) continue;
             if(commands.contains("tell")){
-                if(!firstOne){
+                if(firstOne){
                     commandSeq = "tell " + commandSeq;
                 }
             }
@@ -102,29 +102,6 @@ public class Parser {
 
 
             }}}
-//
-//    private List<String> cutByTell(String commands){
-//        String tellCommand = "tell";
-//        List<String> params = new ArrayList<>();
-//        List<String> symbolList = Arrays
-//                .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
-//        List<String> newSymbolList = new ArrayList<>(symbolList);
-//        List<String> commandsAfterTell = new ArrayList<>(symbolList);
-//        if(symbolList.contains(tellCommand)){
-//            int index = symbolList.indexOf(tellCommand);
-//             commandsAfterTell = symbolList.subList(12,symbolList.size());
-//            newSymbolList.remove(index);
-//            for(int i = index; i < symbolList.size(); i++){
-//                params.add(symbolList.get(i));
-//                newSymbolList.remove(i);
-//                if(symbolList.get(i).equals("]")){
-//                    break;
-//                }
-//                i = i -1;
-//            }
-//        }
-//        return commandsAfterTell;
-//    }
 
 
 

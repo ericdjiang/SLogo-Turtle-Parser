@@ -9,10 +9,12 @@ import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import javafx.scene.Node;
 import model.ConsoleModel;
 import model.TurtleContainer;
 import model.TurtleModel;
 import view.util.Pen;
+import view.views.CustomizationView;
 import view.views.TurtleView;
 import view.layout.TurtleWindow;
 
@@ -22,6 +24,7 @@ public class Controller {
     private TurtleWindow turtleWindow;
     private ConsoleModel consoleModel;
     private TurtleContainer turtleContainer;
+    private CustomizationView customization;
     private Pen pen;
     private int index = 1;
     private double point;
@@ -33,6 +36,7 @@ public class Controller {
         //TODO javafx transitions rotate and move
         this.turtleWindow = turtleFrontEnd;
         this.consoleModel = consoleModel;
+        this.customization = new CustomizationView();
         this.pen = new Pen();
         for(TurtleModel turtleModel : turtleContainer.getTurtleModelContainer().getTurtleModels()){
             TurtleView turtleView = turtleContainer.getTurtleView(turtleModel.getModelId());
@@ -47,9 +51,19 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
+
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
+            customization.updateTurtleX(turtleModel.getX());
+            customization.updateTurtleY(turtleModel.getY());
+            customization.updatePenOffset();
+            customization.updatePenThickness();
             int id = turtleModel.getModelId();
+            customization.updateTurtleID(id);
+            customization.updateHeading(turtleModel.getAngle());
+            customization.updatePenStatus(turtleModel.getPenStatus());
+            customization.updatePenColor(pen.getColor());
+            customization.updateBackgroundColor(turtleWindow.getColor());
             TurtleView turtleView = turtleContainer.getTurtleView(id);
 
 
@@ -153,7 +167,6 @@ public class Controller {
                 turtleView.setTurtleRotation(turtleModel.getAngle());
                 turtleView.setVisible(turtleModel.getShowing());
             }
-
         }
 
     }
@@ -163,5 +176,8 @@ public class Controller {
         return this.pen;
     }
     public ConsoleModel getConsoleModel() { return this.consoleModel; }
+    public CustomizationView getStats() {
+        return this.customization;
+    }
 }
 

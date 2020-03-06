@@ -16,6 +16,7 @@ public class ID implements Command {
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel TurtleModel) {
         return TurtleModel.getModelId();
     }
+
     @Override
     public int getNumParams() {
         return 0;

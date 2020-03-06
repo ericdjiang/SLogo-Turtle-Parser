@@ -1,5 +1,6 @@
 package view.views;
 
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -10,75 +11,68 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CommandHistoryView extends ScrollPane {
-    private VBox content = new VBox();
-    private HBox header = new HBox();
-    private VBox body = new VBox();
-    private VBox lineNums =  new VBox();
-    private VBox inputs = new VBox();
-    private VBox outputs = new VBox();
-    private List commandList;
+public class CommandHistoryView extends InformationView {
     private int lineNum;
+    private static final String STYLE = "vbox";
 
     public CommandHistoryView(ResourceBundle resources) {
-        commandList = new ArrayList<Text>();
-        setContent(content);
+        super(resources);
         lineNum = 1;
-        header.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        Text i = new Text("INPUT");
-        i.setWrappingWidth(250);
-        Text o = new Text("OUTPUT");
-        o.setWrappingWidth(250);
-        header.getChildren().add(i);
-        header.getChildren().add(o);
-        content.getChildren().add(header);
-        content.getChildren().add(body);
+        setHeader();
     }
     public void updateHistory(String input, double returnVal) {
         Text consoleInput = new Text(input);
-        consoleInput.setFont(Font.font(10));
-        commandList.add(input);
-        consoleInput.setWrappingWidth(250); //remove magic number
         Text lineNumber = new Text(Integer.toString(lineNum));
-        lineNumber.setFont(Font.font(10));
         Text consoleOutput = new Text(Double.toString(returnVal));
+        consoleInput.setWrappingWidth(250); //remove magic number
         consoleOutput.setWrappingWidth(250);
-        consoleOutput.setFont(Font.font(10));
-        VBox l =  new VBox();
-        VBox i = new VBox();
-        VBox o = new VBox();
-        HBox entry = new HBox();
-        l.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        i.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        o.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        entry.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        l.getChildren().add(lineNumber);
-        i.getChildren().add(consoleInput);
-        o.getChildren().add(consoleOutput);
-        entry.getChildren().add(l);
-        entry.getChildren().add(i);
-        entry.getChildren().add(o);
-        body.getChildren().add(entry);
+        VBox lineNumbers =  new VBox();
+        VBox inputs = new VBox();
+        VBox outputs = new VBox();
+        lineNumbers.getStyleClass().add(STYLE);
+        inputs.getStyleClass().add(STYLE);
+        outputs.getStyleClass().add(STYLE);;
+        lineNumbers.getChildren().add(lineNumber);
+        inputs.getChildren().add(consoleInput);
+        outputs.getChildren().add(consoleOutput);
+        createAndAddEntry(lineNumbers, inputs, outputs);
         lineNum ++;
+    }
+    private void createAndAddEntry(Node nums, Node in, Node out) {
+        HBox entry = new HBox();
+        entry.getStyleClass().add(STYLE);
+        entry.getChildren().add(nums);
+        entry.getChildren().add(in);
+        entry.getChildren().add(out);
+        super.addEntry(entry);
     }
     public void displayError(String input) {
         if (input != null) {
             Text error = new Text(input);
             Text lineNumber = new Text(Integer.toString(lineNum));
             error.setFill(Color.RED);
-            this.lineNums.getChildren().add(lineNumber);
-            this.inputs.getChildren().add(error);
+            VBox lineNumbers =  new VBox();
+            VBox inputs = new VBox();
+            lineNumbers.getChildren().add(lineNumber);
+            inputs.getChildren().add(error);
+            lineNumbers.getStyleClass().add(STYLE);
+            inputs.getStyleClass().add(STYLE);
+            createAndAddEntry(lineNumbers, inputs, null);
             lineNum++;
         }
     }
-    private void clearHistory() {
-        lineNums.getChildren().clear();
-        inputs.getChildren().clear();
-        outputs.getChildren().clear();
+
+    private void setHeader() {
+        Text heading1 = new Text(resources.getString("HistoryInput"));
+        Text heading2 = new Text(resources.getString("HistoryOutput"));
+        heading1.setWrappingWidth(250);
+        heading2.setWrappingWidth(250);
+        header.getChildren().add(heading1);
+        header.getChildren().add(heading2);
+    }
+    public void clearHistory() {
+        lineNum=1;
+        clear();
     }
 }
+

@@ -9,32 +9,43 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class TurtleView extends Rectangle {
-    private Image ig;
+    private final int TURTLE_SIZE = 50;
+    private final String IMAGE_RESOURCE_PATH = "src/resources/images/";
+    private final String DEFAULT_IMAGE = "turtle1.png";
+    private Image image;
     private ImagePattern turtlePattern;
     private int myId;
 
     public TurtleView(int id) {
-        ig = new Image("file:src/resources/images/turtle1.png");
-        myId = id;
-        turtlePattern = new ImagePattern(ig);
-        setFill(turtlePattern);
-        setWidth(50);
-        setHeight(50);
+        this.image = new Image("file:" + IMAGE_RESOURCE_PATH + DEFAULT_IMAGE);
+        this.myId = id;
+        this.turtlePattern = new ImagePattern(image);
+        this.setFill(turtlePattern);
+        this.setWidth(TURTLE_SIZE);
+        this.setHeight(TURTLE_SIZE);
     }
-    public void setTurtleRotation(double r) {
-        setRotate(r);
+    public void setTurtleRotation(double angle) {
+        this.setRotate(angle);
     }
-    public void setImage(String l) {
-        setFill(new ImagePattern(new Image("file:src/resources/images/" + l)));
+    public void setImage(String imageName) {
+        this.setFill(new ImagePattern(new Image("file:" + IMAGE_RESOURCE_PATH + imageName)));
     }
     public void switchTurtleImage() {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File("src/resources/images"));
-        Stage s = new Stage();
-        File selected = fc.showOpenDialog(s);
-        setImage(selected.getName());
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(IMAGE_RESOURCE_PATH));
+        Stage stage = new Stage();
+        File selectedImg = fileChooser.showOpenDialog(stage);
+        if (selectedImg.isFile() && checkForValidExtensions(selectedImg.getName())) {
+            this.setImage(selectedImg.getName());
+        }
+        else {
+            System.out.println("Invalid Image File Chosen. Select a jpg or png File.");
+        }
     }
     public int getViewId(){
         return myId;
-}
+    }
+    private boolean checkForValidExtensions(String fileName) {
+        return (fileName.contains(".png") || fileName.contains(".jpg"));
+    }
 }

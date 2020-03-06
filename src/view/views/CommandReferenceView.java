@@ -1,124 +1,100 @@
 package view.views;
 
-import javafx.scene.control.ScrollPane;
+import javafx.scene.Node;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-//TODO add more languages and refactor
-public class CommandReferenceView extends ScrollPane {
-    private VBox content = new VBox();
-    private HBox header = new HBox();
-    private VBox body = new VBox();
-    private List referenceList;
-    private String myLanguage;
+import java.util.*;
 
-    public CommandReferenceView(String language) throws IOException {
-        this.myLanguage = language;
+public class CommandReferenceView extends InformationView {
+    private static final String STYLE = "vbox";
+    private List<String> referenceList;
+    private String myLanguage;
+    private int index;
+
+    public CommandReferenceView(ResourceBundle resources) throws IOException {
+        super(resources);
+        this.myLanguage = resources.getBaseBundleName();
         this.referenceList = new ArrayList<>();
-        setContent(content);
         initializeReferences(myLanguage);
-        header.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-//        header.getChildren().add(new Text("FUNCTION NAME"));
-//        header.getChildren().add(new Text("PARAMETERS"));
-//        header.getChildren().add(new Text("DESCRIPTION"));
-//        header.getChildren().add(new Text("RETURN VALUE"));
-        content.getChildren().add(header);
-        content.getChildren().add(body);
     }
     public void initializeReferences(String language) throws IOException {
-        content.getChildren().clear();
-        referenceList.clear();
-        HBox entry = new HBox();
+        clear();
+        setHeader();
+        retrieveReferenceInfo(language);
+        for (int i = 0; i < referenceList.size()/4; i++) {
+            Text name = new Text(referenceList.get(index));
+            Text param = new Text(referenceList.get(index+1));
+            Text info = new Text(referenceList.get(index+2));
+            Text ret = new Text(referenceList.get(index+3));
+            name.setWrappingWidth(100);
+            param.setWrappingWidth(150);
+            info.setWrappingWidth(300);
+            ret.setWrappingWidth(300);
+            VBox functionNameList = new VBox();
+            VBox functionParameterList = new VBox();
+            VBox functionInstructionList = new VBox();
+            VBox functionReturnList = new VBox();
+            functionNameList.getStyleClass().add(STYLE);
+            functionParameterList.getStyleClass().add(STYLE);
+            functionInstructionList.getStyleClass().add(STYLE);
+            functionReturnList.getStyleClass().add(STYLE);
+            functionNameList.getChildren().add(name);
+            functionParameterList.getChildren().add(param);
+            functionInstructionList.getChildren().add(info);
+            functionReturnList.getChildren().add(ret);
+            super.addEntry(createEntry(functionNameList, functionParameterList, functionInstructionList, functionReturnList));
+            index += 4;
+        }
+    }
+    private void retrieveReferenceInfo(String language) throws FileNotFoundException {
+        Scanner fileReader = new Scanner(new File("src/resources/parsing/EnglishHelp.properties"));
+        while (fileReader.hasNextLine()) {
+            String line = fileReader.nextLine();
+            String[] parsedInfo = line.split(",");
+            referenceList.addAll(Arrays.asList(parsedInfo));
+        }
+    }
+    private void setHeader() {
         VBox functionNameList = new VBox();
         VBox functionParameterList = new VBox();
         VBox functionInstructionList = new VBox();
         VBox functionReturnList = new VBox();
-        Text h1 = new Text("NAME");
-        Text h2 = new Text("PARAMETERS");
-        Text h3 = new Text("DESCRIPTION");
-        Text h4 = new Text("RETURN VALUE");
-        h1.setWrappingWidth(100);
-        h2.setWrappingWidth(150);
-        h3.setWrappingWidth(300);
-        h4.setWrappingWidth(300);
-        functionNameList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        functionParameterList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        functionInstructionList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        functionReturnList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        entry.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        functionNameList.getChildren().add(h1);
-        functionParameterList.getChildren().add(h2);
-        functionInstructionList.getChildren().add(h3);
-        functionReturnList.getChildren().add(h4);
-        entry.getChildren().add(functionNameList);
-        entry.getChildren().add(functionParameterList);
-        entry.getChildren().add(functionInstructionList);
-        entry.getChildren().add(functionReturnList);
-        header.getChildren().add(entry);
-
-        Scanner fileReader = new Scanner(new File("src/resources/parsing/EnglishHelp.properties"));
-        while (fileReader.hasNextLine()) {
-            String s = fileReader.nextLine();
-            String[] l = s.split(",");
-            Text t1 = new Text(l[0]);
-            Text t2 = new Text(l[1]);
-            Text t3 = new Text(l[2]);
-            Text t4 = new Text(l[3]);
-            t1.setFont(Font.font(10));
-            t2.setFont(Font.font(10));
-            t3.setFont(Font.font(10));
-            t4.setFont(Font.font(10));
-            t1.setWrappingWidth(100);
-            t2.setWrappingWidth(150);
-            t3.setWrappingWidth(300);
-            t4.setWrappingWidth(300);
-             entry = new HBox();
-             functionNameList = new VBox();
-             functionParameterList = new VBox();
-             functionInstructionList = new VBox();
-             functionReturnList = new VBox();
-            functionNameList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            functionParameterList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            functionInstructionList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            functionReturnList.setBorder(new Border(new BorderStroke(Color.BLACK,
-                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            functionNameList.getChildren().add(t1);
-            functionParameterList.getChildren().add(t2);
-            functionInstructionList.getChildren().add(t3);
-            functionReturnList.getChildren().add(t4);
-            entry.getChildren().add(functionNameList);
-            entry.getChildren().add(functionParameterList);
-            entry.getChildren().add(functionInstructionList);
-            entry.getChildren().add(functionReturnList);
-            entry.setBorder(new Border(new BorderStroke(Color.BLACK,
-                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-            body.getChildren().add(entry);
-
-
-//            referenceList.add(s);
-        }
-
-//        for (Object o : referenceList) {
-//            Text text = new Text((String) o);
-//            content.getChildren().add(text);
-//        }
-
+        Text column1Title = new Text(resources.getString("ReferenceName"));
+        Text column2Title = new Text(resources.getString("ReferenceParams"));
+        Text column3Title = new Text(resources.getString("ReferenceInfo"));
+        Text column4Title = new Text(resources.getString("ReferenceRet"));
+        column1Title.setWrappingWidth(100);
+        column2Title.setWrappingWidth(150);
+        column3Title.setWrappingWidth(300);
+        column4Title.setWrappingWidth(300);
+        functionNameList.getStyleClass().add(STYLE);
+        functionParameterList.getStyleClass().add(STYLE);
+        functionInstructionList.getStyleClass().add(STYLE);
+        functionReturnList.getStyleClass().add(STYLE);
+        functionNameList.getChildren().add(column1Title);
+        functionParameterList.getChildren().add(column2Title);
+        functionInstructionList.getChildren().add(column3Title);
+        functionReturnList.getChildren().add(column4Title);
+        header.getChildren().add(createEntry(functionNameList, functionParameterList, functionInstructionList, functionReturnList));
+    }
+    private Node createEntry(Node col1, Node col2, Node col3, Node col4) {
+        HBox entry = new HBox();
+        entry.getChildren().add(col1);
+        entry.getChildren().add(col2);
+        entry.getChildren().add(col3);
+        entry.getChildren().add(col4);
+        entry.getStyleClass().add(STYLE);
+        return entry;
     }
 
+    @Override
+    protected void clear() {
+        index = 0;
+        super.clear();
+    }
 }
+

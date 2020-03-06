@@ -28,6 +28,12 @@ public class ControlPanel extends VBox {
     private ResourceBundle resources;
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
+    private static final String SAVEDCOMMANDSFILE = "data/SavedCommands.txt";
+    private static final String UPLOADFILE = "UploadFile";
+    private static final String RUN = "Run";
+    private static final String CLEAR = "Clear";
+    private static final String TURTLESELECT = "TurtleSelect";
+    private static final String DASH = "ToggleDash";
     private CommandHistoryView historyView;
     private ConsoleView consoleView;
     private Button runButton;
@@ -58,12 +64,12 @@ public class ControlPanel extends VBox {
         this.c = c;
         this.variableModel = new VariableModel();
         this.methodModels = new HashMap<>();
-        uploadButton = makeButton("UploadFile", event-> openFileChooser());
-        runButton = makeButton("Run", event -> {
+        uploadButton = makeButton(UPLOADFILE, event-> openFileChooser());
+        runButton = makeButton(RUN, event -> {
         executeRun();
         });
-        clearButton = makeButton("Clear", event -> clearConsole());
-        turtleSwitchButton = makeButton("TurtleSelect", event -> {
+        clearButton = makeButton(CLEAR, event -> clearConsole());
+        turtleSwitchButton = makeButton(TURTLESELECT, event -> {
             for(TurtleView turtleView : turtleContainer.getTurtleViews()){
                 turtleView.switchTurtleImage();
             }
@@ -125,9 +131,9 @@ public class ControlPanel extends VBox {
         consoleView.clear();
     }
     public void updateLanguage(ResourceBundle resources, String language) {
-        runButton.setText(resources.getString("Run"));
-        clearButton.setText(resources.getString("Clear"));
-        uploadButton.setText(resources.getString("UploadFile"));
+        runButton.setText(resources.getString(RUN));
+        clearButton.setText(resources.getString(CLEAR));
+        uploadButton.setText(resources.getString(UPLOADFILE));
         this.myLanguage = language;
     }
 
@@ -157,7 +163,7 @@ public class ControlPanel extends VBox {
     }
 
     private void saveToFile(String text){
-        File file = new File("data/SavedCommands.txt");
+        File file = new File(SAVEDCOMMANDSFILE);
         try {
             FileWriter writer = new FileWriter(file,false);
             BufferedWriter br = new BufferedWriter(writer);

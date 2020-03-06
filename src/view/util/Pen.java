@@ -3,6 +3,7 @@ package view.util;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Polyline;
+import javafx.scene.shape.StrokeType;
 import view.layout.TurtleWindow;
 
 import java.util.ArrayList;
@@ -11,41 +12,41 @@ import java.util.Collection;
 import java.util.List;
 
 public class Pen {
-    private List myPoints;
+    private final double DEFAULT = 1.0;
+    private List<Double> myPoints;
     private Collection myCoordinates;
     private Paint color;
-    private List myLines;
+    private List<Polyline> myLines;
     private double lastX;
     private double lastY;
-    private boolean visible;
+    private double dashOffset;
+    private double strokeWidth;
 
     public Pen() {
         this.myPoints = new ArrayList();
         this.color = Color.BLACK;
-        this.myLines = new ArrayList<Polyline>();
-        this.visible = true;
+        this.myLines = new ArrayList<>();
+        this.dashOffset=DEFAULT;
+        this.strokeWidth=DEFAULT;
     }
     public void addPoint(double p) {
         myPoints.add(p);
     }
-    public Polyline draw(Paint c) {
-        if (true) {
-            Polyline p = new Polyline();
+    public Polyline draw(Paint color) {
+            Polyline line = new Polyline();
+            line.getStrokeDashArray().add(dashOffset);
+            line.setStrokeWidth(strokeWidth);
             myCoordinates = Arrays.asList(myPoints.toArray());
-            p.getPoints().addAll(myCoordinates);
-            p.setStroke(c);
-            myLines.add(p);
-            lastX = (double) myPoints.get(myPoints.size() - 2);
-            lastY = (double) myPoints.get(myPoints.size() - 1);
+            line.getPoints().addAll(myCoordinates);
+            line.setStroke(color);
+            myLines.add(line);
+            lastX = myPoints.get(myPoints.size() - 2);
+            lastY = myPoints.get(myPoints.size() - 1);
             myPoints.clear();
             myPoints.add(lastX);
             myPoints.add(lastY);
-            return p;
+            return line;
         }
-        else {
-            return null;
-        }
-    }
     public void setColor(Paint color) {
         this.color = color;
     }
@@ -56,13 +57,18 @@ public class Pen {
         myPoints.clear();
     }
     public void clear(TurtleWindow root) {
-        for (Object o : myLines) {
-            Polyline p;
-            p = (Polyline) o;
-            p.getPoints().clear();
-            root.getChildren().remove(p);
+        for (Polyline line : myLines) {
+            line.getPoints().clear();
+            root.getChildren().remove(line);
         }
         myLines.clear();
         myPoints.clear();
+    }
+    public void setDashOffset(double spacing) {
+        System.out.println("worked");
+        dashOffset = spacing;
+    }
+    public void setStrokeWidth(double width) {
+        strokeWidth = width;
     }
 }

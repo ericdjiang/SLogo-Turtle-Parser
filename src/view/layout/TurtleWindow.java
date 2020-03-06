@@ -4,24 +4,32 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
 
 public class TurtleWindow extends Pane {
-    private int viewWidth = 540;
-    private int viewHeight = 480;
+    private final int viewWidth = 540;
+    private final int viewHeight = 480;
+    private Paint color;
 
     //TODO make zoomable
     public TurtleWindow() {
         this.setWidth(viewWidth);
         this.setHeight(viewHeight);
-        this.setBorder(new Border(new BorderStroke(Color.BLACK,
-                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        this.getStyleClass().add("turtlewindow");
+        this.color = Color.LIGHTBLUE;
     }
     public double getViewWidth() {
         return this.viewWidth;
     }
     public double getViewHeight() {
         return this.viewHeight;
+    }
+    public void setColor(Paint color) {
+        this.color = color;
+    }
+    public Paint getColor() {
+        return this.color;
     }
 }

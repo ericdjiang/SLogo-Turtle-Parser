@@ -10,10 +10,8 @@ public class TurtleModelContainer {
     private List<TurtleModel> activeTurtles;
     private List<TurtleModel> turtleModels;
     private List<Integer>     turtleIds;
-    private TurtleContainer turtleContainer;
 
-    public TurtleModelContainer(TurtleContainer turtlecontainer){
-        turtleContainer = turtlecontainer;
+    public TurtleModelContainer(){
         activeTurtles = new ArrayList<>();
         turtleModels = new ArrayList<>();
         turtleIds = new ArrayList<>();
@@ -37,16 +35,13 @@ public class TurtleModelContainer {
         activeTurtles.remove(turtleModel);
     }
 
-    protected TurtleModel addToTurtleModels(int id){
+    public TurtleModel addToTurtleModels(int id){
         TurtleModel turtleModel = new TurtleModel(id,0,0,0);
         turtleModels.add(turtleModel);
         turtleIds.add(id);
         return turtleModel;
     }
-    public TurtleModel addTurtle(int id){
-        TurtleModel turtleModel = turtleContainer.addTurtle(id);
-        return turtleModel;
-    }
+
 
     public void setActiveTurtles(List<TurtleModel> activeturtles){
         activeTurtles = activeturtles;

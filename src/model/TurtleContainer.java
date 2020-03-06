@@ -14,7 +14,7 @@ public class TurtleContainer {
     public TurtleContainer(TurtleWindow turtlewindow){
         turtleWindow = turtlewindow;
         turtleViews = new ArrayList<>();
-        turtleModelContainer = new TurtleModelContainer(this);
+        turtleModelContainer = new TurtleModelContainer();
     }
 
     public TurtleModel addTurtle(int id){
@@ -25,6 +25,11 @@ public class TurtleContainer {
         turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
         turtleWindow.getChildren().add(turtleView);
         return turtleModel;
+    }
+    public TurtleView addTurtleView(int id){
+        TurtleView turtleView = new TurtleView(id);
+        turtleViews.add(turtleView);
+        return turtleView;
     }
 
     public List<TurtleView> getTurtleViews(){

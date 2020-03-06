@@ -64,10 +64,13 @@ public class Controller {
             customization.updatePenStatus(turtleModel.getPenStatus());
             customization.updatePenColor(pen.getColor());
             customization.updateBackgroundColor(turtleWindow.getColor());
+            if ( turtleContainer.getTurtleView(id) == null){
+                TurtleView newTurtleView = turtleContainer.addTurtleView(id);
+                turtleWindow.getChildren().add(newTurtleView);
+                newTurtleView.setX(turtleWindow.getViewWidth()/2 - newTurtleView.getWidth()/2);
+                newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
+            }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
-
-
-
             if (turtleModel.getClearedStatus()) {
                 pen.clear(turtleWindow);
                 turtleView.setX(turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);

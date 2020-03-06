@@ -16,10 +16,10 @@ public class Tell implements MultipleTurtlesCommand {
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
         int id = 0;
-            for(int i = 2; i < symbolList.size()-1; i ++){
+            for(int i = 2; i < symbolList.size(); i ++){
 
                 if(symbolList.get(i).contains(":")){
-                     id = (int) variableModel.getValue(symbolList.get(i).substring(1));
+                     id = (int) variableModel.getValue(symbolList.get(i));
                 }
                 else {
                      id = Integer.parseInt(symbolList.get(i));
@@ -29,7 +29,7 @@ public class Tell implements MultipleTurtlesCommand {
                 if(difference > 0){
                     for(int k = 0; k < difference; k ++ ){
                         int newId = turtleModelContainer.getTurtleIds().get(turtleModelContainer.getTurtleIds().size()-1) + 1;
-                        TurtleModel newTurtleModel = turtleModelContainer.addTurtle(id);
+                        TurtleModel newTurtleModel = turtleModelContainer.addToTurtleModels(newId);
                         newActiveTurtles.add(newTurtleModel);
                     }
                 }
@@ -39,6 +39,9 @@ public class Tell implements MultipleTurtlesCommand {
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);
+            for (TurtleModel active : newActiveTurtles){
+                System.out.println("Turtle: " + active.getModelId() +" now active");
+            }
         return id;
         }
 

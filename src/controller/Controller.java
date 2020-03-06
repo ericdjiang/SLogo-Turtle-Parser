@@ -14,6 +14,7 @@ public class Controller {
     private Pen pen;
     private int index = 1;
     private double point;
+    private static final int animationSpeed = 1000;
 
     public Controller(TurtleWindow turtleFrontEnd, ConsoleModel consoleModel, TurtleContainer turtleContainer) {
         this.turtleContainer = turtleContainer;
@@ -22,7 +23,8 @@ public class Controller {
         this.pen = new Pen();
 
     }
-    public void update() {
+    public void update(){
+
         for(int i =0; i < turtleContainer.getTurtleModelContainer().getTurtleModels().size(); i++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurtleModels().get(i);
             int id = turtleModel.getModelId();
@@ -69,13 +71,14 @@ public class Controller {
                 }
                 turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);
                 turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2);
-                turtleView.setTurtleRotation(turtleModel.getAngle());
+                turtleView.setTurtleRotation(turtleModel.getAngle()/animationSpeed);
                 turtleView.setVisible(turtleModel.getShowing());
             }
 
         }
 
     }
+
     public Pen getPen() {
         return this.pen;
     }

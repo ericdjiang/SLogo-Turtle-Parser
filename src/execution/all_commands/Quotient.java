@@ -12,8 +12,9 @@ public class Quotient implements Command {
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
         System.out.println("Quotient of " + parameters.get(0) + "and " + parameters.get(1));
-        consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST))/Double.parseDouble(parameters.get(SECOND)));
-        return Double.parseDouble(parameters.get(FIRST))/Double.parseDouble(parameters.get(SECOND));
+        double quotient = Double.parseDouble(parameters.get(FIRST))/Double.parseDouble(parameters.get(SECOND));
+        consoleModel.setReturnVal(quotient);
+        return quotient;
     }
 
     @Override

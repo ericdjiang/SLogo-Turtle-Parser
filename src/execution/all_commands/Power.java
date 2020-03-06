@@ -12,8 +12,9 @@ public class Power implements Command {
 
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
-        consoleModel.setReturnVal(Math.pow(Double.parseDouble(parameters.get(FIRST)),Double.parseDouble(parameters.get(SECOND))));
-        return Math.pow(Double.parseDouble(parameters.get(FIRST)),Double.parseDouble(parameters.get(SECOND)));
+        double power = Math.pow(Double.parseDouble(parameters.get(FIRST)),Double.parseDouble(parameters.get(SECOND)));
+        consoleModel.setReturnVal(power);
+        return power;
     }
 
     @Override

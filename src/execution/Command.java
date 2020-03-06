@@ -7,7 +7,5 @@ import model.*;
 
 public interface Command {
     double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel TurtleModel);
-
-
     int getNumParams();
 }

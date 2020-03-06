@@ -8,15 +8,15 @@ import java.util.Map;
 
 public class Tangent implements Command {
     private static final int FIRST = 0;
-    private static final int SECOND = 1;
     private static final int HALFCIRCLE = 180;
 
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
+        double angle = Double.parseDouble(parameters.get(0));
+        double tangent = Math.tan(Math.toRadians(angle));
         System.out.println("Tangent of " + parameters.get(FIRST));
-
-        consoleModel.setReturnVal(Math.tan((Double.parseDouble(parameters.get(FIRST))*Math.PI)/HALFCIRCLE));
-        return Math.tan((Double.parseDouble(parameters.get(FIRST))*Math.PI)/HALFCIRCLE);
+        consoleModel.setReturnVal(tangent);
+        return tangent;
     }
 
     @Override

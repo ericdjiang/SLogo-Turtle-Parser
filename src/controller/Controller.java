@@ -25,7 +25,6 @@ public class Controller {
     private Pen pen;
     private int index = 1;
     private double point;
-    private static final int animationSpeed = 1000;
     private double oldx;
     private double oldy;
 
@@ -35,16 +34,26 @@ public class Controller {
         this.turtleWindow = turtleFrontEnd;
         this.consoleModel = consoleModel;
         this.pen = new Pen();
-
+        for(TurtleModel turtleModel : turtleContainer.getTurtleModelContainer().getTurtleModels()){
+            TurtleView turtleView = turtleContainer.getTurtleView(turtleModel.getModelId());
+            oldx = turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2;
+            oldy = -turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2;
+            turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
+            turtleView.setY(-turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
+         //   turtleWindow.getChildren().add(turtleView);
+        }
 
     }
     double xcoord;
     double ycoord;
     public void update() {
-        for(int t = 1; t < turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
-            TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
+       // for(int t = 1; t < turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
+            TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(1);
             int id = turtleModel.getModelId();
             TurtleView turtleView = turtleContainer.getTurtleView(id);
+
+
+
             if (turtleModel.getClearedStatus()) {
                 pen.clear(turtleWindow);
                 turtleView.setX(turtleWindow.getViewWidth() / 2 - turtleView.getWidth() / 2);
@@ -83,6 +92,8 @@ public class Controller {
                         Object y = (double) turtleModel.getPointList().get(i + 1) * -1 + turtleWindow.getViewHeight() / 2 - turtleView.getHeight() / 2;
                         TranslateTransition translate = new TranslateTransition();
                         if (oldx != (double) x || oldy != (double) y) {
+                            System.out.println(x + " " + oldx);
+                            System.out.println(y + " " + oldy);
                             xcoord += (double) x-oldx;
                             ycoord += (double) y-oldy;
                             translate.setToX(xcoord);
@@ -145,7 +156,7 @@ public class Controller {
 
         }
 
-    }
+  //  }
 
 
     public Pen getPen() {

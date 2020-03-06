@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import execution.MultipleTurtlesCommand;
+import execution.MultipleTurtlesCommandFactory;
 import model.*;
 
 public class Parser {
@@ -17,6 +19,7 @@ public class Parser {
     private static final String MAKE_VAR = "MakeVariable";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
+    private MultipleTurtlesCommandFactory  mtFactory = new MultipleTurtlesCommandFactory();
     private ResourceBundle resourceBundle;
 
     private String myLanguage;
@@ -123,26 +126,54 @@ public class Parser {
     private void parseDefaultMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
         Stack<String> argStack)
         throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Command cmdToExecute = factory.getCommand(getSymbol(cmdStack.pop()));
+        String poppedCommand = cmdStack.pop();
         List<String> params = new ArrayList<>();
-        while (cmdToExecute.getNumParams() > params.size()) {
-            String popped = argStack.pop();
+        Double returnValue = 0.0;
+        if(LOOP_MAPPINGS.containsKey(poppedCommand)){
+           MultipleTurtlesCommand cmdToExecute = mtFactory.getCommand(getSymbol(poppedCommand));
 
-            // check if the argument is a variable, and convert it to double if the command is not "MAKE"
-            if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
-                && popped.matches(":[a-zA-Z_]+")) {
-                popped = Double.toString(myVariableModel.getValue(popped));
+            while (cmdToExecute.getNumParams() > params.size()) {
+                String popped = argStack.pop();
+
+                // check if the argument is a variable, and convert it to double if the command is not "MAKE"
+                if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
+                        && popped.matches(":[a-zA-Z_]+")) {
+                    popped = Double.toString(myVariableModel.getValue(popped));
+                }
+
+                params.add(popped);
             }
 
-            params.add(popped);
+            Collections.reverse(params);
+
+            // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
+            returnValue = cmdToExecute
+                    .execute(params, myVariableModel, myConsoleModel,
+                            myMethodModels,turtleModelContainer, currentTurtle );
+        }
+        else{
+            Command cmdToExecute = factory.getCommand(getSymbol(poppedCommand));
+
+            while (cmdToExecute.getNumParams() > params.size()) {
+                String popped = argStack.pop();
+
+                // check if the argument is a variable, and convert it to double if the command is not "MAKE"
+                if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
+                        && popped.matches(":[a-zA-Z_]+")) {
+                    popped = Double.toString(myVariableModel.getValue(popped));
+                }
+
+                params.add(popped);
+            }
+
+            Collections.reverse(params);
+
+            // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
+            returnValue = cmdToExecute
+                    .execute(params, myVariableModel, myConsoleModel,
+                            myMethodModels, currentTurtle );
         }
 
-        Collections.reverse(params);
-
-        // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
-        Double returnValue = cmdToExecute
-            .execute(params, myVariableModel, myConsoleModel,
-                myMethodModels, currentTurtle );
         this.lastReturnValue = returnValue;
         if (!cmdStack.isEmpty()) {
             argStack.push(returnValue.toString());
@@ -243,13 +274,18 @@ public class Parser {
 
     private int getNumParams(int index, Stack<String> commandStack)
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        return factory.getCommand(getSymbol(commandStack.get(index))).getNumParams();
+        String command = commandStack.get(index);
+        if(LOOP_MAPPINGS.containsKey(command)){
+            return mtFactory.getCommand(getSymbol(command)).getNumParams();
+        }
+        return factory.getCommand(getSymbol(command)).getNumParams();
     }
 
     private int getNumParams(String symbol)
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
         {
 //            System.out.println("Getting factory for symbol: "+ symbol);
+            if(LOOP_MAPPINGS.containsKey(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
             return factory.getCommand(getSymbol(symbol)).getNumParams();
         }
 

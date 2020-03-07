@@ -19,8 +19,11 @@ public class MakeUserInstruction extends LoopCommand implements Command {
     String language = symbolList.get(0);
 
     String methodName = symbolList.get(1);
-
+    System.out.println("here");
     String [] loopBodies = getLoopBodies(symbolList);
+    for (String b: loopBodies){
+      System.out.println(b);
+    }
 
     MethodModel myMethodModel = new MethodModel(loopBodies[0], loopBodies[1]);
 

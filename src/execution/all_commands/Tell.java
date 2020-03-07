@@ -15,15 +15,18 @@ public class Tell implements Command {
         System.out.println(parameters.get(0));
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
 
         int id = 0;
             for(int i = 2; i < symbolList.size(); i ++){
 
                 if(symbolList.get(i).contains(":")){
                      id = (int) variableModel.getValue(symbolList.get(i));
+                     ids.add(id);
                 }
                 else {
                      id = Integer.parseInt(symbolList.get(i));
+                     ids.add(id);
                 }
 
                 int difference = id - turtleModelContainer.getTurtleIds().size();
@@ -40,7 +43,14 @@ public class Tell implements Command {
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);
-
+            for(TurtleModel turtleModel: turtleModelContainer.getTurtleModels()){
+                if(ids.contains(turtleModel.getModelId())){
+                    turtleModel.setActive();
+                }
+                else{
+                    turtleModel.setInActive();
+                }
+            }
             for (TurtleModel active : newActiveTurtles){
                 System.out.println("Turtle: " + active.getModelId() +" now active");
             }

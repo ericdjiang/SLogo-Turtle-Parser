@@ -1,24 +1,9 @@
 package controller;
 
-import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.*;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
-import javafx.util.Duration;
-import javafx.scene.Node;
 import model.*;
 import parsing.Parser;
-import view.util.ControlPanel;
 import view.util.Pen;
 import view.views.*;
 import view.layout.TurtleWindow;
@@ -126,6 +111,7 @@ public class Controller {
                 newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
             }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
+            turtleView.changeActive(turtleModel.getIsActive());
 
             if(customization.getPenChanged()){
                 turtleModel.setPenSize(customization.getPenStrokeWidth());

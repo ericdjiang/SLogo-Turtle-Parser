@@ -10,9 +10,13 @@ public class MethodModel {
   private List<String> methodNames;
 
   public MethodModel (String variableString , String methodBody) {
-    if (!variableString.matches("a-zA-Z")) this.variableNames = new ArrayList<>();
-    else this.variableNames = Arrays.asList(variableString.split("[ ]+"));
-
+    //if (!variableString.matches("a-zA-Z")) this.variableNames = new ArrayList<>();
+    this.variableNames = Arrays.asList(variableString.split("[ ]+"));
+    System.out.println("in method model");
+    for (String s : variableNames){
+      System.out.println(s);
+    }
+    System.out.println("nothing else");
     this.methodBody = methodBody;
     this.methodNames = new ArrayList<>();
   }

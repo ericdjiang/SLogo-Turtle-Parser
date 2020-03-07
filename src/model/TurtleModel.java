@@ -65,7 +65,7 @@ public class TurtleModel {
   private void addPoints(double p) {
     myPoints.add(p);
   }
-  public List getPointList() {
+  public List<Double> getPointList() {
     return this.myPoints;
   }
   public void clearList() {

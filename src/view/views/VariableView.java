@@ -49,9 +49,9 @@ public class VariableView extends InformationView {
         super.addEntry(entry);
     }
     private void setHeader() {
-        Text heading1 = new Text("VARIABLE");
+        Text heading1 = new Text(resources.getString("VariableName"));
         heading1.setWrappingWidth(250);
-        Text heading2 = new Text("VALUE");
+        Text heading2 = new Text(resources.getString("VariableValue"));
         heading2.setWrappingWidth(250);
         header.getChildren().add(heading1);
         header.getChildren().add(heading2);
@@ -87,6 +87,11 @@ public class VariableView extends InformationView {
     }
     public void setChangedVariablesFalse(){
         changedVariables = false;
+    }
+    public void updateLanguage(ResourceBundle resources) {
+        this.resources = resources;
+        header.getChildren().clear();
+        setHeader();
     }
 }
 

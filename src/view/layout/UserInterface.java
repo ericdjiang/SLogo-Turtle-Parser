@@ -57,12 +57,12 @@ public class UserInterface {
 
     public UserInterface(Stage stage, ResourceBundle myResources, TurtleWindow turtleWindow, ConsoleView console) throws IOException, InvocationTargetException, IllegalAccessException {
         this.turtleWindow = turtleWindow;
-        this.referenceView = new CommandReferenceView(myResources);
+        this.referenceView = new CommandReferenceView(myResources, "English");
         this.commandPrompt = console;
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.libraryView = new LibraryView(myResources);
-        this.customizationView = new CustomizationView();
+        this.customizationView = new CustomizationView(myResources);
         this.languageSelector = new LanguageSelector(myResources);
         this.backgroundColorSelector = new ColorSelector(myResources.getString("ChooseBackground"));
         this.penColorSelector = new ColorSelector(myResources.getString("ChoosePen"));
@@ -102,9 +102,12 @@ public class UserInterface {
         myLanguage = r.getString(languageSelector.getValue());
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + myLanguage);
         commandPrompt.updateLanguage(myResources);
-        referenceView.initializeReferences(myLanguage);
+        referenceView.updateLanguage(myResources, myLanguage);
+        customizationView.updateLanguage(myResources);
         controlPanel.updateLanguage(myResources, myLanguage);
         tabs.updateLanguage(myResources);
+        libraryView.updateLanguage(myResources);
+        variableView.updateLanguage(myResources);
         penColorSelector.updateLanguage(myResources.getString("ChoosePen"));
         backgroundColorSelector.updateLanguage(myResources.getString("ChooseBackground"));
         historyView.updateLanguage(myResources);

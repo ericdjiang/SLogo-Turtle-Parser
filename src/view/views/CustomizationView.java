@@ -8,6 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
+import java.util.ResourceBundle;
+
 
 public class CustomizationView extends ScrollPane {
     private final int DEFAULT = 1;
@@ -29,12 +31,11 @@ public class CustomizationView extends ScrollPane {
     private double penOffsetVal;
     private double penThicknessVal;
 
-    private HBox row1;
-    private HBox row2;
-    private HBox row3;
     private VBox content;
+    private ResourceBundle resources;
 
-    public CustomizationView() {
+    public CustomizationView(ResourceBundle resources) {
+        this.resources = resources;
         initializeText();
         this.content = new VBox();
         content.setSpacing(50);
@@ -58,34 +59,34 @@ public class CustomizationView extends ScrollPane {
         penOffset = new Text(null);
     }
     public void updateTurtleX(Double d) {
-        turtleX.setText("XPos: " + Double.toString(d.longValue()));
+        turtleX.setText(resources.getString("TurtleX") + Double.toString(d.longValue()));
     }
     public void updateTurtleY(Double d) {
-        turtleY.setText("YPos: " + Double.toString(d.longValue()));
+        turtleY.setText(resources.getString("TurtleY") + Double.toString(d.longValue()));
     }
     public void updatePenThickness() {
         Double d = strokeThicknessSlider.getValue();
-        penThickness.setText("Stroke Thickness: " + Double.toString(d.longValue()));
+        penThickness.setText(resources.getString("Stroke") + Double.toString(d.longValue()));
     }
     public void updatePenOffset() {
         Double d = dashWidthSlider.getValue();
-        penOffset.setText("Dash Width: " + Double.toString(d.longValue()));
+        penOffset.setText(resources.getString("Dash") + Double.toString(d.longValue()));
     }
     public void updateTurtleID(Integer d) {
-        turtleID.setText("ID: " + Integer.toString(d));
+        turtleID.setText(resources.getString("TurtleID") + Integer.toString(d));
     }
     public void updateHeading(Double d) {
-        turtleHeading.setText("Heading: " + Double.toString(d.longValue()));
+        turtleHeading.setText(resources.getString("TurtleHeading") + Double.toString(d.longValue()));
     }
     public void updatePenStatus(boolean b) {
-        penStatus.setText("IsPenDown: " + b);
+        penStatus.setText(resources.getString("PenStatus") + b);
     }
     public void updatePenColor(Paint c) {
-        penColor.setText("PenColor: " + c.toString());
+        penColor.setText(resources.getString("PenColor") + c.toString());
         penColor.setFill(c);
     }
     public void updateBackgroundColor(Paint c) {
-        backgroundColor.setText("BackgroundColor: " + c.toString());
+        backgroundColor.setText(resources.getString("BackgroundColor") + c.toString());
         backgroundColor.setFill(c);
     }
     private void initRowOne() {
@@ -95,8 +96,8 @@ public class CustomizationView extends ScrollPane {
         HBox thicknessSliderField = new HBox();
         widthSliderField.getChildren().add(dashWidthSlider);
         thicknessSliderField.getChildren().add(strokeThicknessSlider);
-        widthSliderField.getChildren().add(new Text("Change Dash Width"));
-        thicknessSliderField.getChildren().add(new Text("Change Pen Thickness"));
+        widthSliderField.getChildren().add(new Text(resources.getString("DashSlider")));
+        thicknessSliderField.getChildren().add(new Text(resources.getString("StrokeSlider")));
         createSliders(dashWidthSlider, 1, 50, 10);
         createSliders(strokeThicknessSlider, 1, 5, 0.5);
         dashWidthSlider.setOnMouseReleased(event -> savePenOffset(dashWidthSlider.getValue()));
@@ -136,5 +137,14 @@ public class CustomizationView extends ScrollPane {
     }
     public Double getPenStrokeOffset() {
         return this.penOffsetVal;
+    }
+    public void updateLanguage(ResourceBundle resources) {
+        this.resources = resources;
+        this.content.getChildren().clear();
+        this.penThicknessVal=DEFAULT;
+        this.penOffsetVal=DEFAULT;
+        initRowOne();
+        initRowTwo();
+        initRowThree();
     }
 }

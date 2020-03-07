@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 public class LibraryView extends InformationView {
     private static final String STYLE = "vbox";
+    private final int SPACING = 250;
 
     public LibraryView(ResourceBundle resources) {
         super(resources);
@@ -19,8 +20,8 @@ public class LibraryView extends InformationView {
     public void addMethod(String name, List<String> variables, String body) {
         Text methodName = new Text(name);
         Text methodBody = new Text(body);
-        methodName.setWrappingWidth(250);
-        methodBody.setWrappingWidth(250);
+        methodName.setWrappingWidth(SPACING);
+        methodBody.setWrappingWidth(SPACING);
         VBox names = new VBox();
         VBox bodies = new VBox();
         names.getStyleClass().add(STYLE);
@@ -34,12 +35,17 @@ public class LibraryView extends InformationView {
         super.addEntry(entry);
     }
     private void setHeader() {
-        Text heading1 = new Text("NAME");
-        heading1.setWrappingWidth(250);
-        Text heading2 = new Text("BODY");
-        heading2.setWrappingWidth(250);
+        Text heading1 = new Text(resources.getString("MethodName"));
+        heading1.setWrappingWidth(SPACING);
+        Text heading2 = new Text(resources.getString("MethodBody"));
+        heading2.setWrappingWidth(SPACING);
         header.getChildren().add(heading1);
         header.getChildren().add(heading2);
+    }
+    public void updateLanguage(ResourceBundle resources) {
+        this.resources = resources;
+        header.getChildren().clear();
+        setHeader();
     }
 
 

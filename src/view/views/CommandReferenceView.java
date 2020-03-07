@@ -15,9 +15,9 @@ public class CommandReferenceView extends InformationView {
     private String myLanguage;
     private int index;
 
-    public CommandReferenceView(ResourceBundle resources) throws IOException {
+    public CommandReferenceView(ResourceBundle resources, String language) throws IOException {
         super(resources);
-        this.myLanguage = resources.getBaseBundleName();
+        this.myLanguage = language;
         this.referenceList = new ArrayList<>();
         initializeReferences(myLanguage);
     }
@@ -51,7 +51,7 @@ public class CommandReferenceView extends InformationView {
         }
     }
     private void retrieveReferenceInfo(String language) throws FileNotFoundException {
-        Scanner fileReader = new Scanner(new File("src/resources/parsing/EnglishHelp.properties"));
+        Scanner fileReader = new Scanner(new File("src/resources/parsing/EnglishHelp.txt"));
         while (fileReader.hasNextLine()) {
             String line = fileReader.nextLine();
             String[] parsedInfo = line.split(",");
@@ -89,6 +89,11 @@ public class CommandReferenceView extends InformationView {
         entry.getChildren().add(col4);
         entry.getStyleClass().add(STYLE);
         return entry;
+    }
+    public void updateLanguage(ResourceBundle resources, String language) throws IOException {
+        this.resources = resources;
+        header.getChildren().clear();
+        initializeReferences(language);
     }
 
     @Override

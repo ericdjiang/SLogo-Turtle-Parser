@@ -4,13 +4,13 @@ import execution.Command;
 import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class MakeVariable implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        VariableModel variableModel = allModels.getVariableModel();
         variableModel.updateVariable(parameters.get(0), Double.parseDouble(parameters.get(1)));
-
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(1)));
         return Double.parseDouble(parameters.get(1));
     }

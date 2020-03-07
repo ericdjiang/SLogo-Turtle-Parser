@@ -8,6 +8,8 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
 
+import java.util.List;
+
 public class TurtleWindow extends Pane {
     private final int viewWidth = 540;
     private final int viewHeight = 480;

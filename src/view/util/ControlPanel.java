@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
@@ -108,7 +109,7 @@ public class ControlPanel extends VBox {
     public void sendPenColorToController(Paint color) {
         c.setPenColor(color);
     }
-    public void sendBGColorToController(Paint color) {c.setBGColor(color);}
+    public void sendBGColorToController(Color color) {c.setBGColor(color);}
     private void addUploadedText(File file){
         try {
             Scanner s = new Scanner(file);

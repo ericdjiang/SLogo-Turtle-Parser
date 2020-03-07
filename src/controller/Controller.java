@@ -23,7 +23,9 @@ import view.util.Pen;
 import view.views.*;
 import view.layout.TurtleWindow;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Controller {
@@ -35,6 +37,7 @@ public class Controller {
     private CommandHistoryView historyView;
     private LibraryView libraryView;
 
+    private PaletteModel paletteModel;
     private ConsoleModel consoleModel;
     private VariableModel variableModel;
     private Map<String, MethodModel> methodModels;
@@ -44,6 +47,8 @@ public class Controller {
     private double point;
     private double oldx;
     private double oldy;
+    private ModelContainer allModels;
+
 
     public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView, LibraryView libraryView) {
         this.turtleWindow = turtleWindow;
@@ -52,6 +57,7 @@ public class Controller {
         turtleContainer.getTurtleModelContainer().makeTurtleActive(1);
         this.consoleModel = new ConsoleModel();
         this.variableModel = new VariableModel();
+        this.paletteModel = new PaletteModel();
         this.variableView = variableView;
         this.libraryView = libraryView;
         this.customization = dynamicStats;
@@ -72,9 +78,15 @@ public class Controller {
     double ycoord;
     public void update() {
 
-        Color backGroundColor = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackGroundColor();
-        turtleWindow.setColor(backGroundColor);
-        turtleWindow.setBackground(new Background(new BackgroundFill(backGroundColor, CornerRadii.EMPTY, Insets.EMPTY)));
+        if (variableView.isChangedVariables()) {
+        }
+
+        if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
+            List<Double> colorVals = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackgroundColor();
+            turtleWindow.setColor(new Color(colorVals.get(0), colorVals.get(1), colorVals.get(2), 1));
+            allModels.getTurtleModelContainer().getActiveTurtles().get(0).setColorChanged(false);
+        }
+
 
 
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
@@ -89,8 +101,6 @@ public class Controller {
             customization.updatePenStatus(turtleModel.getPenStatus());
             customization.updatePenColor(pen.getColor());
             customization.updateBackgroundColor(turtleWindow.getColor());
-            pen.setStrokeWidth(customization.getPenStrokeWidth());
-            pen.setDashOffset(customization.getPenStrokeOffset());
 
             if ( turtleContainer.getTurtleView(id) == null){
                 TurtleView newTurtleView = turtleContainer.addTurtleView(id);
@@ -99,6 +109,10 @@ public class Controller {
                 newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
             }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
+
+            pen.setStrokeWidth(customization.getPenStrokeWidth());
+            pen.setDashOffset(customization.getPenStrokeOffset());
+
 
             if (turtleModel.getClearedStatus()) {
                 pen.clear(turtleWindow);
@@ -214,6 +228,7 @@ public class Controller {
     public void setPenColor(Paint color) {
         pen.setColor(color);
     }
+
     public void updateVariableView() {
         if (variableModel.newVarAdded()) {
             variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
@@ -236,10 +251,18 @@ public class Controller {
         consoleModel.setErrorMessage(null);
     }
     public void createParser(String commands) {
-        parser = new Parser(commands, "English", variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer());
+        allModels = new ModelContainer(variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer(), paletteModel);
+        parser = new Parser(commands, "English", allModels);
     }
-    public void setBGColor(Paint color) {
-
+    public void setBGColor(Color color) {
+        for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++) {
+            TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
+            List<Double> l = new ArrayList<>();
+            l.add(color.getGreen());
+            l.add(color.getRed());
+            l.add(color.getBlue());
+            turtleModel.setBackgroundColor(l);
+        }
     }
 }
 

@@ -156,6 +156,7 @@ public class UserInterface {
             }
         });
     }
+
     public CommandHistoryView getHistoryView() {
         return this.historyView;
     }

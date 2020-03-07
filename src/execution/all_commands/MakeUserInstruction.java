@@ -25,6 +25,7 @@ public class MakeUserInstruction extends LoopCommand implements MultipleTurtlesC
     MethodModel myMethodModel = new MethodModel(loopBodies[0], loopBodies[1]);
 
     methodModels.put(methodName, myMethodModel);
+    myMethodModel.addMethodName(methodName);
 
     System.out.println("DONE MAKING METHOD BODY FOR METHOD NAME: " + methodName);
 //    System.out.println(language);

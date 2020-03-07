@@ -12,16 +12,16 @@ public class Backward implements Command {
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
         double distance = Double.parseDouble(parameters.get(FIRST));
-            double oppositeangle = turtleModel.getAngle() + HALFCIRCLE;
-            double radians = Math.toRadians(oppositeangle);
-            double yChange = distance * Math.cos(radians);
-            double xChange = distance * Math.sin(radians);
-            turtleModel.setX(turtleModel.getX() + xChange);
-            turtleModel.setY(turtleModel.getY() + yChange);
-
+        double oppositeangle = turtleModel.getAngle() + HALFCIRCLE;
+        double radians = Math.toRadians(oppositeangle);
+        double yChange = distance * Math.cos(radians);
+        double xChange = distance * Math.sin(radians);
+        turtleModel.setX(turtleModel.getX() + xChange);
+        turtleModel.setY(turtleModel.getY() + yChange);
         consoleModel.setReturnVal(distance);
         return distance;
     }
+
 
     @Override
     public int getNumParams() {

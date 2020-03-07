@@ -45,3 +45,4 @@ public class ConsoleView extends TextArea {
     }
 
 }
+

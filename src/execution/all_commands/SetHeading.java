@@ -12,7 +12,7 @@ public class SetHeading implements Command {
 
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
-            turtleModel.setAngle(Double.parseDouble(parameters.get(FIRST)));
+        turtleModel.setAngle(Double.parseDouble(parameters.get(FIRST)));
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
         return Double.parseDouble(parameters.get(FIRST));
     }

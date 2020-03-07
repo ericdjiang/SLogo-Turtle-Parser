@@ -74,3 +74,4 @@ public class CommandHistoryView extends InformationView {
         clear();
     }
 }
+

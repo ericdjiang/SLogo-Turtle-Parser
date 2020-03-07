@@ -25,6 +25,7 @@
   -fx-pref-width: 410;
   -fx-font-family: "Comic Sans MS";
 }
+
 .scroll-pane {
   -fx-pref-width: 512;
   -fx-pref-height: 980;

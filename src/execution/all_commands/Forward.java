@@ -12,14 +12,12 @@ public class Forward implements Command {
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
         System.out.println("inside forward" + parameters.get(0));
         double radians = Math.toRadians(turtleModel.getAngle());
-            double distance = Double.parseDouble(parameters.get(FIRST));
-            double xChange = Double.parseDouble(parameters.get(FIRST)) * Math.sin(radians);
-            double yChange =  Double.parseDouble(parameters.get(FIRST)) * Math.cos(radians);
-            turtleModel.setX(turtleModel.getX() + xChange);
-            turtleModel.setY(turtleModel.getY() + yChange);
-        System.out.println(turtleModel.getY());
-
-
+        double distance = Double.parseDouble(parameters.get(FIRST));
+        double xChange = Double.parseDouble(parameters.get(FIRST)) * Math.sin(radians);
+        double yChange =  Double.parseDouble(parameters.get(FIRST)) * Math.cos(radians);
+        turtleModel.setX(turtleModel.getX() + xChange);
+        turtleModel.setY(turtleModel.getY() + yChange);
+        System.out.println("turtle number " + turtleModel.getModelId() + " forward: " + distance);
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
         return distance;
     }

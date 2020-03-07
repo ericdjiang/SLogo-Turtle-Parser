@@ -49,3 +49,4 @@ public class VariableView extends InformationView {
         header.getChildren().add(heading2);
     }
 }
+

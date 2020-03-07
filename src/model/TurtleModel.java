@@ -13,7 +13,7 @@ public class TurtleModel {
   private double myZeroX;
   private double myZeroY;
   private boolean isCleared;
-  private List myPoints;
+  private List<Double> myPoints;
 
 
   public TurtleModel (int id,double myX, double myY, double myAngle) {

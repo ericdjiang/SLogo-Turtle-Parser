@@ -25,6 +25,7 @@ public class And implements Command {
         return 0;
     }
 
+
     @Override
     public int getNumParams() {
         return 2;

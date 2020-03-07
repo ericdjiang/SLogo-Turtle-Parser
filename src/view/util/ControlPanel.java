@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import javafx.stage.FileChooser;
@@ -18,10 +19,7 @@ import javafx.stage.Stage;
 import model.*;
 
 import parsing.Parser;
-import view.views.TurtleView;
-import view.views.VariableView;
-import view.views.CommandHistoryView;
-import view.views.ConsoleView;
+import view.views.*;
 
 import javax.imageio.ImageIO;
 import java.util.ResourceBundle;
@@ -45,27 +43,15 @@ public class ControlPanel extends VBox {
     private Button turtleSwitchButton;
     private Parser parser;
     private String myLanguage;
-    private Controller c;
-    private ConsoleModel cm;
 
-    private VariableModel variableModel;
-    private VariableView variableView;
-
-    private Map<String, MethodModel> methodModels;
     private TurtleContainer turtleContainer;
+    private Controller c;
 
 
-
-    public ControlPanel(ResourceBundle resources, CommandHistoryView historyView, ConsoleView consoleView, String language, Controller c, ConsoleModel cm, VariableView variableView, TurtleContainer turtlecontainer) {
+    public ControlPanel(ResourceBundle resources, ConsoleView consoleView, TurtleContainer turtlecontainer, Controller c) {
         this.resources = resources;
-        this.historyView = historyView;
         this.consoleView = consoleView;
-        this.myLanguage = language;
-        this.variableView = variableView;
-        this.cm = cm;
         this.c = c;
-        this.variableModel = new VariableModel();
-        this.methodModels = new HashMap<>();
         uploadButton = makeButton(UPLOADFILE, event-> openFileChooser());
         runButton = makeButton(RUN, event -> {
         executeRun();
@@ -100,28 +86,19 @@ public class ControlPanel extends VBox {
     public Button getTurtleSwitcher() {
         return this.turtleSwitchButton;
     }
-    private void updateInputHistory(String commands){
-        historyView.updateHistory(commands, c.getConsoleModel().getReturnVal());
-        historyView.displayError(c.getConsoleModel().getErrorMessage());
-        c.getConsoleModel().setErrorMessage(null);
-    }
 
     private void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();
-        parser = new Parser(commands, myLanguage, variableModel, c.getConsoleModel(), methodModels, turtleContainer.getTurtleModelContainer());
-        updateInputHistory(commands);
-        updateVariableView();
+        c.createParser(commands);
+        c.updateInputHistory(commands);
+        c.updateVariableView();
+        c.updateLibraryView();
         //saveToFile(commands);
         // FIXME: Find a way to only save some commands not all of them
     }
-    private void updateVariableView() {
-        if (variableModel.newVarAdded()) {
-            variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
-            variableModel.clearVarInfo();
-        }
-        variableModel.varReceived();
-    }
+
+
     private void clearConsole() {
         consoleView.clear();
     }
@@ -129,11 +106,11 @@ public class ControlPanel extends VBox {
         runButton.setText(resources.getString(RUN));
         clearButton.setText(resources.getString(CLEAR));
         uploadButton.setText(resources.getString(UPLOADFILE));
+
         this.myLanguage = language;
     }
-
-    public void sendErrorToConsoleModel(String errorMessage){
-        cm.setErrorMessage(errorMessage);
+    public void sendColorToController(Paint color) {
+        c.setPenColor(color);
     }
 
     private void addUploadedText(File file){

@@ -12,10 +12,20 @@ import java.util.Map;
 public class Tell implements MultipleTurtlesCommand {
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+        System.out.println(parameters.get(0));
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
-            for(int i = 2; i < symbolList.size(); i ++){
-                int id = Integer.parseInt(symbolList.get(i));
+
+        int id = 0;
+            for(int i = 2; i < symbolList.size()-1; i ++){
+
+                if(symbolList.get(i).contains(":")){
+                     id = (int) variableModel.getValue(symbolList.get(i).substring(1));
+                }
+                else {
+                     id = Integer.parseInt(symbolList.get(i));
+                }
+
                 int difference = id - turtleModelContainer.getTurtleIds().size();
                 if(difference > 0){
                     for(int k = 0; k < difference; k ++ ){
@@ -30,8 +40,11 @@ public class Tell implements MultipleTurtlesCommand {
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);
-        return Integer.parseInt(symbolList.get(symbolList.size()-1));
-    }
+
+        return id;
+        }
+
+
 
     @Override
     public int getNumParams() {

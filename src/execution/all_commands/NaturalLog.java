@@ -12,8 +12,9 @@ public class NaturalLog implements Command {
 
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
-        consoleModel.setReturnVal(Math.log(Double.parseDouble(parameters.get(FIRST))));
-        return Math.log(Double.parseDouble(parameters.get(FIRST)));
+        double naturalLog = Math.log(Double.parseDouble(parameters.get(FIRST)));
+        consoleModel.setReturnVal(naturalLog);
+        return naturalLog;
     }
 
     @Override

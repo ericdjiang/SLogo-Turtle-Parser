@@ -97,3 +97,4 @@ public class CommandReferenceView extends InformationView {
         super.clear();
     }
 }
+

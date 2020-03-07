@@ -11,20 +11,18 @@ public class ClearScreen implements Command {
     private final static int SQUARED = 2;
     @Override
     public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel turtleModel) {
-
-            double originalX = turtleModel.getX();
-            double originalY = turtleModel.getY();
-            double distance = Math.sqrt(Math.pow(originalX,SQUARED) + Math.pow(originalY,SQUARED));
-            turtleModel.setX(CENTER);
-            turtleModel.setY(CENTER);
-            turtleModel.setAngle(CENTER);
-            turtleModel.setCleared(true);
-            turtleModel.reInitCenter();
-
-
+        double originalX = turtleModel.getX();
+        double originalY = turtleModel.getY();
+        double distance = Math.sqrt(Math.pow(originalX,SQUARED) + Math.pow(originalY,SQUARED));
+        turtleModel.setX(CENTER);
+        turtleModel.setY(CENTER);
+        turtleModel.setAngle(CENTER);
+        turtleModel.setCleared(true);
+        turtleModel.reInitCenter();
         consoleModel.setReturnVal(distance);
         return distance;
     }
+
 
     @Override
     public int getNumParams() {

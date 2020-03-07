@@ -48,7 +48,7 @@ public class ControlPanel extends VBox {
     private Controller c;
 
 
-    public ControlPanel(ResourceBundle resources, ConsoleView consoleView, TurtleContainer turtlecontainer, Controller c) {
+    public ControlPanel(ResourceBundle resources, ConsoleView consoleView, Controller c) {
         this.resources = resources;
         this.consoleView = consoleView;
         this.c = c;
@@ -58,9 +58,7 @@ public class ControlPanel extends VBox {
         });
         clearButton = makeButton(CLEAR, event -> clearConsole());
         turtleSwitchButton = makeButton(TURTLESELECT, event -> {
-            for(TurtleView turtleView : turtleContainer.getTurtleViews()){
-                turtleView.switchTurtleImage();
-            }
+            c.updateTurtleImages();
         });
         newWindowButton = makeButton("NewWindow", event -> {
             try {
@@ -77,7 +75,6 @@ public class ControlPanel extends VBox {
         getChildren().add(clearButton);
         getChildren().add(uploadButton);
         getChildren().add(newWindowButton);
-        turtleContainer = turtlecontainer;
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes
@@ -121,6 +118,8 @@ public class ControlPanel extends VBox {
         runButton.setText(resources.getString(RUN));
         clearButton.setText(resources.getString(CLEAR));
         uploadButton.setText(resources.getString(UPLOADFILE));
+        turtleSwitchButton.setText(resources.getString("ChooseTurtle"));
+        newWindowButton.setText(resources.getString("NewWindow"));
         this.myLanguage = language;
     }
     public void sendPenColorToController(Paint color) {

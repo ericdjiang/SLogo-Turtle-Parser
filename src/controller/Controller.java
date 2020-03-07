@@ -48,6 +48,7 @@ public class Controller {
     private double oldx;
     private double oldy;
     private ModelContainer allModels;
+    private boolean isErrorDisplayed=false;
 
 
     public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView, LibraryView libraryView) {
@@ -91,6 +92,13 @@ public class Controller {
 
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
+            if (turtleModel.getDisabledStatus() && isErrorDisplayed == false) {
+                turtleWindow.displayWarning();
+                isErrorDisplayed = true;
+            }
+            else if (! turtleModel.getDisabledStatus()) {
+                isErrorDisplayed = false;
+            }
             customization.updateTurtleX(turtleModel.getX());
             customization.updateTurtleY(turtleModel.getY());
             customization.updatePenOffset();
@@ -266,6 +274,11 @@ public class Controller {
             l.add(color.getRed()*255);
             l.add(color.getBlue()*255);
             turtleModel.setBackgroundColor(l);
+        }
+    }
+    public void updateTurtleImages() {
+        for(TurtleView turtleView : turtleContainer.getTurtleViews()){
+            turtleView.switchTurtleImage();
         }
     }
 }

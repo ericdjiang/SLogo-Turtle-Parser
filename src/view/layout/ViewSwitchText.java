@@ -61,6 +61,7 @@ public class ViewSwitchText extends HBox {
         referenceSwitchText.setText(updatedResources.getString("CommandWindow"));
         variableSwitchText.setText(updatedResources.getString("VariableWindow"));
         librarySwitchText.setText(updatedResources.getString("LibraryWindow"));
+        customizationSwitchText.setText(updatedResources.getString("CustomizationWindow"));
     }
     public Node getHistoryTab() {
         return this.historySwitchText;

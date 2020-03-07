@@ -1,12 +1,15 @@
 package view.layout;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import model.TurtleModel;
 
 import java.util.List;
@@ -34,5 +37,12 @@ public class TurtleWindow extends Pane {
     }
     public Paint getColor() {
         return this.color;
+    }
+    public void displayWarning() {
+        String error = "Warning: Turtle left view area. It's line may or may not have been drawn to completion.\n Use the command: cs st pd to reset it back to its original state";
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("OffScreenWarning");
+        alert.setHeaderText(error);
+        Platform.runLater(alert::showAndWait);
     }
 }

@@ -34,6 +34,9 @@ public class Parser {
 
     private TurtleModelContainer turtleModelContainer;
 
+    private boolean insideGroup = false;
+    private String groupCmd = "";
+
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
     private static final List<String> MTCOMMANDS = new ArrayList<>(){{
@@ -146,11 +149,6 @@ public class Parser {
     private void handleStacks(TurtleModel currentTurtle, Stack<String> cmdStack,
                               Stack<String> argStack)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        System.out.println("about to enter while loop");
-        if (myMethodModels.containsKey(cmdStack.peek()))
-        {
-            System.out.println("Num variables: " + myMethodModels.get(cmdStack.peek()).getNumVariables());
-        }
 
         while (cmdAndArgsExist(cmdStack, argStack)) {
             if(myMethodModels.containsKey(cmdStack.peek())){ // if the popped command is a user generated method
@@ -276,7 +274,15 @@ public class Parser {
     private int pushToStack(List<String> symbolList, Stack<String> cmdStack, Stack<String> argStack,
                             int loopEndIndex, int cursor, String symbol)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (LOOP_MAPPINGS.containsKey(getSymbol(symbol))) {
+        if (symbol.equals("(")){
+//            loopEndIndex = new GroupParser(myLanguage).handleGroup(symbolList, cursor, symbol);
+            loopEndIndex = cursor + 1;
+            this.insideGroup = true;
+            this.groupCmd = symbolList.get(cursor+1);
+        } else if (symbol.equals(")")) {
+            this.insideGroup = false;
+        }
+        else if (LOOP_MAPPINGS.containsKey(getSymbol(symbol))) {
             loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);
         }
         else if (symbol.matches("^[-+*\\/a-zA-Z_]+(\\?)?$")) {
@@ -286,6 +292,8 @@ public class Parser {
         }
         return loopEndIndex;
     }
+
+
 
     private void setLoopReturnValue(List<String> symbolList) {
         if (symbolList.size() == 1 && !symbolList.get(0)

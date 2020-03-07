@@ -123,7 +123,6 @@ public class TurtleModel {
   public int getModelId(){
     return myId;
   }
-
   public List<Integer> getPenColor(){
     return penColor;
   }
@@ -133,4 +132,5 @@ public class TurtleModel {
   public boolean getIsColorChanged(){
     return isColorChanged;
   }
+  public double getPenSize(){return penSize;}
 }

@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
+//import execution.MultipleTurtlesCommand;
+//import execution.MultipleTurtlesCommandFactory;
 import model.*;
 
 public class Parser {
@@ -17,7 +19,7 @@ public class Parser {
     private static final String MAKE_VAR = "MakeVariable";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
-    //private MultipleTurtlesCommandFactory  mtFactory = new MultipleTurtlesCommandFactory();
+//    private MultipleTurtlesCommandFactory  mtFactory = new MultipleTurtlesCommandFactory();
     private ResourceBundle resourceBundle;
 
     private String myLanguage;
@@ -33,7 +35,8 @@ public class Parser {
     private VariableModel myVariableModel;
     private Map<String, MethodModel> myMethodModels;
 
-    private String groupCmd = null;
+    private Stack<String> groupCmds = new Stack<>();
+    private int reservedIxs = 0;
 
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
@@ -51,7 +54,7 @@ public class Parser {
 
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
         put("Repeat", 1);
-        put("Dotimes", 2);
+        put("DoTimes", 2);
         put("For", 2);
         put("If", 1);
         put("IfElse", 2);
@@ -105,11 +108,11 @@ public class Parser {
 
 
     private void parseText(String commands, TurtleModel currentTurtle)
-            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
+        throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, ClassNotFoundException {
 
 
         List<String> symbolList = Arrays
-                .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
+            .asList(String.join(" ", commands.toLowerCase().split("\n")).split("[ ]+"));
         // separate the user input string into list where each element is either a command or number
 
         Stack<String> cmdStack = new Stack<>();
@@ -132,7 +135,7 @@ public class Parser {
                 // if the command is a loop command, find the index of the closing loop bracket and store it in loopEndIndex so that the program can skip all symbols until we reach this index
                 loopEndIndex = pushToStack(symbolList, cmdStack, argStack, loopEndIndex, cursor, symbol, currentTurtle);
 
-//                printDebugging(cmdStack,argStack,cursor);
+                printDebugging(cmdStack,argStack,cursor);
 
 
                 // pop commands and args off the stack and handle them
@@ -145,10 +148,10 @@ public class Parser {
     }
 
     private void handleStacks(TurtleModel currentTurtle, Stack<String> cmdStack,
-                              Stack<String> argStack)
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        while (groupCmd==null && cmdAndArgsExist(cmdStack, argStack)) {
+        while (groupCmds.isEmpty() && cmdAndArgsExist(cmdStack, argStack)) {
             if(myMethodModels.containsKey(cmdStack.peek())){ // if the popped command is a user generated method
                 parseUserMethod(currentTurtle, cmdStack, argStack);
             } else if (checkInsufficientParameters(cmdStack, argStack)) {
@@ -160,52 +163,53 @@ public class Parser {
     }
 
     private void parseDefaultMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
-                                    Stack<String> argStack, String poppedCommand)
-            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Stack<String> argStack, String poppedCommand)
+        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         List<String> params = new ArrayList<>();
         Double returnValue = 0.0;
 
-            Command cmdToExecute = factory.getCommand(getSymbol(poppedCommand));
+        Command cmdToExecute = factory.getCommand(getSymbol(poppedCommand));
 
-            System.out.println(argStack);
-            while (cmdToExecute.getNumParams() > params.size()) {
-                String popped = argStack.pop();
+        System.out.println(argStack);
+        while (cmdToExecute.getNumParams() > params.size()) {
+            String popped = argStack.pop();
 
-                // check if the argument is a variable, and convert it to double if the command is not "MAKE"
-                if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
-                        && popped.matches(":[a-zA-Z_]+")) {
-                    popped = Double.toString(myVariableModel.getValue(popped));
-                }
-
-                params.add(popped);
+            // check if the argument is a variable, and convert it to double if the command is not "MAKE"
+            if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
+                && popped.matches(":[a-zA-Z_]+")) {
+                popped = Double.toString(myVariableModel.getValue(popped));
             }
 
-            Collections.reverse(params);
+            params.add(popped);
+        }
 
-            // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
-            returnValue = cmdToExecute
-                    .execute(params, currentTurtle, allModels);
+        Collections.reverse(params);
+
+        // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
+        returnValue = cmdToExecute
+            .execute(params, currentTurtle, allModels);
 
         this.lastReturnValue = returnValue;
-        if (!cmdStack.isEmpty() || (this.groupCmd!=null && cmdToExecute.getNumParams()>1) && !cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)) {
+        if (!cmdStack.isEmpty() || (!this.groupCmds.isEmpty() && cmdToExecute.getNumParams()>1) && !cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)) {
             argStack.push(returnValue.toString());
+            if (groupCmds.size()==1) reservedIxs+=1;
         }
     }
 
     private boolean checkInsufficientParameters(Stack<String> cmdStack, Stack<String> argStack)
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return cmdStack.size() >= 2 &&
-                (
-                        getNumParams(cmdStack.size() - 2, cmdStack) == 1 && getNumParams(cmdStack.size() - 2, cmdStack) > argStack.size()
-                                // and fd 30 bk 20
-                                ||
-                                getNumParams(cmdStack.size() - 2, cmdStack) == 2 && getNumParams(cmdStack.size() - 2, cmdStack) >= argStack.size() // make :var sum 20 30
-                );
+            (
+                getNumParams(cmdStack.size() - 2, cmdStack) == 1 && getNumParams(cmdStack.size() - 2, cmdStack) > argStack.size()
+                    // and fd 30 bk 20
+                    ||
+                    getNumParams(cmdStack.size() - 2, cmdStack) == 2 && getNumParams(cmdStack.size() - 2, cmdStack) >= argStack.size() // make :var sum 20 30
+            );
     }
 
     private void parseUserMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
-                                 Stack<String> argStack)
-            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Stack<String> argStack)
+        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         String methodName = cmdStack.pop();
         System.out.println("running method: "+methodName);
 
@@ -235,27 +239,29 @@ public class Parser {
     }
 
     private boolean cmdAndArgsExist(Stack<String> cmdStack, Stack<String> argStack)
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return !cmdStack.isEmpty() &&
-                (
-                        (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
-                                ||
-                        (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
-                );
+            (
+                (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
+                    ||
+                    (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
+            );
     }
 
     private int pushToStack(List<String> symbolList, Stack<String> cmdStack, Stack<String> argStack,
-                            int loopEndIndex, int cursor, String symbol, TurtleModel currentTurtle)
-            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        int loopEndIndex, int cursor, String symbol, TurtleModel currentTurtle)
+        throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (symbol.equals("(")){
 //            loopEndIndex = new GroupParser(myLanguage).handleGroup(symbolList, cursor, symbol);
             loopEndIndex = cursor + 1;
-            this.groupCmd = symbolList.get(cursor+1);
+            this.groupCmds.push(symbolList.get(cursor+1));
         } else if (symbol.equals(")")) {
-            while (argStack.size()>1) {
+            System.out.print("Group Comamnds");
+            System.out.println(groupCmds);
+            String groupCmd = groupCmds.pop();
+            while (argStack.size()>=1 && (groupCmds.isEmpty() || argStack.size()>reservedIxs) ) {
                 parseDefaultMethod(currentTurtle, cmdStack, argStack, groupCmd);
             }
-            groupCmd = null;
         }
         else if (LOOP_MAPPINGS.containsKey(getSymbol(symbol))) {
             loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);
@@ -272,7 +278,7 @@ public class Parser {
 
     private void setLoopReturnValue(List<String> symbolList) {
         if (symbolList.size() == 1 && !symbolList.get(0)
-                .matches("[-+*\\/]?[a-zA-Z_]+(\\?)?")) { // for parsing within loop guard
+            .matches("[-+*\\/]?[a-zA-Z_]+(\\?)?")) { // for parsing within loop guard
             if (symbolList.get(0).matches(":[a-zA-Z_]+")) {
                 lastReturnValue = myVariableModel.getValue(symbolList.get(0));
             } else {
@@ -296,7 +302,7 @@ public class Parser {
 
 
     private int getNumParams(int index, Stack<String> commandStack)
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String command = commandStack.get(index);
 
 //        if(MTCOMMANDS.contains(command)){
@@ -307,7 +313,7 @@ public class Parser {
     }
 
     private int getNumParams(String symbol)
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
     {
 //        System.out.println("Getting factory for symbol: "+ symbol);
 //        if(MTCOMMANDS.contains(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
@@ -321,16 +327,19 @@ public class Parser {
 
 
     private int handleLoop
-            (List < String > symbolList, Stack < String > cmdStack, Stack < String > argStack,
-             int cursor, String symbol)
-            throws
-            ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
+        (List < String > symbolList, Stack < String > cmdStack, Stack < String > argStack,
+            int cursor, String symbol)
+        throws
+        ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
         cmdStack.push(symbol);
         int loopEndIndex = getLoopEndIndex(symbolList, cursor, symbol);
 
         List<String> argsWithLanguage = new ArrayList<>(
-                symbolList.subList(cursor + 1, loopEndIndex));
+            symbolList.subList(cursor + 1, loopEndIndex));
+        System.out.println("ldaskjfasiodfjasiodjf");
+        System.out.println(cursor);
+        System.out.println(loopEndIndex);
         argsWithLanguage.add(0, myLanguage);
         argStack.push(String.join(" ", argsWithLanguage));
         return loopEndIndex;
@@ -343,7 +352,7 @@ public class Parser {
 
         int cursor = loopStartIndex; //the index of the command symbol
         while (openBracketCount > closeBracketCount || closeBracketCount < LOOP_MAPPINGS
-                .get(getSymbol(cmdString))) {
+            .get(getSymbol(cmdString))) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
             if (symbol.equals("]")) {
@@ -374,8 +383,8 @@ public class Parser {
         for (String key : Collections.list(resources.getKeys())) {
             String regex = resources.getString(key);
             mySymbols.add(new AbstractMap.SimpleEntry<>(key,
-                    // THIS IS THE IMPORTANT LINE
-                    Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
+                // THIS IS THE IMPORTANT LINE
+                Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
         }
     }
 
@@ -401,15 +410,15 @@ public class Parser {
     }
 
     private void printDebugging(Stack<String> cmdStack, Stack<String> argStack, int cursor)
-            throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         //                printDebugging(cmdStack, argStack, cursor);
 
-        System.out.println();
+        System.out.println("Cursor: "+cursor);
 
-        System.out.println(cursor);
+        System.out.print("Cmd: ");
         System.out.println(cmdStack);
+        System.out.print("Arg: ");
         System.out.println(argStack);
-
-        System.out.println(getNumParams(cmdStack.peek()));
+        System.out.println();
     }
 }

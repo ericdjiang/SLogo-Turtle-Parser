@@ -41,7 +41,7 @@ public class Parser {
         add("DoTimes");
         add("If");
         add("IfElse");
-        add("To");
+        add("MakeUserInstruction");
         add("Tell");
         add("Turtles");
         add("Ask");
@@ -53,7 +53,7 @@ public class Parser {
         put("For", 2);
         put("If", 1);
         put("Ifelse", 2);
-        put("To", 2);
+        put("MakeUserInstruction", 2);
         put("Tell", 1);
         put("Ask", 2);
     }};
@@ -131,6 +131,9 @@ public class Parser {
                 // if the command is a loop command, find the index of the closing loop bracket and store it in loopEndIndex so that the program can skip all symbols until we reach this index
                 loopEndIndex = pushToStack(symbolList, cmdStack, argStack, loopEndIndex, cursor, symbol);
 
+//                printDebugging(cmdStack,argStack,cursor);
+
+
                 // pop commands and args off the stack and handle them
                 handleStacks(currentTurtle, cmdStack, argStack);
 
@@ -143,6 +146,12 @@ public class Parser {
     private void handleStacks(TurtleModel currentTurtle, Stack<String> cmdStack,
                               Stack<String> argStack)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        System.out.println("about to enter while loop");
+        if (myMethodModels.containsKey(cmdStack.peek()))
+        {
+            System.out.println("Num variables: " + myMethodModels.get(cmdStack.peek()).getNumVariables());
+        }
+
         while (cmdAndArgsExist(cmdStack, argStack)) {
             if(myMethodModels.containsKey(cmdStack.peek())){ // if the popped command is a user generated method
                 parseUserMethod(currentTurtle, cmdStack, argStack);
@@ -260,7 +269,7 @@ public class Parser {
                 (
                         (myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= myMethodModels.get(cmdStack.peek()).getNumVariables())
                                 ||
-                                (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
+                        (!myMethodModels.containsKey(cmdStack.peek()) && argStack.size() >= getNumParams(cmdStack.peek())) // for standard command
                 );
     }
 

@@ -40,6 +40,8 @@ public class LoopCommand {
     loopBodies[0] = String.join(" ", symbolList.subList(getExpEnd(symbolList)+1, cursor));
     loopBodies[1] = String.join(" ", symbolList.subList(cursor+2, symbolList.size()));
 
+    System.out.println("VARIABLE BODY: " + loopBodies[0]);
+    System.out.println("LOOP BODY: " + loopBodies[1]);
     return loopBodies;
   }
 }

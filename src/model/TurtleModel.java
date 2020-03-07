@@ -1,7 +1,11 @@
 package model;
 
+
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class TurtleModel {
   private int myId;
@@ -15,11 +19,12 @@ public class TurtleModel {
   private double myZeroY;
   private boolean isCleared;
   private List<Double> myPoints;
-  private List<Double> backgroundColor;
-  private List<Double> penColor;
+  private List<Integer> backgroundColor;
+  private List<Integer> penColor;
+  private boolean isColorChanged;
 
 
-  public TurtleModel (int id,double myX, double myY, double myAngle) {
+  public TurtleModel (int id, double myX, double myY, double myAngle) {
     this.myId = id;
     this.myX = myX;
     this.myY = myY;
@@ -31,12 +36,18 @@ public class TurtleModel {
     this.myPoints.add(myY);
     this.isShowing = true;
     this.penDown = true;
+    isColorChanged = false;
   }
-  public void setBackgroundColor(List<Double> rgbVals){
+
+  public void setColorChanged(boolean changed){
+    isColorChanged = changed;
+  }
+
+  public void setBackgroundColor(List<Integer> rgbVals){
     backgroundColor = rgbVals;
   }
 
-  public void setPenColor(List<Double> rgbVals){
+  public void setPenColor(List<Integer> rgbVals){
     penColor = rgbVals;
   }
 
@@ -113,7 +124,13 @@ public class TurtleModel {
     return myId;
   }
 
-  public List<Double> getPenColor(){
+  public List<Integer> getPenColor(){
     return penColor;
+  }
+  public List<Integer> getBackgroundColor(){
+    return backgroundColor;
+  }
+  public boolean getIsColorChanged(){
+    return isColorChanged;
   }
 }

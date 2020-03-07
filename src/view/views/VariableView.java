@@ -1,11 +1,15 @@
 package view.views;
 
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.ResourceBundle;
 
 public class VariableView extends InformationView {
     private static final String STYLE = "vbox";
+    private boolean changedVariables = false;
 
     public VariableView(ResourceBundle resources) {
         super(resources);
@@ -26,6 +31,9 @@ public class VariableView extends InformationView {
             Text val = new Text(varVal.get(i));
             name.setWrappingWidth(250);
             val.setWrappingWidth(250);
+            name.setOnMouseClicked(e->
+                handleTextPressed(name,"Variable"));
+            val.setOnMouseClicked(e->handleTextPressed(val,"Value"));
             variableNames.getChildren().add(name);
             variableVals.getChildren().add(val);
             createAndAddEntry(variableNames, variableVals);
@@ -47,6 +55,38 @@ public class VariableView extends InformationView {
         heading2.setWrappingWidth(250);
         header.getChildren().add(heading1);
         header.getChildren().add(heading2);
+    }
+
+    private void handleTextPressed(Text text, String type){
+        TextArea ta = new TextArea();
+        ta.setPromptText("Change " +type+ " Name");
+        Stage s = new Stage();
+        s.show();
+        s.setScene(new Scene(ta));
+        s.setAlwaysOnTop(true);
+        ta.setOnMouseClicked(f->{
+            s.hide();
+            if(!ta.getText().equals("")){
+                //FIXME: send error if not right type
+                text.setText(ta.getText());
+                changedVariables = true;
+            }
+        });
+        ta.setOnKeyPressed(k->{
+            if (k.getCode() == KeyCode.ENTER){
+                s.hide();
+                if(!ta.getText().equals("")){
+                    text.setText(ta.getText());
+                    changedVariables = true;
+                }
+            }
+        });
+    }
+    public boolean isChangedVariables(){
+        return changedVariables;
+    }
+    public void setChangedVariablesFalse(){
+        changedVariables = false;
     }
 }
 

@@ -40,6 +40,7 @@ public class Parser {
 
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
+
 //    private static final List<String> MTCOMMANDS = new ArrayList<>(){{
 //        add("repeat");
 //        add("dotimes");
@@ -52,15 +53,14 @@ public class Parser {
 //    }};
 
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
-        put("repeat", 1);
-        put("dotimes", 2);
-        put("for", 2);
-
-        put("if", 1);
-        put("ifelse", 2);
-        put("to", 2);
-        put("tell", 1);
-        put("ask", 2);
+        put("Repeat", 1);
+        put("Dotimes", 2);
+        put("For", 2);
+        put("If", 1);
+        put("IfElse", 2);
+        put("MakeUserInstruction", 2);
+        put("Tell", 1);
+        put("Ask", 2);
     }};
 
 
@@ -85,13 +85,13 @@ public class Parser {
         List<String> splitByTell = new ArrayList<>(Arrays.asList(commands.split("tell")));
         for(String commandSeq : splitByTell){
             commandSeq = removeComments(commandSeq);
-            if(commandSeq.equals("")) continue;
             if(commands.contains("tell")){
-                if(firstOne){
+                if(!firstOne){
                     commandSeq = "tell " + commandSeq;
                 }
             }
             firstOne = false;
+            if(commandSeq.equals("")) continue;
             for(currentIndex = 0; currentIndex < turtlemodelcontainer.getActiveTurtles().size(); currentIndex ++){
                 try {
                     parseText(commandSeq,turtlemodelcontainer.getActiveTurtles().get(currentIndex));
@@ -163,7 +163,7 @@ public class Parser {
         poppedCommand = cmdStack.pop();
         List<String> params = new ArrayList<>();
         Double returnValue = 0.0;
-//
+
             Command cmdToExecute = factory.getCommand(getSymbol(poppedCommand));
 
             while (cmdToExecute.getNumParams() > params.size()) {
@@ -245,7 +245,7 @@ public class Parser {
     private int pushToStack(List<String> symbolList, Stack<String> cmdStack, Stack<String> argStack,
                             int loopEndIndex, int cursor, String symbol)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (LOOP_MAPPINGS.containsKey(symbol)) {
+        if (LOOP_MAPPINGS.containsKey(getSymbol(symbol))) {
             loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);
         }
         else if (symbol.matches("^[-+*\\/a-zA-Z_]+(\\?)?$")) {
@@ -284,9 +284,11 @@ public class Parser {
     private int getNumParams(int index, Stack<String> commandStack)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String command = commandStack.get(index);
+
 //        if(MTCOMMANDS.contains(command)){
 //            return mtFactory.getCommand(getSymbol(command)).getNumParams();
 //        }
+
         return factory.getCommand(getSymbol(command)).getNumParams();
     }
 
@@ -295,6 +297,7 @@ public class Parser {
     {
 //        System.out.println("Getting factory for symbol: "+ symbol);
 //        if(MTCOMMANDS.contains(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
+
         return factory.getCommand(getSymbol(symbol)).getNumParams();
     }
 
@@ -326,7 +329,7 @@ public class Parser {
 
         int cursor = loopStartIndex; //the index of the command symbol
         while (openBracketCount > closeBracketCount || closeBracketCount < LOOP_MAPPINGS
-                .get(cmdString)) {
+                .get(getSymbol(cmdString))) {
             cursor += 1;
             String symbol = symbolList.get(cursor).strip();
             if (symbol.equals("]")) {

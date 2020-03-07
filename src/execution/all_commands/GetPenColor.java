@@ -9,7 +9,7 @@ public class GetPenColor implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels) {
         PaletteModel palette = allModels.getPaletteModel();
-        List<Double> rgbVals = TurtleModel.getPenColor();
+        List<Integer> rgbVals = TurtleModel.getPenColor();
         Double index = palette.getIndex(rgbVals);
         return 0;
     }

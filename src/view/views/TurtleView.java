@@ -1,5 +1,6 @@
 package view.views;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -15,10 +16,14 @@ public class TurtleView extends Rectangle {
     private Image image;
     private ImagePattern turtlePattern;
     private int myId;
-
+    private Tooltip myInfo;
+    private String myInfoText;
     public TurtleView(int id) {
+        myInfoText = "Id: " + id + " X: " + 0 + " Y: " + 0 + " Heading: " + 0;
         this.image = new Image("file:" + IMAGE_RESOURCE_PATH + DEFAULT_IMAGE);
         this.myId = id;
+        this.myInfo = new Tooltip(myInfoText);
+        Tooltip.install(this, myInfo);
         this.turtlePattern = new ImagePattern(image);
         this.setFill(turtlePattern);
         this.setWidth(TURTLE_SIZE);
@@ -47,5 +52,9 @@ public class TurtleView extends Rectangle {
     }
     private boolean checkForValidExtensions(String fileName) {
         return (fileName.contains(".png") || fileName.contains(".jpg"));
+    }
+    public void changeToolTip(int id, double xcor, double ycor, double heading){
+        myInfoText = "Id: " + id + " X: " + xcor + " Y: " + ycor + " Heading: " + heading;
+        myInfo.setText(myInfoText);
     }
 }

@@ -19,25 +19,28 @@ public class PaletteModel {
 
     public void addColor(double index, double r, double g, double b){
         int indexInt = (int) index;
-        String element = cleanColorVals(r,g,b);
+        int red = (int) r;
+        int green = (int) g;
+        int blue = (int) b;
+        String element = cleanColorVals(red,green,blue);
         myColors.set(indexInt, element);
     }
 
-    public List<Double> getColor(double index){
+    public List<Integer> getColor(double index){
         int indexInt = (int) index;
         String colorString = myColors.get(indexInt);
         return parseColor(colorString);
     }
 
-    public double getIndex(List<Double> rgbVals){
+    public double getIndex(List<Integer> rgbVals){
         String color = cleanColorVals(rgbVals.get(0), rgbVals.get(1), rgbVals.get(2));
         return rgbVals.indexOf(color);
     }
 
-    private String cleanColorVals(double  r, double g, double b){
-        StringBuilder rString = new StringBuilder(Double.toString(r));
-        StringBuilder gString = new StringBuilder(Double.toString(g));
-        StringBuilder bString = new StringBuilder(Double.toString(b));
+    private String cleanColorVals(int r, int g, int b){
+        StringBuilder rString = new StringBuilder(Integer.toString(r));
+        StringBuilder gString = new StringBuilder(Integer.toString(g));
+        StringBuilder bString = new StringBuilder(Integer.toString(b));
         StringBuilder answer = new StringBuilder();
         while(rString.length()!=3){
             rString.insert(0, "0");
@@ -54,10 +57,10 @@ public class PaletteModel {
         return answer.toString();
     }
 
-    private List<Double> parseColor(String colorString){
-        double r = Double.parseDouble(colorString.substring(0,3));
-        double g = Double.parseDouble(colorString.substring(3,6));
-        double b = Double.parseDouble(colorString.substring(6,9));
+    private List<Integer> parseColor(String colorString){
+        int r = Integer.parseInt(colorString.substring(0,3));
+        int g = Integer.parseInt(colorString.substring(3,6));
+        int b = Integer.parseInt(colorString.substring(6,9));
         return  Arrays.asList(r,g,b);
     }
 

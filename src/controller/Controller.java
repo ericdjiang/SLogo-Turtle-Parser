@@ -4,6 +4,10 @@ import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
@@ -23,6 +27,7 @@ import view.layout.TurtleWindow;
 import view.views.VariableView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Controller {
@@ -72,6 +77,16 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
+        if (variableView.isChangedVariables()) {
+        }
+
+        if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
+            List<Integer> colorVals = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackgroundColor();
+            turtleWindow.setColor(Color.rgb(colorVals.get(0), colorVals.get(1), colorVals.get(2)));
+            allModels.getTurtleModelContainer().getActiveTurtles().get(0).setColorChanged(false);
+        }
+        
+
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
             customization.updateTurtleX(turtleModel.getX());
@@ -84,9 +99,15 @@ public class Controller {
             customization.updatePenStatus(turtleModel.getPenStatus());
             customization.updatePenColor(pen.getColor());
             customization.updateBackgroundColor(turtleWindow.getColor());
+            if ( turtleContainer.getTurtleView(id) == null){
+                TurtleView newTurtleView = turtleContainer.addTurtleView(id);
+                turtleWindow.getChildren().add(newTurtleView);
+                newTurtleView.setX(turtleWindow.getViewWidth()/2 - newTurtleView.getWidth()/2);
+                newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
+            }
+            TurtleView turtleView = turtleContainer.getTurtleView(id);
             pen.setStrokeWidth(customization.getPenStrokeWidth());
             pen.setDashOffset(customization.getPenStrokeOffset());
-            TurtleView turtleView = turtleContainer.getTurtleView(id);
 
             if (turtleModel.getClearedStatus()) {
                 pen.clear(turtleWindow);
@@ -191,7 +212,9 @@ public class Controller {
                 turtleView.setTurtleRotation(turtleModel.getAngle());
                 turtleView.setVisible(turtleModel.getShowing());
             }
+            turtleView.changeToolTip(turtleView.getViewId(), turtleModel.getX(),turtleModel.getY(),turtleModel.getAngle());
         }
+
 
     }
     public void setPenColor(Paint color) {

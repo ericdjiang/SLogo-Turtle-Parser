@@ -92,8 +92,7 @@ public class UserInterface {
     private void setBackgroundColor(TurtleWindow turtleWindow) {
         turtleWindow.setBackground(new Background(new BackgroundFill(backgroundColorSelector.getColorPicker().getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
         controlPanel.sendBGColorToController(backgroundColorSelector.getColorPicker().getValue());
-        turtleWindow.setColor(backgroundColorSelector.getColorPicker().getValue());
-        //backgroundColorSelector.setButtonColor(backgroundColorSelector.getColorPicker().getValue());
+//        turtleWindow.setColor(backgroundColorSelector.getColorPicker().getValue());
     }
     private void setPenColor() {
         controlPanel.sendPenColorToController(penColorSelector.getColorPicker().getValue());
@@ -108,7 +107,8 @@ public class UserInterface {
         tabs.updateLanguage(myResources);
         penColorSelector.updateLanguage(myResources.getString("ChoosePen"));
         backgroundColorSelector.updateLanguage(myResources.getString("ChooseBackground"));
-        turtleButton.setText(myResources.getString("ChooseTurtle"));
+        historyView.updateLanguage(myResources);
+
     }
     private void setFooter() {
         console.getChildren().add(commandPrompt.getPrompt());

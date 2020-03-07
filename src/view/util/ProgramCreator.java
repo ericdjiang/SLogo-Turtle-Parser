@@ -32,7 +32,6 @@ public class ProgramCreator {
     private ControlPanel controlPanel;
     private UserInterface UI;
     private ConsoleView console;
-    private TurtleContainer turtleContainer = new TurtleContainer(turtleWindow);
 
     public ProgramCreator(Stage stage) throws IllegalAccessException, IOException, InvocationTargetException {
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "English");
@@ -40,7 +39,7 @@ public class ProgramCreator {
         UI = new UserInterface(stage, myResources, turtleWindow, console);
         myAnimation = new Timeline();
         controller = new Controller(turtleWindow, UI.getCustomizationView(), UI.getHistoryView(), UI.getVariableView(), UI.getLibraryView());
-        controlPanel = new ControlPanel(myResources, console, turtleContainer, controller);
+        controlPanel = new ControlPanel(myResources, console, controller);
         UI.addControlPanel(controlPanel);
         myScene = UI.setupUI();
         stage.setScene(myScene);

@@ -148,5 +148,7 @@ public class TurtleModel {
   public void disableShowAndPen(boolean b) {
     this.disabled = b;
   }
-
+  public boolean getDisabledStatus() {
+    return this.disabled;
+  }
 }

@@ -23,6 +23,11 @@ public class CommandHistoryView extends InformationView {
         lineNum = 1;
         setHeader();
     }
+    public void updateLanguage(ResourceBundle resources) {
+        this.resources = resources;
+        header.getChildren().clear();
+        setHeader();
+    }
     public void updateHistory(String input, double returnVal) {
         Text consoleInput = new Text(input);
         Text lineNumber = new Text(Integer.toString(lineNum));
@@ -78,6 +83,7 @@ public class CommandHistoryView extends InformationView {
         heading2.setWrappingWidth(250);
         header.getChildren().add(heading1);
         header.getChildren().add(heading2);
+        //header.getStyleClass().add()
     }
     public void clearHistory() {
         lineNum=1;

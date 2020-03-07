@@ -9,12 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Tell implements MultipleTurtlesCommand {
+public class Tell implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+    public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
+        VariableModel variableModel = allModels.getVariableModel();
+        TurtleModelContainer turtleModelContainer = allModels.getTurtleModelContainer();
         System.out.println(parameters.get(0));
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
+
         int id = 0;
             for(int i = 2; i < symbolList.size(); i ++){
 
@@ -39,9 +42,11 @@ public class Tell implements MultipleTurtlesCommand {
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);
+
             for (TurtleModel active : newActiveTurtles){
                 System.out.println("Turtle: " + active.getModelId() +" now active");
             }
+
         return id;
         }
 

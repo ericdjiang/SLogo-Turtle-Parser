@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import model.TurtleContainer;
 import view.util.ColorSelector;
@@ -36,38 +37,32 @@ public class UserInterface {
     private CommandReferenceView referenceView;
     private CommandHistoryView historyView;
     private VariableView variableView;
+    private CustomizationView customizationView;
     private LibraryView libraryView;
     private ConsoleView commandPrompt;
     private LanguageSelector languageSelector;
-    private ControlPanel controlPanel;
     public InformationWindow historyWindow;
     private InformationWindow referenceWindow;
     private InformationWindow variableWindow;
     private InformationWindow libraryWindow;
-    private CustomizationView customizationView;
     private InformationWindow customizationWindow;
-    private Controller controller;
-    private Pen pen;
     private String myLanguage;
     private final HBox console = new HBox();
     private Button turtleButton;
     private ColorSelector backgroundColorSelector;
     private ColorSelector penColorSelector;
+    private Paint penColor;
+    private ControlPanel controlPanel;
 
-    public UserInterface(Stage stage, String language, TurtleWindow turtleWindow, Controller c, TurtleContainer turtleContainer) throws IOException, InvocationTargetException, IllegalAccessException {
-        this.myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
-        this.myLanguage = language;
+    public UserInterface(Stage stage, ResourceBundle myResources, TurtleWindow turtleWindow, ConsoleView console) throws IOException, InvocationTargetException, IllegalAccessException {
         this.turtleWindow = turtleWindow;
         this.referenceView = new CommandReferenceView(myResources);
-        this.commandPrompt = new ConsoleView(myResources);
+        this.commandPrompt = console;
         this.historyView = new CommandHistoryView(myResources);
         this.variableView = new VariableView(myResources);
         this.libraryView = new LibraryView(myResources);
+        this.customizationView = new CustomizationView();
         this.languageSelector = new LanguageSelector(myResources);
-        this.controlPanel = new ControlPanel(myResources, historyView, commandPrompt, myLanguage, c, c.getConsoleModel(), variableView,turtleContainer );
-        this.controller = c;
-        this.customizationView = c.getStats();
-        this.pen = c.getPen();
         this.backgroundColorSelector = new ColorSelector(myResources.getString("ChooseBackground"));
         this.penColorSelector = new ColorSelector(myResources.getString("ChoosePen"));
         this.tabs = new ViewSwitchText(myResources);
@@ -85,10 +80,6 @@ public class UserInterface {
         tabs.getCustomizationTab().setOnMouseClicked(event -> setCustomizationWindow());
         setFooter();
 
-        inputPanel.getChildren().add(console);
-        inputPanel.getChildren().add(controlPanel);
-
-        mainView.setBottom(inputPanel);
         mainView.setCenter(turtleWindow);
         mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
@@ -104,7 +95,7 @@ public class UserInterface {
         //backgroundColorSelector.setButtonColor(backgroundColorSelector.getColorPicker().getValue());
     }
     private void setPenColor() {
-        pen.setColor(penColorSelector.getColorPicker().getValue());
+        controlPanel.sendColorToController(penColorSelector.getColorPicker().getValue());
     }
     private void updateLanguage() throws IOException {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
@@ -145,17 +136,12 @@ public class UserInterface {
     private void setCustomizationWindow() {
         mainFrame.getChildren().remove(mainFrame.getRight());
         customizationWindow = new InformationWindow(tabs, customizationView);
-        customizationView.setOnMouseExited(event -> {
-            pen.setDashOffset(customizationView.getDashWidth());
-            pen.setStrokeWidth(customizationView.getThickness());
-        });
         mainFrame.setRight(customizationWindow);
     }
     private void setCustomizationPanel() {
         customizationPanel.getChildren().add(languageSelector);
         customizationPanel.getChildren().add(penColorSelector);
         customizationPanel.getChildren().add(backgroundColorSelector);
-        //FIXME refactor button
         turtleButton = controlPanel.getTurtleSwitcher();
         customizationPanel.getChildren().add(turtleButton);
         turtleButton.getStyleClass().add("turtleswitch");
@@ -169,6 +155,23 @@ public class UserInterface {
             }
         });
     }
+
+    public CommandHistoryView getHistoryView() {
+        return this.historyView;
+    }
+    public VariableView getVariableView() {
+        return this.variableView;
+    }
+    public CustomizationView getCustomizationView() {
+        return this.customizationView;
+    }
+    public void addControlPanel(ControlPanel cp) {
+        this.controlPanel = cp;
+        inputPanel.getChildren().add(console);
+        inputPanel.getChildren().add(cp);
+        mainView.setBottom(inputPanel);
+    }
+
 }
 
 

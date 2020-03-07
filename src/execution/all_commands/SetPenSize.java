@@ -1,19 +1,21 @@
 package execution.all_commands;
 
 import execution.Command;
-
 import model.*;
 
 import java.util.List;
 
-public class ID implements Command {
+public class SetPenSize implements Command {
+    private static final int FIRST = 0;
     @Override
     public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels) {
-        return TurtleModel.getModelId();
+        double penSize = Double.parseDouble(parameters.get(FIRST));
+        TurtleModel.setPenSize(penSize);
+        return penSize;
     }
 
     @Override
     public int getNumParams() {
-        return 0;
+        return 1;
     }
 }

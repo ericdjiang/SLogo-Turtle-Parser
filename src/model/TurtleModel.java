@@ -1,22 +1,30 @@
 package model;
 
+
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class TurtleModel {
   private int myId;
   private double myX;
   private double myY;
   private double myAngle;
+  private double penSize;
   private boolean isShowing;
   private boolean penDown;
   private double myZeroX;
   private double myZeroY;
   private boolean isCleared;
   private List<Double> myPoints;
+  private List<Integer> backgroundColor;
+  private List<Integer> penColor;
+  private boolean isColorChanged;
 
 
-  public TurtleModel (int id,double myX, double myY, double myAngle) {
+  public TurtleModel (int id, double myX, double myY, double myAngle) {
     this.myId = id;
     this.myX = myX;
     this.myY = myY;
@@ -28,6 +36,19 @@ public class TurtleModel {
     this.myPoints.add(myY);
     this.isShowing = true;
     this.penDown = true;
+    isColorChanged = false;
+  }
+
+  public void setColorChanged(boolean changed){
+    isColorChanged = changed;
+  }
+
+  public void setBackgroundColor(List<Integer> rgbVals){
+    backgroundColor = rgbVals;
+  }
+
+  public void setPenColor(List<Integer> rgbVals){
+    penColor = rgbVals;
   }
 
   public void setX(double x){
@@ -88,6 +109,9 @@ public class TurtleModel {
   public void setCleared(boolean b){
     isCleared = b;
   }
+  public void setPenSize(double size){
+    penSize = size;
+  }
   public boolean getClearedStatus() {
     return this.isCleared;
   }
@@ -98,5 +122,15 @@ public class TurtleModel {
   }
   public int getModelId(){
     return myId;
+  }
+
+  public List<Integer> getPenColor(){
+    return penColor;
+  }
+  public List<Integer> getBackgroundColor(){
+    return backgroundColor;
+  }
+  public boolean getIsColorChanged(){
+    return isColorChanged;
   }
 }

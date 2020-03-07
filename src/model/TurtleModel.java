@@ -1,7 +1,11 @@
 package model;
 
+
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class TurtleModel {
   private int myId;
@@ -14,9 +18,11 @@ public class TurtleModel {
   private double myZeroY;
   private boolean isCleared;
   private List<Double> myPoints;
+  private Color backGroundColor;
+  private boolean disabled;
 
 
-  public TurtleModel (int id,double myX, double myY, double myAngle) {
+  public TurtleModel (int id, double myX, double myY, double myAngle, Color  backgroundcolor) {
     this.myId = id;
     this.myX = myX;
     this.myY = myY;
@@ -28,6 +34,7 @@ public class TurtleModel {
     this.myPoints.add(myY);
     this.isShowing = true;
     this.penDown = true;
+    backGroundColor = backgroundcolor;
   }
 
   public void setX(double x){
@@ -74,7 +81,9 @@ public class TurtleModel {
   public boolean getPenStatus() {return this.penDown;}
 
   public void makePenDown(){
-    penDown = true;
+    if (! disabled) {
+      penDown = true;
+    }
   }
   public void makePenUp(){
     penDown = false;
@@ -83,7 +92,9 @@ public class TurtleModel {
     isShowing = false;
   }
   public void showTurtle(){
-    isShowing = true;
+    if (! disabled) {
+      isShowing = true;
+    }
   }
   public void setCleared(boolean b){
     isCleared = b;
@@ -98,5 +109,18 @@ public class TurtleModel {
   }
   public int getModelId(){
     return myId;
+  }
+  public void setBackGroundColor(Color backgroundcolor){
+    backGroundColor = backgroundcolor;
+  }
+  public Color getBackGroundColor(){return backGroundColor;}
+  public boolean checkBounds(double deltaX, double deltaY) {
+    return this.getX() + deltaX < 230 && this.getX() + deltaX > -270 && this.getY() + deltaY < 240 && this.getY() + deltaY > -180;
+  }
+  public boolean checkAbsoluteBounds(double xPos, double yPos) {
+    return xPos < 230 && xPos > -270 && yPos < 240 && yPos > -180;
+  }
+  public void disableShowAndPen(boolean b) {
+    this.disabled = b;
   }
 }

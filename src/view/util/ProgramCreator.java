@@ -6,7 +6,6 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.ConsoleModel;
 
 import model.TurtleContainer;
 
@@ -14,7 +13,6 @@ import view.layout.TurtleWindow;
 import view.layout.UserInterface;
 import view.views.ConsoleView;
 
-import java.io.Console;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
@@ -41,7 +39,7 @@ public class ProgramCreator {
         this.console = new ConsoleView(myResources);
         UI = new UserInterface(stage, myResources, turtleWindow, console);
         myAnimation = new Timeline();
-        controller = new Controller(turtleWindow, UI.getCustomizationView(), UI.getHistoryView(), UI.getVariableView());
+        controller = new Controller(turtleWindow, UI.getCustomizationView(), UI.getHistoryView(), UI.getVariableView(), UI.getLibraryView());
         controlPanel = new ControlPanel(myResources, console, turtleContainer, controller);
         UI.addControlPanel(controlPanel);
         myScene = UI.setupUI();

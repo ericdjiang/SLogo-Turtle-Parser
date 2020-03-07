@@ -4,6 +4,10 @@ import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
@@ -16,11 +20,8 @@ import model.*;
 import parsing.Parser;
 import view.util.ControlPanel;
 import view.util.Pen;
-import view.views.CommandHistoryView;
-import view.views.CustomizationView;
-import view.views.TurtleView;
+import view.views.*;
 import view.layout.TurtleWindow;
-import view.views.VariableView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,7 @@ public class Controller {
     private CustomizationView customization;
     private VariableView variableView;
     private CommandHistoryView historyView;
+    private LibraryView libraryView;
 
     private ConsoleModel consoleModel;
     private VariableModel variableModel;
@@ -43,7 +45,7 @@ public class Controller {
     private double oldx;
     private double oldy;
 
-    public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView) {
+    public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView, LibraryView libraryView) {
         this.turtleWindow = turtleWindow;
         this.turtleContainer = new TurtleContainer(turtleWindow);
         turtleContainer.addTurtle(1);
@@ -51,6 +53,7 @@ public class Controller {
         this.consoleModel = new ConsoleModel();
         this.variableModel = new VariableModel();
         this.variableView = variableView;
+        this.libraryView = libraryView;
         this.customization = dynamicStats;
         this.methodModels = new HashMap<>();
         this.historyView = historyView;
@@ -68,6 +71,12 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
+
+        Color backGroundColor = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackGroundColor();
+        turtleWindow.setColor(backGroundColor);
+        turtleWindow.setBackground(new Background(new BackgroundFill(backGroundColor, CornerRadii.EMPTY, Insets.EMPTY)));
+
+
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
             customization.updateTurtleX(turtleModel.getX());
@@ -82,6 +91,13 @@ public class Controller {
             customization.updateBackgroundColor(turtleWindow.getColor());
             pen.setStrokeWidth(customization.getPenStrokeWidth());
             pen.setDashOffset(customization.getPenStrokeOffset());
+
+            if ( turtleContainer.getTurtleView(id) == null){
+                TurtleView newTurtleView = turtleContainer.addTurtleView(id);
+                turtleWindow.getChildren().add(newTurtleView);
+                newTurtleView.setX(turtleWindow.getViewWidth()/2 - newTurtleView.getWidth()/2);
+                newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
+            }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
 
             if (turtleModel.getClearedStatus()) {
@@ -93,6 +109,9 @@ public class Controller {
             }
             else {
                 if (turtleModel.getPenStatus()) {
+                    if (                point > turtleWindow.getViewHeight() && point > turtleWindow.getViewWidth() && point < 0 && point < 0) {
+                        turtleView.setVisible(false);
+                    }
 //correct one
             for (Object o : turtleModel.getPointList()) {
                 if (index % 2 == 1) {
@@ -187,7 +206,9 @@ public class Controller {
                 turtleView.setTurtleRotation(turtleModel.getAngle());
                 turtleView.setVisible(turtleModel.getShowing());
             }
+            turtleView.changeToolTip(turtleView.getViewId(), turtleModel.getX(),turtleModel.getY(),turtleModel.getAngle());
         }
+
 
     }
     public void setPenColor(Paint color) {
@@ -202,17 +223,23 @@ public class Controller {
     }
     public void updateLibraryView() {
         for (String k :  methodModels.keySet()) {
-            Text t = new Text("Method: " + methodModels.get(k).getMethodName() + "\tParameters: " + "\tBody: " + methodModels.get(k).getMethodBody());
-            //libraryView.addMethod(t);
+            libraryView.addMethod(methodModels.get(k).getMethodName(), methodModels.get(k).getVariableNames(), methodModels.get(k).getMethodBody());
         }
     }
     public void updateInputHistory(String commands){
-        historyView.updateHistory(commands, consoleModel.getReturnVal());
-        historyView.displayError(consoleModel.getErrorMessage());
+        if (! consoleModel.getErrorMessage().equals(null)) {
+            historyView.displayError(consoleModel.getErrorMessage());
+        }
+        else {
+            historyView.updateHistory(commands, consoleModel.getReturnVal());
+        }
         consoleModel.setErrorMessage(null);
     }
     public void createParser(String commands) {
         parser = new Parser(commands, "English", variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer());
+    }
+    public void setBGColor(Paint color) {
+
     }
 }
 

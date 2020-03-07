@@ -15,8 +15,17 @@ public class Forward implements Command {
         double distance = Double.parseDouble(parameters.get(FIRST));
         double xChange = Double.parseDouble(parameters.get(FIRST)) * Math.sin(radians);
         double yChange =  Double.parseDouble(parameters.get(FIRST)) * Math.cos(radians);
+        if (! turtleModel.checkBounds(xChange, yChange)) {
+            turtleModel.makePenUp();
+            turtleModel.hideTurtle();
+            turtleModel.disableShowAndPen(true);
+        }
+        else {
+            turtleModel.disableShowAndPen(false);
+        }
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
+
         System.out.println("turtle number " + turtleModel.getModelId() + " forward: " + distance);
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
         return distance;

@@ -25,11 +25,10 @@ public class Ask extends LoopCommand implements MultipleTurtlesCommand {
             }
             int id = Integer.parseInt(symbolList.get(runner));
             int difference = id - turtleModelContainer.getTurtleIds().size();
-            System.out.println(turtleModelContainer.getTurtleModels().size());
             if(difference > 0){
                 for(int k = 0; k < difference; k ++ ){
                     int newId = turtleModelContainer.getTurtleIds().get(turtleModelContainer.getTurtleIds().size()-1) + 1;
-                    TurtleModel newTurtleModel = turtleModelContainer.addTurtle(newId);
+                    TurtleModel newTurtleModel = turtleModelContainer.addToTurtleModels(newId);
                     if(newId == id)newActiveTurtles.add(newTurtleModel);
                 }
             }
@@ -41,10 +40,11 @@ public class Ask extends LoopCommand implements MultipleTurtlesCommand {
         turtleModelContainer.setActiveTurtles(newActiveTurtles);
 
         symbolList = symbolList.subList(runner+2, symbolList.size());
+        System.out.println(symbolList);
 
 
         int loopGuardEnd = getLoopGuardEnd(symbolList);
-        Parser loopGuardParser = new Parser(String.join(" ", symbolList.subList(0, loopGuardEnd)), language, variableModel, consoleModel, methodModels, turtleModelContainer );
+        Parser loopGuardParser = new Parser(String.join(" ", symbolList), language, variableModel, consoleModel, methodModels, turtleModelContainer );
         double loopLimit =  Math.round(loopGuardParser.getLastReturnValue());
 
 //    System.out.println(loopLimit);

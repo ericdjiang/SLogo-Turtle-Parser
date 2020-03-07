@@ -14,8 +14,8 @@ public class TurtleWindow extends Pane {
     private Paint color;
 
     public TurtleWindow() {
-        this.setWidth(viewWidth);
-        this.setHeight(viewHeight);
+        this.setWidth(200);
+        this.setHeight(200);
         this.getStyleClass().add("turtlewindow");
         this.color = Color.LIGHTBLUE;
     }

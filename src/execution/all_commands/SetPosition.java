@@ -16,6 +16,14 @@ public class SetPosition implements Command {
             double orginalY = turtleModel.getY();
             double newX = Double.parseDouble(parameters.get(FIRST));
             double newY = Double.parseDouble(parameters.get(SECOND));
+            if (! turtleModel.checkAbsoluteBounds(newX, newY)) {
+                turtleModel.makePenUp();
+                turtleModel.hideTurtle();
+                turtleModel.disableShowAndPen(true);
+        }
+            else {
+            turtleModel.disableShowAndPen(false);
+        }
             turtleModel.setXY(newX, newY);
             double distanceTraveled = Math.sqrt(Math.pow(newX - orginalX,SQUARED) + Math.pow(newY - orginalY,SQUARED));
 

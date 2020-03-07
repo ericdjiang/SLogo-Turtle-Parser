@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import java.util.ResourceBundle;
 
 public class ConsoleView extends TextArea {
-    private static final int PROMPT_LIMIT = 6;
+    private static final int PROMPT_LIMIT = 7;
     private static final String PROMPT_SYMBOL = ">";
     private final ResourceBundle myResources;
 

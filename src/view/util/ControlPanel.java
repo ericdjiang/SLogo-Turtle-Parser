@@ -3,6 +3,7 @@ package view.util;
 import controller.Controller;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
@@ -34,21 +36,19 @@ public class ControlPanel extends VBox {
     private static final String RUN = "Run";
     private static final String CLEAR = "Clear";
     private static final String TURTLESELECT = "TurtleSelect";
-    private static final String DASH = "ToggleDash";
-    private CommandHistoryView historyView;
     private ConsoleView consoleView;
     private Button runButton;
     private Button clearButton;
     private Button uploadButton;
     private Button turtleSwitchButton;
-    private Parser parser;
+    private Button newWindowButton;
     private String myLanguage;
 
     private TurtleContainer turtleContainer;
     private Controller c;
 
 
-    public ControlPanel(ResourceBundle resources, ConsoleView consoleView, TurtleContainer turtlecontainer, Controller c) {
+    public ControlPanel(ResourceBundle resources, ConsoleView consoleView, Controller c) {
         this.resources = resources;
         this.consoleView = consoleView;
         this.c = c;
@@ -58,14 +58,23 @@ public class ControlPanel extends VBox {
         });
         clearButton = makeButton(CLEAR, event -> clearConsole());
         turtleSwitchButton = makeButton(TURTLESELECT, event -> {
-            for(TurtleView turtleView : turtleContainer.getTurtleViews()){
-                turtleView.switchTurtleImage();
+            c.updateTurtleImages();
+        });
+        newWindowButton = makeButton("NewWindow", event -> {
+            try {
+                createNewWindow();
+            } catch (IllegalAccessException e) {
+               // e.printStackTrace();
+            } catch (IOException e) {
+               // e.printStackTrace();
+            } catch (InvocationTargetException e) {
+               // e.printStackTrace();
             }
         });
         getChildren().add(runButton);
         getChildren().add(clearButton);
         getChildren().add(uploadButton);
-        turtleContainer = turtlecontainer;
+        getChildren().add(newWindowButton);
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
         // represent all supported image suffixes
@@ -86,7 +95,10 @@ public class ControlPanel extends VBox {
     public Button getTurtleSwitcher() {
         return this.turtleSwitchButton;
     }
-
+    private void createNewWindow() throws IllegalAccessException, IOException, InvocationTargetException {
+        Stage newWindow = new Stage();
+        ProgramCreator pc = new ProgramCreator(newWindow);
+    }
     private void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();
@@ -106,13 +118,14 @@ public class ControlPanel extends VBox {
         runButton.setText(resources.getString(RUN));
         clearButton.setText(resources.getString(CLEAR));
         uploadButton.setText(resources.getString(UPLOADFILE));
-
+        turtleSwitchButton.setText(resources.getString("ChooseTurtle"));
+        newWindowButton.setText(resources.getString("NewWindow"));
         this.myLanguage = language;
     }
-    public void sendColorToController(Paint color) {
+    public void sendPenColorToController(Paint color) {
         c.setPenColor(color);
     }
-
+    public void sendBGColorToController(Color color) {c.setBGColor(color);}
     private void addUploadedText(File file){
         try {
             Scanner s = new Scanner(file);

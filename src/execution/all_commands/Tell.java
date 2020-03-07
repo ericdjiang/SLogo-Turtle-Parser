@@ -1,13 +1,11 @@
 package execution.all_commands;
 
 import execution.Command;
-import execution.MultipleTurtlesCommand;
 import model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Tell implements Command {
     @Override

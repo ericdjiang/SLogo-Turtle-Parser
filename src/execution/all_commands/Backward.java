@@ -16,6 +16,14 @@ public class Backward implements Command {
         double radians = Math.toRadians(oppositeangle);
         double yChange = distance * Math.cos(radians);
         double xChange = distance * Math.sin(radians);
+        if (! turtleModel.checkBounds(xChange, yChange)) {
+            turtleModel.makePenUp();
+            turtleModel.hideTurtle();
+            turtleModel.disableShowAndPen(true);
+        }
+        else {
+            turtleModel.disableShowAndPen(false);
+        }
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
         consoleModel.setReturnVal(distance);

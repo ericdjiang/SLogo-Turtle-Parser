@@ -20,12 +20,10 @@ import model.*;
 import parsing.Parser;
 import view.util.ControlPanel;
 import view.util.Pen;
-import view.views.CommandHistoryView;
-import view.views.CustomizationView;
-import view.views.TurtleView;
+import view.views.*;
 import view.layout.TurtleWindow;
-import view.views.VariableView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +35,7 @@ public class Controller {
     private CustomizationView customization;
     private VariableView variableView;
     private CommandHistoryView historyView;
+    private LibraryView libraryView;
 
     private PaletteModel paletteModel;
     private ConsoleModel consoleModel;
@@ -48,10 +47,11 @@ public class Controller {
     private double point;
     private double oldx;
     private double oldy;
-
     private ModelContainer allModels;
+    private boolean isErrorDisplayed=false;
 
-    public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView) {
+
+    public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView, LibraryView libraryView) {
         this.turtleWindow = turtleWindow;
         this.turtleContainer = new TurtleContainer(turtleWindow);
         turtleContainer.addTurtle(1);
@@ -60,6 +60,7 @@ public class Controller {
         this.variableModel = new VariableModel();
         this.paletteModel = new PaletteModel();
         this.variableView = variableView;
+        this.libraryView = libraryView;
         this.customization = dynamicStats;
         this.methodModels = new HashMap<>();
         this.historyView = historyView;
@@ -77,18 +78,27 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
+
         if (variableView.isChangedVariables()) {
         }
 
         if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
-            List<Integer> colorVals = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackgroundColor();
-            turtleWindow.setColor(Color.rgb(colorVals.get(0), colorVals.get(1), colorVals.get(2)));
+            List<Double> colorVals = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackgroundColor();
+            turtleWindow.setColor(new Color(colorVals.get(0)/255, colorVals.get(1)/255, colorVals.get(2)/255, 1));
             allModels.getTurtleModelContainer().getActiveTurtles().get(0).setColorChanged(false);
         }
-        
+
+
 
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
+            if (turtleModel.getDisabledStatus() && isErrorDisplayed == false) {
+                turtleWindow.displayWarning();
+                isErrorDisplayed = true;
+            }
+            else if (! turtleModel.getDisabledStatus()) {
+                isErrorDisplayed = false;
+            }
             customization.updateTurtleX(turtleModel.getX());
             customization.updateTurtleY(turtleModel.getY());
             customization.updatePenOffset();
@@ -99,6 +109,7 @@ public class Controller {
             customization.updatePenStatus(turtleModel.getPenStatus());
             customization.updatePenColor(pen.getColor());
             customization.updateBackgroundColor(turtleWindow.getColor());
+
             if ( turtleContainer.getTurtleView(id) == null){
                 TurtleView newTurtleView = turtleContainer.addTurtleView(id);
                 turtleWindow.getChildren().add(newTurtleView);
@@ -106,8 +117,14 @@ public class Controller {
                 newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
             }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
-            pen.setStrokeWidth(customization.getPenStrokeWidth());
+
+            if(customization.getPenChanged()){
+                turtleModel.setPenSize(customization.getPenStrokeWidth());
+                customization.setPenChangedFalse();
+            }
+            pen.setStrokeWidth(turtleModel.getPenSize());
             pen.setDashOffset(customization.getPenStrokeOffset());
+
 
             if (turtleModel.getClearedStatus()) {
                 pen.clear(turtleWindow);
@@ -118,6 +135,9 @@ public class Controller {
             }
             else {
                 if (turtleModel.getPenStatus()) {
+                    if (point > turtleWindow.getViewHeight() && point > turtleWindow.getViewWidth() && point < 0 && point < 0) {
+                        turtleView.setVisible(false);
+                    }
 //correct one
             for (Object o : turtleModel.getPointList()) {
                 if (index % 2 == 1) {
@@ -230,18 +250,36 @@ public class Controller {
     }
     public void updateLibraryView() {
         for (String k :  methodModels.keySet()) {
-            Text t = new Text("Method: " + methodModels.get(k).getMethodName() + "\tParameters: " + "\tBody: " + methodModels.get(k).getMethodBody());
-            //libraryView.addMethod(t);
+            libraryView.addMethod(methodModels.get(k).getMethodName(), methodModels.get(k).getVariableNames(), methodModels.get(k).getMethodBody());
         }
     }
     public void updateInputHistory(String commands){
-        historyView.updateHistory(commands, consoleModel.getReturnVal());
-        historyView.displayError(consoleModel.getErrorMessage());
-        consoleModel.setErrorMessage(null);
+        if (! consoleModel.getErrorMessage().equals("")) {
+            historyView.displayError(consoleModel.getErrorMessage());
+        }
+        else {
+            historyView.updateHistory(commands, consoleModel.getReturnVal());
+        }
+        consoleModel.setErrorMessage("");
     }
     public void createParser(String commands) {
         allModels = new ModelContainer(variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer(), paletteModel);
         parser = new Parser(commands, "English", allModels);
+    }
+    public void setBGColor(Color color) {
+        for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++) {
+            TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
+            List<Double> l = new ArrayList<>();
+            l.add(color.getGreen()*255);
+            l.add(color.getRed()*255);
+            l.add(color.getBlue()*255);
+            turtleModel.setBackgroundColor(l);
+        }
+    }
+    public void updateTurtleImages() {
+        for(TurtleView turtleView : turtleContainer.getTurtleViews()){
+            turtleView.switchTurtleImage();
+        }
     }
 }
 

@@ -19,8 +19,9 @@ public class TurtleModel {
   private double myZeroY;
   private boolean isCleared;
   private List<Double> myPoints;
-  private List<Integer> backgroundColor;
-  private List<Integer> penColor;
+  private boolean disabled;
+  private List<Double> backgroundColor;
+  private List<Double> penColor;
   private boolean isColorChanged;
 
 
@@ -37,17 +38,19 @@ public class TurtleModel {
     this.isShowing = true;
     this.penDown = true;
     isColorChanged = false;
+    this.backgroundColor = new ArrayList<>();
+    this.penSize = 1;
   }
 
   public void setColorChanged(boolean changed){
     isColorChanged = changed;
   }
 
-  public void setBackgroundColor(List<Integer> rgbVals){
+  public void setBackgroundColor(List<Double> rgbVals){
     backgroundColor = rgbVals;
   }
 
-  public void setPenColor(List<Integer> rgbVals){
+  public void setPenColor(List<Double> rgbVals){
     penColor = rgbVals;
   }
 
@@ -95,7 +98,9 @@ public class TurtleModel {
   public boolean getPenStatus() {return this.penDown;}
 
   public void makePenDown(){
-    penDown = true;
+    if (! disabled) {
+      penDown = true;
+    }
   }
   public void makePenUp(){
     penDown = false;
@@ -104,7 +109,9 @@ public class TurtleModel {
     isShowing = false;
   }
   public void showTurtle(){
-    isShowing = true;
+    if (! disabled) {
+      isShowing = true;
+    }
   }
   public void setCleared(boolean b){
     isCleared = b;
@@ -124,13 +131,29 @@ public class TurtleModel {
     return myId;
   }
 
-  public List<Integer> getPenColor(){
+  public List<Double> getPenColor(){
     return penColor;
   }
-  public List<Integer> getBackgroundColor(){
+  public List<Double> getBackgroundColor(){
     return backgroundColor;
   }
+
   public boolean getIsColorChanged(){
     return isColorChanged;
+  }
+
+  public double getPenSize(){return penSize;}
+
+  public boolean checkBounds(double deltaX, double deltaY) {
+    return this.getX() + deltaX < 230 && this.getX() + deltaX > -270 && this.getY() + deltaY < 240 && this.getY() + deltaY > -180;
+  }
+  public boolean checkAbsoluteBounds(double xPos, double yPos) {
+    return xPos < 230 && xPos > -270 && yPos < 240 && yPos > -180;
+  }
+  public void disableShowAndPen(boolean b) {
+    this.disabled = b;
+  }
+  public boolean getDisabledStatus() {
+    return this.disabled;
   }
 }

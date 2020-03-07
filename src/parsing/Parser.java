@@ -7,8 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import execution.MultipleTurtlesCommand;
-import execution.MultipleTurtlesCommandFactory;
 import model.*;
 
 public class Parser {
@@ -19,7 +17,7 @@ public class Parser {
     private static final String MAKE_VAR = "MakeVariable";
     private List<Map.Entry<String, Pattern>> mySymbols;
     private CommandFactory factory = new CommandFactory();
-    private MultipleTurtlesCommandFactory  mtFactory = new MultipleTurtlesCommandFactory();
+    //private MultipleTurtlesCommandFactory  mtFactory = new MultipleTurtlesCommandFactory();
     private ResourceBundle resourceBundle;
 
     private String myLanguage;

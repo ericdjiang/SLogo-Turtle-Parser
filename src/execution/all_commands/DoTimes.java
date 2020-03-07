@@ -5,9 +5,7 @@ import execution.LoopCommand;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import execution.MultipleTurtlesCommand;
 import model.*;
 import parsing.Parser;
 

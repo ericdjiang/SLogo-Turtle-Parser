@@ -1,7 +1,11 @@
 package model;
 
+
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class TurtleModel {
   private int myId;
@@ -14,9 +18,11 @@ public class TurtleModel {
   private double myZeroY;
   private boolean isCleared;
   private List<Double> myPoints;
+  private Color backGroundColor;
 
 
-  public TurtleModel (int id,double myX, double myY, double myAngle) {
+
+  public TurtleModel (int id, double myX, double myY, double myAngle, Color  backgroundcolor) {
     this.myId = id;
     this.myX = myX;
     this.myY = myY;
@@ -28,6 +34,7 @@ public class TurtleModel {
     this.myPoints.add(myY);
     this.isShowing = true;
     this.penDown = true;
+    backGroundColor = backgroundcolor;
   }
 
   public void setX(double x){
@@ -99,4 +106,8 @@ public class TurtleModel {
   public int getModelId(){
     return myId;
   }
+  public void setBackGroundColor(Color backgroundcolor){
+    backGroundColor = backgroundcolor;
+  }
+  public Color getBackGroundColor(){return backGroundColor;}
 }

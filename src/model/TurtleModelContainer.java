@@ -1,5 +1,7 @@
 package model;
 
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +38,7 @@ public class TurtleModelContainer {
     }
 
     public TurtleModel addToTurtleModels(int id){
-        TurtleModel turtleModel = new TurtleModel(id,0,0,0);
+        TurtleModel turtleModel = new TurtleModel(id,0,0,0, Color.WHITE);
         turtleModels.add(turtleModel);
         turtleIds.add(id);
         return turtleModel;

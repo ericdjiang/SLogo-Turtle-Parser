@@ -4,6 +4,10 @@ import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
@@ -51,6 +55,10 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
+        Color backGroundColor = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackGroundColor();
+        System.out.println(backGroundColor);
+        turtleWindow.setColor(backGroundColor);
+        turtleWindow.setBackground(new Background(new BackgroundFill(backGroundColor, CornerRadii.EMPTY, Insets.EMPTY)));
 
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
@@ -170,7 +178,9 @@ public class Controller {
                 turtleView.setTurtleRotation(turtleModel.getAngle());
                 turtleView.setVisible(turtleModel.getShowing());
             }
+            turtleView.changeToolTip(turtleView.getViewId(), turtleModel.getX(),turtleModel.getY(),turtleModel.getAngle());
         }
+
 
     }
 

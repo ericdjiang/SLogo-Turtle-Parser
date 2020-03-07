@@ -1,16 +1,10 @@
 package execution;
 
 import java.util.List;
-import java.util.Map;
 
-import model.ConsoleModel;
-import model.TurtleModel;
-import model.VariableModel;
-import model.MethodModel;
+import model.*;
 
 public interface Command {
-    double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels);
-
-
+    double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels);
     int getNumParams();
 }

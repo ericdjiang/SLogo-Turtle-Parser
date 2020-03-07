@@ -2,29 +2,34 @@ package execution.all_commands;
 
 import execution.Command;
 import java.util.List;
-import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 public class Backward implements Command {
+    private static final int FIRST = 0;
+    private static final int HALFCIRCLE = 180;
     @Override
-
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-        double distance = Double.parseDouble(parameters.get(0));
-        double oppositeangle = turtleModel.getAngle() + 180;
-        double radians = oppositeangle * (Math.PI/180);
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        double distance = Double.parseDouble(parameters.get(FIRST));
+        double oppositeangle = turtleModel.getAngle() + HALFCIRCLE;
+        double radians = Math.toRadians(oppositeangle);
         double yChange = distance * Math.cos(radians);
         double xChange = distance * Math.sin(radians);
-        System.out.println(xChange);
-        System.out.println(yChange);
+        if (! turtleModel.checkBounds(xChange, yChange)) {
+            turtleModel.makePenUp();
+            turtleModel.hideTurtle();
+            turtleModel.disableShowAndPen(true);
+        }
+        else {
+            turtleModel.disableShowAndPen(false);
+        }
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
         consoleModel.setReturnVal(distance);
         return distance;
     }
+
 
     @Override
     public int getNumParams() {

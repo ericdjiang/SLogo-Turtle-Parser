@@ -4,17 +4,15 @@ import execution.Command;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 import parsing.Parser;
 
 public class For implements Command {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+  public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
+    VariableModel variableModel = allModels.getVariableModel();
+    ConsoleModel consoleModel = allModels.getConsoleModel();
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
 
@@ -38,8 +36,9 @@ public class For implements Command {
     double lastReturnValue = 0;
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
-        variableModel.updateVariable(varName, i);
-        Parser parser = new Parser(loopBody, language, turtleModel, variableModel, consoleModel, methodModels);
+
+        variableModel.updateVariable(varName, i,false);
+        Parser parser = new Parser(loopBody, language, allModels);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {
         System.out.println("Error in dotimes");

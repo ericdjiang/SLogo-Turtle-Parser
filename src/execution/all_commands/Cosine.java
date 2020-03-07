@@ -1,21 +1,27 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map;
 
 public class Cosine implements Command {
+    private static final int FIRST = 0;
+    private static final int HALFCIRCLE = 180;
 
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-        double angle = Double.parseDouble(parameters.get(0));
-        consoleModel.setReturnVal(Math.cos((angle*Math.PI)/180));
-        return Math.cos((angle*Math.PI)/180);
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        double angle = Double.parseDouble(parameters.get(FIRST));
+        double cosine = Math.cos(Math.toRadians(angle));
+
+        BigDecimal bd = new BigDecimal(Double.toString(cosine));
+        bd = bd.setScale(4, RoundingMode.HALF_UP);
+        cosine = bd.doubleValue();
+        consoleModel.setReturnVal(cosine);
+        return cosine;
     }
 
     @Override

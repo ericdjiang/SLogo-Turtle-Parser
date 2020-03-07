@@ -1,21 +1,20 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class NaturalLog implements Command {
+    private static final int FIRST = 0;
+
 
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-        System.out.println("Natural Log of" + parameters.get(0));
-        consoleModel.setReturnVal(Math.log(Double.parseDouble(parameters.get(0))));
-        return Math.log(Double.parseDouble(parameters.get(0)));
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        double naturalLog = Math.log(Double.parseDouble(parameters.get(FIRST)));
+        consoleModel.setReturnVal(naturalLog);
+        return naturalLog;
     }
 
     @Override

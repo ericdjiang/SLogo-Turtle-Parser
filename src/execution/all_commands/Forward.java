@@ -2,25 +2,33 @@ package execution.all_commands;
 
 import execution.Command;
 import java.util.List;
-import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 public class Forward implements Command {
+    private static final int FIRST = 0;
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        System.out.println("inside forward" + parameters.get(0));
         double radians = Math.toRadians(turtleModel.getAngle());
-        System.out.println("Forward: "+ parameters.get(0));
-
-        double xChange = Double.parseDouble(parameters.get(0)) * Math.sin(radians);
-        double yChange =  Double.parseDouble(parameters.get(0)) * Math.cos(radians);
+        double distance = Double.parseDouble(parameters.get(FIRST));
+        double xChange = Double.parseDouble(parameters.get(FIRST)) * Math.sin(radians);
+        double yChange =  Double.parseDouble(parameters.get(FIRST)) * Math.cos(radians);
+        if (! turtleModel.checkBounds(xChange, yChange)) {
+            turtleModel.makePenUp();
+            turtleModel.hideTurtle();
+            turtleModel.disableShowAndPen(true);
+        }
+        else {
+            turtleModel.disableShowAndPen(false);
+        }
         turtleModel.setX(turtleModel.getX() + xChange);
         turtleModel.setY(turtleModel.getY() + yChange);
-        consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
-        return Double.parseDouble(parameters.get(0));
+
+        System.out.println("turtle number " + turtleModel.getModelId() + " forward: " + distance);
+        consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
+        return distance;
     }
 
     @Override
@@ -28,15 +36,4 @@ public class Forward implements Command {
         return 1;
     }
 
-    public static boolean isNumeric(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
-        try {
-            double d = Double.parseDouble(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-        return true;
-    }
 }

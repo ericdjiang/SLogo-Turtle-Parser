@@ -1,31 +1,59 @@
 package model;
 
+
+import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SplittableRandom;
 
 public class TurtleModel {
+  private int myId;
   private double myX;
   private double myY;
   private double myAngle;
+  private double penSize;
   private boolean isShowing;
   private boolean penDown;
   private double myZeroX;
   private double myZeroY;
   private boolean isCleared;
-  private List myPoints;
+  private List<Double> myPoints;
+  private boolean disabled;
+  private List<Double> backgroundColor;
+  private List<Double> penColor;
+  private boolean isColorChanged;
+  private boolean isActive;
 
 
-  public TurtleModel (double myX, double myY, double myAngle) {
+  public TurtleModel (int id, double myX, double myY, double myAngle) {
+    this.myId = id;
     this.myX = myX;
     this.myY = myY;
     this.myZeroX = myX;
     this.myZeroY = myY;
     this.myAngle = myAngle;
     this.myPoints = new ArrayList();
-    myPoints.add(myX);
-    myPoints.add(myY);
-    isShowing = true;
-    penDown = true;
+    this.myPoints.add(myX);
+    this.myPoints.add(myY);
+    this.isShowing = true;
+    this.penDown = true;
+    isColorChanged = false;
+    this.backgroundColor = new ArrayList<>();
+    this.penSize = 1;
+    isActive = true;
+  }
+
+  public void setColorChanged(boolean changed){
+    isColorChanged = changed;
+  }
+
+  public void setBackgroundColor(List<Double> rgbVals){
+    backgroundColor = rgbVals;
+  }
+
+  public void setPenColor(List<Double> rgbVals){
+    penColor = rgbVals;
   }
 
   public void setX(double x){
@@ -40,7 +68,7 @@ public class TurtleModel {
   private void addPoints(double p) {
     myPoints.add(p);
   }
-  public List getPointList() {
+  public List<Double> getPointList() {
     return this.myPoints;
   }
   public void clearList() {
@@ -72,7 +100,9 @@ public class TurtleModel {
   public boolean getPenStatus() {return this.penDown;}
 
   public void makePenDown(){
-    penDown = true;
+    if (! disabled) {
+      penDown = true;
+    }
   }
   public void makePenUp(){
     penDown = false;
@@ -81,10 +111,15 @@ public class TurtleModel {
     isShowing = false;
   }
   public void showTurtle(){
-    isShowing = true;
+    if (! disabled) {
+      isShowing = true;
+    }
   }
   public void setCleared(boolean b){
     isCleared = b;
+  }
+  public void setPenSize(double size){
+    penSize = size;
   }
   public boolean getClearedStatus() {
     return this.isCleared;
@@ -93,5 +128,43 @@ public class TurtleModel {
     myPoints.clear();
     myPoints.add(myX);
     myPoints.add(myY);
+  }
+  public int getModelId(){
+    return myId;
+  }
+
+  public List<Double> getPenColor(){
+    return penColor;
+  }
+  public List<Double> getBackgroundColor(){
+    return backgroundColor;
+  }
+
+  public boolean getIsColorChanged(){
+    return isColorChanged;
+  }
+
+  public double getPenSize(){return penSize;}
+
+  public boolean checkBounds(double deltaX, double deltaY) {
+    return this.getX() + deltaX < 230 && this.getX() + deltaX > -270 && this.getY() + deltaY < 240 && this.getY() + deltaY > -180;
+  }
+  public boolean checkAbsoluteBounds(double xPos, double yPos) {
+    return xPos < 230 && xPos > -270 && yPos < 240 && yPos > -180;
+  }
+  public void disableShowAndPen(boolean b) {
+    this.disabled = b;
+  }
+  public boolean getDisabledStatus() {
+    return this.disabled;
+  }
+  public boolean getIsActive(){
+    return isActive;
+  }
+  public void setActive(){
+    isActive = true;
+  }
+  public void setInActive(){
+    isActive = false;
   }
 }

@@ -1,28 +1,29 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class ClearScreen implements Command {
+    private final static int CENTER = 0;
+    private final static int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
         double originalX = turtleModel.getX();
         double originalY = turtleModel.getY();
-        double distance = Math.sqrt(Math.pow(originalX,2) + Math.pow(originalY,2));
-        turtleModel.setX(0);
-        turtleModel.setY(0);
-        turtleModel.setAngle(0);
+        double distance = Math.sqrt(Math.pow(originalX,SQUARED) + Math.pow(originalY,SQUARED));
+        turtleModel.setX(CENTER);
+        turtleModel.setY(CENTER);
+        turtleModel.setAngle(CENTER);
         turtleModel.setCleared(true);
+        turtleModel.disableShowAndPen(false);
         turtleModel.reInitCenter();
         consoleModel.setReturnVal(distance);
         return distance;
     }
+
 
     @Override
     public int getNumParams() {

@@ -1,20 +1,20 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class Quotient implements Command {
+    private static final int FIRST = 0;
+    private static final int SECOND = 1;
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
         System.out.println("Quotient of " + parameters.get(0) + "and " + parameters.get(1));
-        consoleModel.setReturnVal(Double.parseDouble(parameters.get(0))/Double.parseDouble(parameters.get(1)));
-        return Double.parseDouble(parameters.get(0))/Double.parseDouble(parameters.get(1));
+        double quotient = Double.parseDouble(parameters.get(FIRST))/Double.parseDouble(parameters.get(SECOND));
+        consoleModel.setReturnVal(quotient);
+        return quotient;
     }
 
     @Override

@@ -1,22 +1,20 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class Home implements Command {
+    private static final int CENTER = 0;
+    private static final int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels){
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels){
+        ConsoleModel consoleModel = allModels.getConsoleModel();
         double originalX = turtleModel.getX();
         double originalY = turtleModel.getY();
-        turtleModel.setXY(0,0);
-        double distance = Math.sqrt(Math.pow(originalX,2) + Math.pow( originalY,2));
-        System.out.println(distance);
+        turtleModel.setXY(CENTER,CENTER);
+        double distance = Math.sqrt(Math.pow(originalX,SQUARED) + Math.pow( originalY,SQUARED));
         consoleModel.setReturnVal(distance);
         return distance;
     }

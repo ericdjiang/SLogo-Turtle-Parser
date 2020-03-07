@@ -7,27 +7,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
-import parsing.Parser;
+import model.*;
 
 public class MakeUserInstruction extends LoopCommand implements Command {
   @Override
-  public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
+  public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
+    Map<String, MethodModel> methodModels = allModels.getMethodModels();
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     // to varname [ :var1 :var2 ] [ command1 command2 ]
     String language = symbolList.get(0);
 
     String methodName = symbolList.get(1);
-
+    System.out.println("here");
     String [] loopBodies = getLoopBodies(symbolList);
+    for (String b: loopBodies){
+      System.out.println(b);
+    }
 
     MethodModel myMethodModel = new MethodModel(loopBodies[0], loopBodies[1]);
 
     methodModels.put(methodName, myMethodModel);
+    myMethodModel.addMethodName(methodName);
 
     System.out.println("DONE MAKING METHOD BODY FOR METHOD NAME: " + methodName);
 //    System.out.println(language);

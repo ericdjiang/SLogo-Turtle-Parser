@@ -7,6 +7,14 @@
 .color-picker {
   -fx-pref-height: 32.5;
 }
+.vbox {
+  -fx-border-color: #000;
+  -fx-font-size: 10pt;
+}
+.turtlewindow {
+  -fx-border-color: #000;
+  -fx-background-color: #add8e6;
+}
 .combo-box {
   -fx-pref-height: 32.5;
   -fx-pref-width: 180;
@@ -17,6 +25,7 @@
   -fx-pref-width: 410;
   -fx-font-family: "Comic Sans MS";
 }
+
 .scroll-pane {
   -fx-pref-width: 512;
   -fx-pref-height: 980;
@@ -29,8 +38,8 @@
   -fx-background-color: #eef;
   -fx-border-radius: 20;
   -fx-background-radius: 20;
-  -fx-padding: 20;
-  -fx-pref-width: 100;
+  -fx-padding: 10;
+  -fx-pref-width: 150;
   -fx-border-color: #000
 }
 .turtleswitch {
@@ -42,6 +51,15 @@
   -fx-border-radius: 7;
   -fx-background-radius: 7;
   -fx-padding: 7;
+}
+.tabtext {
+  -fx-font-family: 'DejaVu Sans Mono', monospace;
+  -fx-font-size: 9;
+  -fx-stroke: #0000ff;
+}
+.tabbox {
+  -fx-spacing: 30;
+  -fx-font-size: 8pt;
 }
 .colorbutton {
   -fx-pref-height: 32.5;

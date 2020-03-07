@@ -1,23 +1,32 @@
 package execution.all_commands;
 
 import execution.Command;
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
-import model.VariableModel;
+import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class SetPosition implements Command {
+    private static final int FIRST = 0;
+    private static final int SECOND = 1;
+    private static final int SQUARED = 2;
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-        double orginalX = turtleModel.getX();
-        double orginalY = turtleModel.getY();
-        double newX = Double.parseDouble(parameters.get(0));
-        double newY = Double.parseDouble(parameters.get(1));
-        turtleModel.setXY(newX, newY);
-        double distanceTraveled = Math.sqrt(Math.pow(newX - orginalX,2) + Math.pow(newY - orginalY,2));
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+            ConsoleModel consoleModel = allModels.getConsoleModel();
+            double orginalX = turtleModel.getX();
+            double orginalY = turtleModel.getY();
+            double newX = Double.parseDouble(parameters.get(FIRST));
+            double newY = Double.parseDouble(parameters.get(SECOND));
+            if (! turtleModel.checkAbsoluteBounds(newX, newY)) {
+                turtleModel.makePenUp();
+                turtleModel.hideTurtle();
+                turtleModel.disableShowAndPen(true);
+        }
+            else {
+            turtleModel.disableShowAndPen(false);
+        }
+            turtleModel.setXY(newX, newY);
+            double distanceTraveled = Math.sqrt(Math.pow(newX - orginalX,SQUARED) + Math.pow(newY - orginalY,SQUARED));
+
         consoleModel.setReturnVal(distanceTraveled);
         return distanceTraveled;
     }

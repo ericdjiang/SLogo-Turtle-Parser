@@ -2,24 +2,19 @@ package execution.all_commands;
 
 import execution.Command;
 
-import model.ConsoleModel;
-import model.MethodModel;
-import model.TurtleModel;
+import model.*;
 
 import java.util.List;
-import java.util.Map;
-
-import model.VariableModel;
 
 public class SetHeading implements Command {
+    private static final int FIRST = 0;
 
     @Override
-    public double execute(List<String> parameters, TurtleModel turtleModel, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels) {
-
-        System.out.println("turns turtle to an absolute heading by " +parameters.get(0) + " degrees");
-        turtleModel.setAngle(Double.parseDouble(parameters.get(0)));
-        consoleModel.setReturnVal(Double.parseDouble(parameters.get(0)));
-        return Double.parseDouble(parameters.get(0));
+    public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        turtleModel.setAngle(Double.parseDouble(parameters.get(FIRST)));
+        consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
+        return Double.parseDouble(parameters.get(FIRST));
     }
 
     @Override

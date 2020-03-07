@@ -8,10 +8,8 @@ import java.util.List;
 public class Turtles implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
-        double num = allModels.getTurtleModelContainer().getTurtleModels().size();
         ConsoleModel consoleModel = allModels.getConsoleModel();
-        consoleModel.setReturnVal(num);
-        return num;
+        return allModels.getTurtleModelContainer().getTurtleModels().size();
     }
 
     @Override

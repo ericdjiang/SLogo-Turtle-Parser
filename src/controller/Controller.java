@@ -245,7 +245,7 @@ public class Controller {
     }
     public void updateLibraryView() {
         for (String k :  methodModels.keySet()) {
-            libraryView.addMethod(methodModels.get(k).getMethodName(), methodModels.get(k).getVariableNames(), methodModels.get(k).getMethodBody());
+            libraryView.addMethod(methodModels.get(k).getMethodName(), methodModels.get(k).getVariablesFE(), methodModels.get(k).getMethodBody());
         }
     }
     public void updateInputHistory(String commands){

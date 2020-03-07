@@ -8,15 +8,19 @@ public class MethodModel {
   private String methodBody;
   private List<String> variableNames;
   private List<String> methodNames;
+  private List<String> variables;
 
   public MethodModel (String variableString , String methodBody) {
-    //if (!variableString.matches("a-zA-Z")) this.variableNames = new ArrayList<>();
-    this.variableNames = Arrays.asList(variableString.split("[ ]+"));
-    System.out.println("in method model");
+      variables = Arrays.asList(variableString.split("[ ]+"));
+  if (variableString.strip().length() == 0) this.variableNames = new ArrayList<>();
+  else this.variableNames = Arrays.asList(variableString.split("[ ]+"));
+      System.out.println("in method model");
     for (String s : variableNames){
       System.out.println(s);
     }
     System.out.println("nothing else");
+
+
     this.methodBody = methodBody;
     this.methodNames = new ArrayList<>();
   }
@@ -40,5 +44,8 @@ public class MethodModel {
   public String getMethodName() { return methodNames.get(methodNames.size()-1);
   }
   public void addMethodName(String name) { methodNames.add(name);
+  }
+  public List<String> getVariablesFE(){
+      return variables;
   }
 }

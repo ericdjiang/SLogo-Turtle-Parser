@@ -36,7 +36,8 @@ public class For implements Command {
     double lastReturnValue = 0;
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
-        variableModel.updateVariable(varName, i);
+
+        variableModel.updateVariable(varName, i,false);
         Parser parser = new Parser(loopBody, language, allModels);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {

@@ -38,7 +38,7 @@ public class DoTimes extends LoopCommand implements Command{
 
     for (int i = 0; i < loopLimit; i++) {
       try{
-        variableModel.updateVariable(varName, i);
+        variableModel.updateVariable(varName, i,false);
         Parser parser = new Parser(loopBody, language, allModels);
 
         lastReturnValue = parser.getLastReturnValue();

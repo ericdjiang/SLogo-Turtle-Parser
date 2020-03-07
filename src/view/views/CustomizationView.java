@@ -30,7 +30,7 @@ public class CustomizationView extends ScrollPane {
 
     private double penOffsetVal;
     private double penThicknessVal;
-    
+
     private boolean penThicknessChanged;
 
     private VBox content;

@@ -1,6 +1,9 @@
 package view.views;
 
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -18,17 +21,35 @@ public class LibraryView extends InformationView {
 
     }
     public void addMethod(String name, List<String> variables, String body) {
-        Text methodName = new Text(name);
         Text methodBody = new Text(body);
-        methodName.setWrappingWidth(SPACING);
         methodBody.setWrappingWidth(SPACING);
+
+        String v = "";
+        for(String d : variables){
+            v += " " + d;
+        }
+        v = " [ " + v + " ]";
+        body = " [ " + body + " ]";
+        System.out.println("VARIABLES");
+        System.out.println(v);
+        System.out.println("in library");
+        Text methodName = new Text(name + v);
+        methodName.setWrappingWidth(250);
+        methodBody.setWrappingWidth(250);
+
         VBox names = new VBox();
         VBox bodies = new VBox();
         names.getStyleClass().add(STYLE);
         bodies.getStyleClass().add(STYLE);
         names.getChildren().add(methodName);
         bodies.getChildren().add(methodBody);
-        HBox entry = new HBox();
+        HBox entry = new Library(  "to "+name + " " +v + body);
+        entry.setOnDragDetected(e-> {
+            Dragboard db = entry.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(((Library)entry).getText());
+            db.setContent(content);
+        });
         entry.getChildren().add(names);
         entry.getChildren().add(bodies);
         entry.getStyleClass().add(STYLE);

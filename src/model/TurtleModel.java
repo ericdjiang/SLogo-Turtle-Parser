@@ -23,6 +23,7 @@ public class TurtleModel {
   private List<Double> backgroundColor;
   private List<Double> penColor;
   private boolean isColorChanged;
+  private boolean isActive;
 
 
   public TurtleModel (int id, double myX, double myY, double myAngle) {
@@ -40,6 +41,7 @@ public class TurtleModel {
     isColorChanged = false;
     this.backgroundColor = new ArrayList<>();
     this.penSize = 1;
+    isActive = true;
   }
 
   public void setColorChanged(boolean changed){
@@ -155,5 +157,14 @@ public class TurtleModel {
   }
   public boolean getDisabledStatus() {
     return this.disabled;
+  }
+  public boolean getIsActive(){
+    return isActive;
+  }
+  public void setActive(){
+    isActive = true;
+  }
+  public void setInActive(){
+    isActive = false;
   }
 }

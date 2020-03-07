@@ -18,8 +18,10 @@ public class TurtleView extends Rectangle {
     private int myId;
     private Tooltip myInfo;
     private String myInfoText;
+    private boolean active;
     public TurtleView(int id) {
-        myInfoText = "Id: " + id + " X: " + 0 + " Y: " + 0 + " Heading: " + 0;
+        active = true;
+        myInfoText = "Id: " + id + " X: " + 0 + " Y: " + 0 + " Heading: " + 0 + "Active:" + active;
         this.image = new Image("file:" + IMAGE_RESOURCE_PATH + DEFAULT_IMAGE);
         this.myId = id;
         this.myInfo = new Tooltip(myInfoText);
@@ -55,7 +57,16 @@ public class TurtleView extends Rectangle {
         return (fileName.contains(".png") || fileName.contains(".jpg"));
     }
     public void changeToolTip(int id, double xcor, double ycor, double heading){
-        myInfoText = "Id: " + id + " X: " + xcor + " Y: " + ycor + " Heading: " + heading;
+        myInfoText = "Id: " + id + " X: " + xcor + " Y: " + ycor + " Heading: " + heading + " Active: " + active;
         myInfo.setText(myInfoText);
+    }
+    public void makeActive(){
+        active = true;
+    }
+    public void makeInactive(){
+        active = false;
+    }
+    public void changeActive(boolean b){
+        active = b;
     }
 }

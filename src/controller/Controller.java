@@ -1,24 +1,12 @@
 package controller;
 
-import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.geometry.Insets;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.*;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 import javafx.util.Duration;
-import javafx.scene.Node;
 import model.*;
 import parsing.Parser;
-import view.util.ControlPanel;
 import view.util.Pen;
 import view.views.*;
 import view.layout.TurtleWindow;
@@ -75,6 +63,15 @@ public class Controller {
     public void update() {
 
         if (variableView.isChangedVariables()) {
+            List<Variable> viewVariables = variableView.getVariables();
+            for(int i = 0; i < viewVariables.size(); i++){
+                Variable variable = viewVariables.get(i);
+                variableModel.updateVariable(":"+variable.getName(),variable.getVal(),true);
+                System.out.println(variable.getName());
+                System.out.println(variableModel.getVariables().get(0).getName());
+                System.out.println(variable.getVal());
+            }
+            variableView.setChangedVariablesFalse();
         }
 
         if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
@@ -103,6 +100,7 @@ public class Controller {
                 newTurtleView.setY( turtleWindow.getViewHeight()/2 - newTurtleView.getHeight()/2);
             }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
+            turtleView.changeActive(turtleModel.getIsActive());
 
             if(customization.getPenChanged()){
                 turtleModel.setPenSize(customization.getPenStrokeWidth());
@@ -178,14 +176,14 @@ public class Controller {
     }
     public void updateVariableView() {
         if (variableModel.newVarAdded()) {
-            variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
+            variableView.addVariable(variableModel.getVariables());
             variableModel.clearVarInfo();
         }
         variableModel.varReceived();
     }
     public void updateLibraryView() {
         for (String k :  methodModels.keySet()) {
-            libraryView.addMethod(methodModels.get(k).getMethodName(), methodModels.get(k).getVariableNames(), methodModels.get(k).getMethodBody());
+            libraryView.addMethod(methodModels.get(k).getMethodName(), methodModels.get(k).getVariablesFE(), methodModels.get(k).getMethodBody());
         }
     }
     public void updateInputHistory(String commands){

@@ -14,7 +14,9 @@ public class SetHeading implements Command {
         ConsoleModel consoleModel = allModels.getConsoleModel();
         turtleModel.setAngle(Double.parseDouble(parameters.get(FIRST)));
         consoleModel.setReturnVal(Double.parseDouble(parameters.get(FIRST)));
-        return Double.parseDouble(parameters.get(FIRST));
+        double returnVal = Double.parseDouble(parameters.get(FIRST));
+        consoleModel.setReturnVal(returnVal);
+        return returnVal;
     }
 
     @Override

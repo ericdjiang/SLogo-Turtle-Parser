@@ -8,7 +8,10 @@ import java.util.List;
 public class YCoordinate implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
-        return turtleModel.getY();
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        double y = turtleModel.getY();
+        consoleModel.setReturnVal(y);
+        return y;
     }
 
     @Override

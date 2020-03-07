@@ -23,29 +23,33 @@ public class Parser {
     private ResourceBundle resourceBundle;
 
     private String myLanguage;
-    private VariableModel myVariableModel;
-    private ConsoleModel myConsoleModel;
+    //private ConsoleModel myConsoleModel;
     private Double lastReturnValue;
 
-    private Map<String, MethodModel> myMethodModels;
     private int currentIndex;
     private String poppedCommand;
 
+    //private TurtleModelContainer turtleModelContainer;
 
-    private TurtleModelContainer turtleModelContainer;
+    private ModelContainer allModels;
+    private VariableModel myVariableModel;
+    private Map<String, MethodModel> myMethodModels;
+
+
+
 
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
-    private static final List<String> MTCOMMANDS = new ArrayList<>(){{
-        add("repeat");
-        add("dotimes");
-        add("if");
-        add("ifelse");
-        add("to");
-        add("tell");
-        add("turtles");
-        add("ask");
-    }};
+//    private static final List<String> MTCOMMANDS = new ArrayList<>(){{
+//        add("repeat");
+//        add("dotimes");
+//        add("if");
+//        add("ifelse");
+//        add("to");
+//        add("tell");
+//        add("turtles");
+//        add("ask");
+//    }};
 
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
         put("repeat", 1);
@@ -60,19 +64,17 @@ public class Parser {
     }};
 
 
-    public Parser(String commands, String language,
-                  VariableModel myVariableModel, ConsoleModel myConsoleModel,
-                  Map<String, MethodModel> myMethodModels, TurtleModelContainer turtlemodelcontainer) {
-        this.myVariableModel = myVariableModel;
-        this.myConsoleModel = myConsoleModel;
+    public Parser(String commands, String language, ModelContainer allModels) {
+
+        this.allModels = allModels;
+        this.myVariableModel = allModels.getVariableModel();
+        this.myMethodModels = allModels.getMethodModels();
         this.myLanguage = language;
-        this.myMethodModels = myMethodModels;
         resourceBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);
         addPatterns(language);
-        turtleModelContainer = turtlemodelcontainer;
         this.currentIndex = 0;
         this.poppedCommand = "";
-        splitAndParseText(commands,turtlemodelcontainer);
+        splitAndParseText(commands,allModels.getTurtleModelContainer());
     }
 
     private boolean validateMessage() {
@@ -96,7 +98,7 @@ public class Parser {
                 } catch( Exception e){
 //            System.out.println("error");
                     String message = resourceBundle.getString(ERROR_STRING);
-                    myConsoleModel.setErrorMessage(message);
+                    allModels.setConsoleErrorMessage(message);
                     e.printStackTrace();
                 }
 
@@ -161,29 +163,7 @@ public class Parser {
         poppedCommand = cmdStack.pop();
         List<String> params = new ArrayList<>();
         Double returnValue = 0.0;
-        if(MTCOMMANDS.contains(poppedCommand)){
-            MultipleTurtlesCommand cmdToExecute = mtFactory.getCommand(getSymbol(poppedCommand));
-
-            while (cmdToExecute.getNumParams() > params.size()) {
-                String popped = argStack.pop();
-
-                // check if the argument is a variable, and convert it to double if the command is not "MAKE"
-                if (!cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)
-                        && popped.matches(":[a-zA-Z_]+")) {
-                    popped = Double.toString(myVariableModel.getValue(popped));
-                }
-
-                params.add(popped);
-            }
-
-            Collections.reverse(params);
-
-            // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
-            returnValue = cmdToExecute
-                    .execute(params, myVariableModel, myConsoleModel,
-                            myMethodModels,turtleModelContainer, currentTurtle );
-        }
-        else{
+//
             Command cmdToExecute = factory.getCommand(getSymbol(poppedCommand));
 
             while (cmdToExecute.getNumParams() > params.size()) {
@@ -202,10 +182,8 @@ public class Parser {
 
             // EXECUTE THE COMMAND AND STORE THE RETURN VALUE IN INSTANCE VARIABLE AND ON ARGUMENT STACK
             returnValue = cmdToExecute
-                    .execute(params, myVariableModel, myConsoleModel,
-                            myMethodModels, currentTurtle );
+                    .execute(params, currentTurtle, allModels);
 
-        }
         this.lastReturnValue = returnValue;
         if (!cmdStack.isEmpty()) {
             argStack.push(returnValue.toString());
@@ -247,11 +225,10 @@ public class Parser {
                 value = Double.toString(myVariableModel.getValue(value));
             }
             varNameAndValue.add(value);
-            factory.getCommand(getSymbol("make")).execute(varNameAndValue, myVariableModel, myConsoleModel,
-                    myMethodModels, currentTurtle);
+            factory.getCommand(getSymbol("make")).execute(varNameAndValue, currentTurtle, allModels);
         }
 
-        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, myVariableModel, myConsoleModel, myMethodModels,turtleModelContainer );
+        Parser parser = new Parser(myMethodModel.getMethodBody(), myLanguage, allModels );
         lastReturnValue = parser.getLastReturnValue();
     }
 
@@ -307,17 +284,17 @@ public class Parser {
     private int getNumParams(int index, Stack<String> commandStack)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String command = commandStack.get(index);
-        if(MTCOMMANDS.contains(command)){
-            return mtFactory.getCommand(getSymbol(command)).getNumParams();
-        }
+//        if(MTCOMMANDS.contains(command)){
+//            return mtFactory.getCommand(getSymbol(command)).getNumParams();
+//        }
         return factory.getCommand(getSymbol(command)).getNumParams();
     }
 
     private int getNumParams(String symbol)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException
     {
-//            System.out.println("Getting factory for symbol: "+ symbol);
-        if(MTCOMMANDS.contains(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
+//        System.out.println("Getting factory for symbol: "+ symbol);
+//        if(MTCOMMANDS.contains(symbol)) return mtFactory.getCommand(getSymbol(symbol)).getNumParams();
         return factory.getCommand(getSymbol(symbol)).getNumParams();
     }
 

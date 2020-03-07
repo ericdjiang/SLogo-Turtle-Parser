@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PaletteModel {
-    private List<String> myColors;
+    private List<String> myColors = new ArrayList<>();
 
     public PaletteModel () {
         String[] vals = new String[] {"000000000", "255255255", "255000000","000255000", "000000255", "252144003", "252240003", "036133081",
@@ -26,8 +26,7 @@ public class PaletteModel {
     public List<Double> getColor(double index){
         int indexInt = (int) index;
         String colorString = myColors.get(indexInt);
-        List<Double> color = parseColor(colorString);
-        return color;
+        return parseColor(colorString);
     }
 
     public double getIndex(List<Double> rgbVals){

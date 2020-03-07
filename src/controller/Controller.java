@@ -33,6 +33,7 @@ public class Controller {
     private VariableView variableView;
     private CommandHistoryView historyView;
 
+    private PaletteModel paletteModel;
     private ConsoleModel consoleModel;
     private VariableModel variableModel;
     private Map<String, MethodModel> methodModels;
@@ -43,6 +44,8 @@ public class Controller {
     private double oldx;
     private double oldy;
 
+    private ModelContainer allModels;
+
     public Controller(TurtleWindow turtleWindow, CustomizationView dynamicStats, CommandHistoryView historyView, VariableView variableView) {
         this.turtleWindow = turtleWindow;
         this.turtleContainer = new TurtleContainer(turtleWindow);
@@ -50,6 +53,7 @@ public class Controller {
         turtleContainer.getTurtleModelContainer().makeTurtleActive(1);
         this.consoleModel = new ConsoleModel();
         this.variableModel = new VariableModel();
+        this.paletteModel = new PaletteModel();
         this.variableView = variableView;
         this.customization = dynamicStats;
         this.methodModels = new HashMap<>();
@@ -193,6 +197,7 @@ public class Controller {
     public void setPenColor(Paint color) {
         pen.setColor(color);
     }
+
     public void updateVariableView() {
         if (variableModel.newVarAdded()) {
             variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
@@ -212,7 +217,8 @@ public class Controller {
         consoleModel.setErrorMessage(null);
     }
     public void createParser(String commands) {
-        parser = new Parser(commands, "English", variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer());
+        allModels = new ModelContainer(variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer(), paletteModel);
+        parser = new Parser(commands, "English", allModels);
     }
 }
 

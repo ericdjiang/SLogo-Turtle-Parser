@@ -10,9 +10,11 @@ import execution.MultipleTurtlesCommand;
 import model.*;
 import parsing.Parser;
 
-public class For implements MultipleTurtlesCommand {
+public class For implements Command {
   @Override
-  public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+  public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
+    VariableModel variableModel = allModels.getVariableModel();
+    ConsoleModel consoleModel = allModels.getConsoleModel();
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
 
@@ -37,7 +39,7 @@ public class For implements MultipleTurtlesCommand {
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
         variableModel.updateVariable(varName, i);
-        Parser parser = new Parser(loopBody, language, variableModel, consoleModel, methodModels,turtleModelContainer);
+        Parser parser = new Parser(loopBody, language, allModels);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {
         System.out.println("Error in dotimes");

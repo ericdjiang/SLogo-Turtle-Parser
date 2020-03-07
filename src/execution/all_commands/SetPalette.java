@@ -4,7 +4,6 @@ import execution.Command;
 import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public class SetPalette implements Command {
     private static final int FIRST = 0;
@@ -13,12 +12,13 @@ public class SetPalette implements Command {
     private static final int FOURTH = 3;
 
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModel TurtleModel) {
+    public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels) {
+        PaletteModel paletteModel = allModels.getPaletteModel();
         double index =  Double.parseDouble(parameters.get(FIRST));
         double r = Double.parseDouble(parameters.get(SECOND));
         double g =  Double.parseDouble(parameters.get(THIRD));
         double b = Double.parseDouble(parameters.get(FOURTH));
-        PaletteModel.addColor(index, r, g, b);
+        paletteModel.addColor(index, r, g, b);
         return index;
     }
 

@@ -12,26 +12,31 @@ public class ModelContainer {
     private TurtleContainer turtleContainer;
 
     public ModelContainer(VariableModel myVariableModel, ConsoleModel myConsoleModel, Map<String, MethodModel> myMethodModels,
-        TurtleModelContainer myTurtleModelContainer, TurtleContainer myTurtleContainer, PaletteModel myPaletteModel){
+        TurtleModelContainer myTurtleModelContainer, PaletteModel myPaletteModel){
         this.consoleModel = myConsoleModel;
         this.methodModels = myMethodModels;
         this.variableModel = myVariableModel;
         this.paletteModel = myPaletteModel;
         this.turtleModelContainer = myTurtleModelContainer;
-        this.turtleContainer = myTurtleContainer;
+    }
+    public VariableModel getVariableModel(){
+        return variableModel;
     }
 
     public ConsoleModel getConsoleModel(){
         return consoleModel;
     }
 
-    public VariableModel getVariableModel(){
-        return variableModel;
-    }
+    public Map<String, MethodModel> getMethodModels() {return methodModels;}
+
+    public TurtleModelContainer getTurtleModelContainer(){return turtleModelContainer;}
 
     public PaletteModel getPaletteModel(){
         return paletteModel;
     }
 
+    public void setConsoleErrorMessage(String message){
+        consoleModel.setErrorMessage(message);
+    }
 
 }

@@ -54,7 +54,7 @@ public class Parser {
 
     private static final Map<String, Integer> LOOP_MAPPINGS = new HashMap<String, Integer>() {{
         put("Repeat", 1);
-        put("Dotimes", 2);
+        put("DoTimes", 2);
         put("For", 2);
         put("If", 1);
         put("IfElse", 2);
@@ -135,7 +135,7 @@ public class Parser {
                 // if the command is a loop command, find the index of the closing loop bracket and store it in loopEndIndex so that the program can skip all symbols until we reach this index
                 loopEndIndex = pushToStack(symbolList, cmdStack, argStack, loopEndIndex, cursor, symbol, currentTurtle);
 
-//                printDebugging(cmdStack,argStack,cursor);
+                printDebugging(cmdStack,argStack,cursor);
 
 
                 // pop commands and args off the stack and handle them
@@ -334,6 +334,9 @@ public class Parser {
 
         List<String> argsWithLanguage = new ArrayList<>(
             symbolList.subList(cursor + 1, loopEndIndex));
+        System.out.println("ldaskjfasiodfjasiodjf");
+        System.out.println(cursor);
+        System.out.println(loopEndIndex);
         argsWithLanguage.add(0, myLanguage);
         argStack.push(String.join(" ", argsWithLanguage));
         return loopEndIndex;
@@ -407,12 +410,10 @@ public class Parser {
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         //                printDebugging(cmdStack, argStack, cursor);
 
-        System.out.println();
+        System.out.println("Printing Debugging");
 
         System.out.println(cursor);
         System.out.println(cmdStack);
         System.out.println(argStack);
-
-        System.out.println(getNumParams(cmdStack.peek()));
     }
 }

@@ -150,28 +150,26 @@ public class Parser {
                               Stack<String> argStack)
             throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        while (cmdAndArgsExist(cmdStack, argStack)) {
+        while (groupCmd==null && cmdAndArgsExist(cmdStack, argStack)) {
             if(myMethodModels.containsKey(cmdStack.peek())){ // if the popped command is a user generated method
                 parseUserMethod(currentTurtle, cmdStack, argStack);
             } else if (checkInsufficientParameters(cmdStack, argStack)) {
                 break;
             } else { // if the popped command is a default method
-                parseDefaultMethod(currentTurtle, cmdStack, argStack);
+                parseDefaultMethod(currentTurtle, cmdStack, argStack, cmdStack.pop());
             }
         }
     }
 
     private void parseDefaultMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
-                                    Stack<String> argStack)
+                                    Stack<String> argStack, String poppedCommand)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (groupCmd!=null) poppedCommand = groupCmd;
-        else poppedCommand = cmdStack.pop();
-
         List<String> params = new ArrayList<>();
         Double returnValue = 0.0;
 
             Command cmdToExecute = factory.getCommand(getSymbol(poppedCommand));
 
+            System.out.println(argStack);
             while (cmdToExecute.getNumParams() > params.size()) {
                 String popped = argStack.pop();
 
@@ -191,7 +189,7 @@ public class Parser {
                     .execute(params, currentTurtle, allModels);
 
         this.lastReturnValue = returnValue;
-        if (!cmdStack.isEmpty() || this.groupCmd!=null) {
+        if (!cmdStack.isEmpty() || (this.groupCmd!=null && cmdToExecute.getNumParams()>1) && !cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)) {
             argStack.push(returnValue.toString());
         }
     }
@@ -257,7 +255,7 @@ public class Parser {
             this.groupCmd = symbolList.get(cursor+1);
         } else if (symbol.equals(")")) {
             while (argStack.size()>1) {
-                parseDefaultMethod(currentTurtle, cmdStack, argStack);
+                parseDefaultMethod(currentTurtle, cmdStack, argStack, groupCmd);
             }
             groupCmd = null;
         }

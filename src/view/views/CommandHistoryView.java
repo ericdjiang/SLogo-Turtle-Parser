@@ -61,7 +61,6 @@ public class CommandHistoryView extends InformationView {
             lineNum++;
         }
     }
-
     private void setHeader() {
         Text heading1 = new Text(resources.getString("HistoryInput"));
         Text heading2 = new Text(resources.getString("HistoryOutput"));

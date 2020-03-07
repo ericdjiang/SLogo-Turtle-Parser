@@ -30,7 +30,7 @@ public class ViewSwitchText extends HBox {
         referenceSwitchText = new Text(resources.getString("CommandWindow"));
         variableSwitchText = new Text(resources.getString("VariableWindow"));
         librarySwitchText = new Text(resources.getString("LibraryWindow"));
-        customizationSwitchText = new Text("customization");
+        customizationSwitchText = new Text(resources.getString("CustomizationWindow"));
         linksList.add(historySwitchText);
         linksList.add(referenceSwitchText);
         linksList.add(variableSwitchText);

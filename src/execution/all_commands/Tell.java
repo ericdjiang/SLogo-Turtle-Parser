@@ -15,6 +15,7 @@ public class Tell implements MultipleTurtlesCommand {
         System.out.println(parameters.get(0));
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         List<TurtleModel> newActiveTurtles = new ArrayList<>();
+
         int id = 0;
             for(int i = 2; i < symbolList.size(); i ++){
 
@@ -39,9 +40,11 @@ public class Tell implements MultipleTurtlesCommand {
                 }
             }
             turtleModelContainer.setActiveTurtles(newActiveTurtles);
+
             for (TurtleModel active : newActiveTurtles){
                 System.out.println("Turtle: " + active.getModelId() +" now active");
             }
+
         return id;
         }
 

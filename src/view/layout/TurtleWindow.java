@@ -13,7 +13,6 @@ public class TurtleWindow extends Pane {
     private final int viewHeight = 480;
     private Paint color;
 
-    //TODO make zoomable
     public TurtleWindow() {
         this.setWidth(viewWidth);
         this.setHeight(viewHeight);

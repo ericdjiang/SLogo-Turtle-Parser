@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import execution.MultipleTurtlesCommand;
 import model.*;
 
 public class MakeUserInstruction extends LoopCommand implements Command {

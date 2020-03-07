@@ -39,6 +39,7 @@ public class TurtleModel {
     this.penDown = true;
     isColorChanged = false;
     this.backgroundColor = new ArrayList<>();
+    this.penSize = 1;
   }
 
   public void setColorChanged(boolean changed){
@@ -136,9 +137,13 @@ public class TurtleModel {
   public List<Double> getBackgroundColor(){
     return backgroundColor;
   }
+
   public boolean getIsColorChanged(){
     return isColorChanged;
   }
+
+  public double getPenSize(){return penSize;}
+
   public boolean checkBounds(double deltaX, double deltaY) {
     return this.getX() + deltaX < 230 && this.getX() + deltaX > -270 && this.getY() + deltaY < 240 && this.getY() + deltaY > -180;
   }

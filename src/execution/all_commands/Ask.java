@@ -2,14 +2,12 @@ package execution.all_commands;
 
 import execution.Command;
 import execution.LoopCommand;
-import execution.MultipleTurtlesCommand;
 import model.*;
 import parsing.Parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Ask extends LoopCommand implements Command {
     @Override

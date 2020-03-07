@@ -42,14 +42,11 @@ public class Ask extends LoopCommand implements MultipleTurtlesCommand {
         symbolList = symbolList.subList(runner+2, symbolList.size());
         System.out.println(symbolList);
 
-
-        int loopGuardEnd = getLoopGuardEnd(symbolList);
-        Parser loopGuardParser = new Parser(String.join(" ", symbolList), language, variableModel, consoleModel, methodModels, turtleModelContainer );
-        double loopLimit =  Math.round(loopGuardParser.getLastReturnValue());
+        Parser loopParser = new Parser(String.join(" ", symbolList), language, variableModel, consoleModel, methodModels, turtleModelContainer );
+        double returnedValue =  Math.round(loopParser.getLastReturnValue());
 
 //    System.out.println(loopLimit);
 //    System.out.println(String.join(" ",symbolList.subList(loopGuardEnd+2, symbolList.size())));
-        String loopBody = String.join(" ",symbolList.subList(loopGuardEnd+2, symbolList.size()));
 
         //DOTIMES [ variable limit ]
         //[ command(s) ]
@@ -58,7 +55,6 @@ public class Ask extends LoopCommand implements MultipleTurtlesCommand {
 //        System.out.println(loopLimit);
 //        System.out.println(loopBody);
 
-        double lastReturnValue = 0;
 
 //        for (int i = 0; i < 1; i++) {
 //            try{
@@ -71,9 +67,9 @@ public class Ask extends LoopCommand implements MultipleTurtlesCommand {
 //            }
 //        }
 
-        consoleModel.setReturnVal(lastReturnValue);
+        consoleModel.setReturnVal(returnedValue);
         turtleModelContainer.setActiveTurtles(oldActive);
-        return loopLimit;
+        return returnedValue;
     }
 
     @Override

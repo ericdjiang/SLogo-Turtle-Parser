@@ -5,7 +5,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.TurtleContainer;
 import view.util.ColorSelector;
@@ -51,7 +53,6 @@ public class UserInterface {
     private Button turtleButton;
     private ColorSelector backgroundColorSelector;
     private ColorSelector penColorSelector;
-    private Paint penColor;
     private ControlPanel controlPanel;
 
     public UserInterface(Stage stage, ResourceBundle myResources, TurtleWindow turtleWindow, ConsoleView console) throws IOException, InvocationTargetException, IllegalAccessException {
@@ -79,7 +80,6 @@ public class UserInterface {
         tabs.getLibraryTab().setOnMouseClicked(event -> setLibraryWindow());
         tabs.getCustomizationTab().setOnMouseClicked(event -> setCustomizationWindow());
         setFooter();
-
         mainView.setCenter(turtleWindow);
         mainView.setTop(customizationPanel);
         mainFrame.setCenter(mainView);
@@ -91,11 +91,12 @@ public class UserInterface {
     }
     private void setBackgroundColor(TurtleWindow turtleWindow) {
         turtleWindow.setBackground(new Background(new BackgroundFill(backgroundColorSelector.getColorPicker().getValue(), CornerRadii.EMPTY, Insets.EMPTY)));
+        controlPanel.sendBGColorToController(backgroundColorSelector.getColorPicker().getValue());
         turtleWindow.setColor(backgroundColorSelector.getColorPicker().getValue());
         //backgroundColorSelector.setButtonColor(backgroundColorSelector.getColorPicker().getValue());
     }
     private void setPenColor() {
-        controlPanel.sendColorToController(penColorSelector.getColorPicker().getValue());
+        controlPanel.sendPenColorToController(penColorSelector.getColorPicker().getValue());
     }
     private void updateLanguage() throws IOException {
         ResourceBundle r = ResourceBundle.getBundle("resources/parsing.Unicode");
@@ -164,6 +165,9 @@ public class UserInterface {
     }
     public CustomizationView getCustomizationView() {
         return this.customizationView;
+    }
+    public LibraryView getLibraryView() {
+        return this.libraryView;
     }
     public void addControlPanel(ControlPanel cp) {
         this.controlPanel = cp;

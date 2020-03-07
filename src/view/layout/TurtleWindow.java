@@ -8,14 +8,16 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import model.TurtleModel;
 
+import java.util.List;
+
 public class TurtleWindow extends Pane {
     private final int viewWidth = 540;
     private final int viewHeight = 480;
     private Paint color;
 
     public TurtleWindow() {
-        this.setWidth(viewWidth);
-        this.setHeight(viewHeight);
+        this.setWidth(200);
+        this.setHeight(200);
         this.getStyleClass().add("turtlewindow");
         this.color = Color.LIGHTBLUE;
     }

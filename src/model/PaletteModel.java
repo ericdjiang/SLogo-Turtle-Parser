@@ -26,21 +26,21 @@ public class PaletteModel {
         myColors.set(indexInt, element);
     }
 
-    public List<Integer> getColor(double index){
+    public List<Double> getColor(double index){
         int indexInt = (int) index;
         String colorString = myColors.get(indexInt);
         return parseColor(colorString);
     }
 
-    public double getIndex(List<Integer> rgbVals){
+    public double getIndex(List<Double> rgbVals){
         String color = cleanColorVals(rgbVals.get(0), rgbVals.get(1), rgbVals.get(2));
         return rgbVals.indexOf(color);
     }
 
-    private String cleanColorVals(int r, int g, int b){
-        StringBuilder rString = new StringBuilder(Integer.toString(r));
-        StringBuilder gString = new StringBuilder(Integer.toString(g));
-        StringBuilder bString = new StringBuilder(Integer.toString(b));
+    private String cleanColorVals(double r, double g, double b){
+        StringBuilder rString = new StringBuilder(Double.toString(r));
+        StringBuilder gString = new StringBuilder(Double.toString(g));
+        StringBuilder bString = new StringBuilder(Double.toString(b));
         StringBuilder answer = new StringBuilder();
         while(rString.length()!=3){
             rString.insert(0, "0");
@@ -57,10 +57,10 @@ public class PaletteModel {
         return answer.toString();
     }
 
-    private List<Integer> parseColor(String colorString){
-        int r = Integer.parseInt(colorString.substring(0,3));
-        int g = Integer.parseInt(colorString.substring(3,6));
-        int b = Integer.parseInt(colorString.substring(6,9));
+    private List<Double> parseColor(String colorString){
+        double r = Integer.parseInt(colorString.substring(0,3));
+        double g = Integer.parseInt(colorString.substring(3,6));
+        double b = Integer.parseInt(colorString.substring(6,9));
         return  Arrays.asList(r,g,b);
     }
 

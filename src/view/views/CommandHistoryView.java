@@ -66,8 +66,8 @@ public class CommandHistoryView extends InformationView {
             inputs.getChildren().add(error);
             lineNumbers.getStyleClass().add(STYLE);
             inputs.getStyleClass().add(STYLE);
-            createAndAddEntry(lineNumbers, inputs, null,"ERROR");
-            //FIXME: CHANGE ERROR
+            createAndAddEntry(lineNumbers, inputs, new Text(""),"ERROR");
+
             lineNum++;
         }
     }

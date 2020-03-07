@@ -24,6 +24,7 @@ public class TurtleContainer {
         turtleView.setX(turtleModel.getX() + turtleWindow.getViewWidth()/2 - turtleView.getWidth()/2);
         turtleView.setY(turtleModel.getY() + turtleWindow.getViewHeight()/2 - turtleView.getHeight()/2);
         turtleWindow.getChildren().add(turtleView);
+        turtleView.setManaged(true);
         return turtleModel;
     }
     public TurtleView addTurtleView(int id){

@@ -1,5 +1,7 @@
 package view.views;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -7,35 +9,55 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 
-public class CustomizationView extends VBox {
+public class CustomizationView extends ScrollPane {
     private final int DEFAULT = 1;
+    private static final String STYLE = "vbox";
+
     private Slider dashWidthSlider;
     private Slider strokeThicknessSlider;
-    private Text turtleX = new Text(null);
-    private Text turtleY = new Text(null);
-    private Text backgroundColor = new Text(null);
-    private Text penColor = new Text(null);
-    private Text penStatus = new Text(null);
-    private Text turtleID = new Text(null);
-    private Text turtleHeading = new Text(null);
-    private Text penThickness = new Text(null);
-    private Text penOffset = new Text(null);
-    private double penOffsetVal=1;
-    private double penThicknessVal=1;
+
+    private Text turtleX;
+    private Text turtleY;
+    private Text backgroundColor;
+    private Text penColor;
+    private Text penStatus;
+    private Text turtleID;
+    private Text turtleHeading;
+    private Text penThickness;
+    private Text penOffset;
+
+    private double penOffsetVal;
+    private double penThicknessVal;
+
+    private boolean penThicknessChanged;
+
     private HBox row1;
     private HBox row2;
     private HBox row3;
+    private VBox content;
 
     public CustomizationView() {
-        row1 = new HBox();
-        row2 = new HBox();
-        row3 = new HBox();
+        initializeText();
+        this.content = new VBox();
+        content.setSpacing(50);
+        setContent(content);
+        this.penThicknessVal=DEFAULT;
+        this.penOffsetVal=DEFAULT;
+
         initRowOne();
         initRowTwo();
         initRowThree();
-        getChildren().add(row1);
-        getChildren().add(row2);
-        getChildren().add(row3);
+    }
+    private void initializeText() {
+        turtleX = new Text(null);
+        turtleY = new Text(null);
+        backgroundColor = new Text(null);
+        penColor = new Text(null);
+        penStatus = new Text(null);
+        turtleID = new Text(null);
+        turtleHeading = new Text(null);
+        penThickness = new Text(null);
+        penOffset = new Text(null);
     }
     public void updateTurtleX(Double d) {
         turtleX.setText("XPos: " + Double.toString(d.longValue()));
@@ -71,31 +93,39 @@ public class CustomizationView extends VBox {
     private void initRowOne() {
         dashWidthSlider = new Slider();
         strokeThicknessSlider = new Slider();
+        HBox widthSliderField = new HBox();
+        HBox thicknessSliderField = new HBox();
+        widthSliderField.getChildren().add(dashWidthSlider);
+        thicknessSliderField.getChildren().add(strokeThicknessSlider);
+        widthSliderField.getChildren().add(new Text("Change Dash Width"));
+        thicknessSliderField.getChildren().add(new Text("Change Pen Thickness"));
         createSliders(dashWidthSlider, 1, 50, 10);
         createSliders(strokeThicknessSlider, 1, 5, 0.5);
         dashWidthSlider.setOnMouseReleased(event -> savePenOffset(dashWidthSlider.getValue()));
         strokeThicknessSlider.setOnMouseReleased(event -> savePenThickness(strokeThicknessSlider.getValue()));
-        row1.getChildren().add(dashWidthSlider);
-        row1.getChildren().add(strokeThicknessSlider);
-        row1.getChildren().add(backgroundColor);
+        content.getChildren().add(widthSliderField);
+        content.getChildren().add(thicknessSliderField);
+        content.getChildren().add(backgroundColor);
     }
     private void savePenOffset(Double d) {
         this.penOffsetVal = d;
     }
     private void savePenThickness(Double d) {
+
         this.penThicknessVal = d;
+        penThicknessChanged = true;
     }
     private void initRowTwo() {
-        row2.getChildren().add(turtleX);
-        row2.getChildren().add(turtleY);
-        row2.getChildren().add(penThickness);
-        row2.getChildren().add(penOffset);
+        content.getChildren().add(turtleX);
+        content.getChildren().add(turtleY);
+        content.getChildren().add(penThickness);
+        content.getChildren().add(penOffset);
     }
     private void initRowThree() {
-        row3.getChildren().add(turtleID);
-        row3.getChildren().add(turtleHeading);
-        row3.getChildren().add(penStatus);
-        row3.getChildren().add(penColor);
+        content.getChildren().add(turtleID);
+        content.getChildren().add(turtleHeading);
+        content.getChildren().add(penStatus);
+        content.getChildren().add(penColor);
     }
     private void createSliders(Slider name, double min, double max, double interval) {
         name.setMin(min);
@@ -111,4 +141,6 @@ public class CustomizationView extends VBox {
     public Double getPenStrokeOffset() {
         return this.penOffsetVal;
     }
+    public boolean getPenChanged(){ return penThicknessChanged;}
+    public void setPenChangedFalse(){penThicknessChanged=false;}
 }

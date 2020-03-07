@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VariableModel {
+public class    VariableModel {
 
     private HashMap<String, Double> myMap;
     private boolean isNewVarAdded;

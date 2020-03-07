@@ -36,6 +36,7 @@ public class TurtleView extends Rectangle {
         this.setFill(new ImagePattern(new Image("file:" + IMAGE_RESOURCE_PATH + imageName)));
     }
     public void switchTurtleImage() {
+        System.out.println("here");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(IMAGE_RESOURCE_PATH));
         Stage stage = new Stage();
@@ -44,7 +45,7 @@ public class TurtleView extends Rectangle {
             this.setImage(selectedImg.getName());
         }
         else {
-            System.out.println("Invalid Image File Chosen. Select a jpg or png File.");
+            System.out.println("Invalid Image File Selected. Select a jpg or png File.");
         }
     }
     public int getViewId(){

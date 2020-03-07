@@ -38,7 +38,7 @@ public class TurtleModelContainer {
     }
 
     public TurtleModel addToTurtleModels(int id){
-        TurtleModel turtleModel = new TurtleModel(id,0,0,0, Color.WHITE);
+        TurtleModel turtleModel = new TurtleModel(id,0,0,0);
         turtleModels.add(turtleModel);
         turtleIds.add(id);
         return turtleModel;

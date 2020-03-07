@@ -7,12 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import execution.MultipleTurtlesCommand;
 import model.*;
 
-public class MakeUserInstruction extends LoopCommand implements MultipleTurtlesCommand {
+public class MakeUserInstruction extends LoopCommand implements Command {
   @Override
-  public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels,TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+  public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
+    Map<String, MethodModel> methodModels = allModels.getMethodModels();
     List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
 
     // to varname [ :var1 :var2 ] [ command1 command2 ]

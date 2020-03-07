@@ -2,18 +2,18 @@ package execution.all_commands;
 
 import execution.Command;
 import execution.LoopCommand;
-import execution.MultipleTurtlesCommand;
 import model.*;
 import parsing.Parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-public class Ask extends LoopCommand implements MultipleTurtlesCommand {
+public class Ask extends LoopCommand implements Command {
     @Override
-    public double execute(List<String> parameters, VariableModel variableModel, ConsoleModel consoleModel, Map<String, MethodModel> methodModels, TurtleModelContainer turtleModelContainer, TurtleModel turtleModel) {
+    public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels){
+        TurtleModelContainer turtleModelContainer = allModels.getTurtleModelContainer();
+        ConsoleModel consoleModel = allModels.getConsoleModel();
         List<TurtleModel> oldActive = turtleModelContainer.getActiveTurtles();
         List <String> symbolList = Arrays.asList(parameters.get(0).split("[ ]+"));
         String language = symbolList.get(0);
@@ -42,7 +42,7 @@ public class Ask extends LoopCommand implements MultipleTurtlesCommand {
         symbolList = symbolList.subList(runner+2, symbolList.size());
         System.out.println(symbolList);
 
-        Parser loopParser = new Parser(String.join(" ", symbolList), language, variableModel, consoleModel, methodModels, turtleModelContainer );
+        Parser loopParser = new Parser(String.join(" ", symbolList), language, allModels);
         double returnedValue =  Math.round(loopParser.getLastReturnValue());
 
 //    System.out.println(loopLimit);

@@ -36,7 +36,7 @@ public class Parser {
     private Map<String, MethodModel> myMethodModels;
 
     private Stack<String> groupCmds = new Stack<>();
-    private Stack<Integer> reservedIxs = new Stack<>();
+    private int reservedIxs = 0;
 
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
@@ -192,6 +192,7 @@ public class Parser {
         this.lastReturnValue = returnValue;
         if (!cmdStack.isEmpty() || (!this.groupCmds.isEmpty() && cmdToExecute.getNumParams()>1) && !cmdToExecute.getClass().getSimpleName().equals(MAKE_VAR)) {
             argStack.push(returnValue.toString());
+            if (groupCmds.size()==1) reservedIxs+=1;
         }
     }
 
@@ -255,8 +256,10 @@ public class Parser {
             loopEndIndex = cursor + 1;
             this.groupCmds.push(symbolList.get(cursor+1));
         } else if (symbol.equals(")")) {
+            System.out.print("Group Comamnds");
+            System.out.println(groupCmds);
             String groupCmd = groupCmds.pop();
-            while (argStack.size()>1) {
+            while (argStack.size()>=1 && (groupCmds.isEmpty() || argStack.size()>reservedIxs) ) {
                 parseDefaultMethod(currentTurtle, cmdStack, argStack, groupCmd);
             }
         }
@@ -410,10 +413,12 @@ public class Parser {
         throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         //                printDebugging(cmdStack, argStack, cursor);
 
-        System.out.println("Printing Debugging");
+        System.out.println("Cursor: "+cursor);
 
-        System.out.println(cursor);
+        System.out.print("Cmd: ");
         System.out.println(cmdStack);
+        System.out.print("Arg: ");
         System.out.println(argStack);
+        System.out.println();
     }
 }

@@ -29,6 +29,8 @@ public class CustomizationView extends ScrollPane {
     private double penOffsetVal;
     private double penThicknessVal;
 
+    private boolean penThicknessChanged;
+
     private HBox row1;
     private HBox row2;
     private HBox row3;
@@ -109,7 +111,9 @@ public class CustomizationView extends ScrollPane {
         this.penOffsetVal = d;
     }
     private void savePenThickness(Double d) {
+
         this.penThicknessVal = d;
+        penThicknessChanged = true;
     }
     private void initRowTwo() {
         content.getChildren().add(turtleX);
@@ -137,4 +141,6 @@ public class CustomizationView extends ScrollPane {
     public Double getPenStrokeOffset() {
         return this.penOffsetVal;
     }
+    public boolean getPenChanged(){ return penThicknessChanged;}
+    public void setPenChangedFalse(){penThicknessChanged=false;}
 }

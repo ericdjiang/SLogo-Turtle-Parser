@@ -110,7 +110,11 @@ public class Controller {
             }
             TurtleView turtleView = turtleContainer.getTurtleView(id);
 
-            pen.setStrokeWidth(customization.getPenStrokeWidth());
+            if(customization.getPenChanged()){
+                turtleModel.setPenSize(customization.getPenStrokeWidth());
+                customization.setPenChangedFalse();
+            }
+            pen.setStrokeWidth(turtleModel.getPenSize());
             pen.setDashOffset(customization.getPenStrokeOffset());
 
 

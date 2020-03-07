@@ -8,7 +8,10 @@ import java.util.List;
 public class XCoordinate implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel turtleModel, ModelContainer allModels) {
-        return turtleModel.getX();
+        ConsoleModel consoleModel = allModels.getConsoleModel();
+        double x = turtleModel.getX();
+        consoleModel.setReturnVal(x);
+        return x;
     }
 
     @Override

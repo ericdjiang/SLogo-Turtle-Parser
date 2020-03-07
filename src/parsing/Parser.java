@@ -35,11 +35,7 @@ public class Parser {
     private VariableModel myVariableModel;
     private Map<String, MethodModel> myMethodModels;
 
-
-
-
-    private boolean insideGroup = false;
-    private String groupCmd = "";
+    private String groupCmd = null;
 
     // Loop mappings specifies how many sets of brackets each command type has
     // e.g., repeat 3 [ cmds ] has 1 set of brackets while dotimes [3] [ cmds ] has 2 sets of brackets
@@ -133,9 +129,10 @@ public class Parser {
                 // symbol represents the space delimited command or parameter (e.g. fd or 30 or :variable)
                 String symbol = symbolList.get(cursor).strip();
 
+                System.out.println("symbol: "+symbol);
                 // push the symbol to the correct stack (cmdStack or argStack based on its regular expression match).
                 // if the command is a loop command, find the index of the closing loop bracket and store it in loopEndIndex so that the program can skip all symbols until we reach this index
-                loopEndIndex = pushToStack(symbolList, cmdStack, argStack, loopEndIndex, cursor, symbol);
+                loopEndIndex = pushToStack(symbolList, cmdStack, argStack, loopEndIndex, cursor, symbol, currentTurtle);
 
 //                printDebugging(cmdStack,argStack,cursor);
 
@@ -167,7 +164,9 @@ public class Parser {
     private void parseDefaultMethod(TurtleModel currentTurtle, Stack<String> cmdStack,
                                     Stack<String> argStack)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        poppedCommand = cmdStack.pop();
+        if (groupCmd!=null) poppedCommand = groupCmd;
+        else poppedCommand = cmdStack.pop();
+
         List<String> params = new ArrayList<>();
         Double returnValue = 0.0;
 
@@ -192,7 +191,7 @@ public class Parser {
                     .execute(params, currentTurtle, allModels);
 
         this.lastReturnValue = returnValue;
-        if (!cmdStack.isEmpty()) {
+        if (!cmdStack.isEmpty() || this.groupCmd!=null) {
             argStack.push(returnValue.toString());
         }
     }
@@ -250,15 +249,17 @@ public class Parser {
     }
 
     private int pushToStack(List<String> symbolList, Stack<String> cmdStack, Stack<String> argStack,
-                            int loopEndIndex, int cursor, String symbol)
+                            int loopEndIndex, int cursor, String symbol, TurtleModel currentTurtle)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         if (symbol.equals("(")){
 //            loopEndIndex = new GroupParser(myLanguage).handleGroup(symbolList, cursor, symbol);
             loopEndIndex = cursor + 1;
-            this.insideGroup = true;
             this.groupCmd = symbolList.get(cursor+1);
         } else if (symbol.equals(")")) {
-            this.insideGroup = false;
+            while (argStack.size()>1) {
+                parseDefaultMethod(currentTurtle, cmdStack, argStack);
+            }
+            groupCmd = null;
         }
         else if (LOOP_MAPPINGS.containsKey(getSymbol(symbol))) {
             loopEndIndex = handleLoop(symbolList, cmdStack, argStack, cursor, symbol);

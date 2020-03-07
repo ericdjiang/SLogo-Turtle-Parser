@@ -1,5 +1,6 @@
 package view.layout;
 
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class TurtleWindow extends Pane {
     private final int viewWidth = 540;
-    private final int viewHeight = 480;
+    private final int viewHeight = 400;
     private Paint color;
 
     public TurtleWindow() {
@@ -29,6 +30,7 @@ public class TurtleWindow extends Pane {
     }
     public void setColor(Paint color) {
         this.color = color;
+        setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
     }
     public Paint getColor() {
         return this.color;

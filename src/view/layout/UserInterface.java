@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 public class UserInterface {
 
     private static final int HEIGHT = 576;
-    private static final int WIDTH = 1024;
+    private static final int WIDTH = 1080;
     private static final String RESOURCES = "resources/languages";
     private static final String DEFAULT_RESOURCE_FOLDER = "/" + RESOURCES + "/";
     private static final String DEFAULT_RESOURCE_PACKAGE = RESOURCES + ".";

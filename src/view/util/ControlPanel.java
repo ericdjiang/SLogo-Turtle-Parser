@@ -3,6 +3,7 @@ package view.util;
 import controller.Controller;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.event.ActionEvent;
@@ -40,6 +41,7 @@ public class ControlPanel extends VBox {
     private Button clearButton;
     private Button uploadButton;
     private Button turtleSwitchButton;
+    private Button newWindowButton;
     private String myLanguage;
 
     private TurtleContainer turtleContainer;
@@ -60,9 +62,21 @@ public class ControlPanel extends VBox {
                 turtleView.switchTurtleImage();
             }
         });
+        newWindowButton = makeButton("NewWindow", event -> {
+            try {
+                createNewWindow();
+            } catch (IllegalAccessException e) {
+               // e.printStackTrace();
+            } catch (IOException e) {
+               // e.printStackTrace();
+            } catch (InvocationTargetException e) {
+               // e.printStackTrace();
+            }
+        });
         getChildren().add(runButton);
         getChildren().add(clearButton);
         getChildren().add(uploadButton);
+        getChildren().add(newWindowButton);
         turtleContainer = turtlecontainer;
     }
     private Button makeButton(String property, EventHandler<ActionEvent> handler) {
@@ -84,7 +98,10 @@ public class ControlPanel extends VBox {
     public Button getTurtleSwitcher() {
         return this.turtleSwitchButton;
     }
-
+    private void createNewWindow() throws IllegalAccessException, IOException, InvocationTargetException {
+        Stage newWindow = new Stage();
+        ProgramCreator pc = new ProgramCreator(newWindow);
+    }
     private void executeRun(){
         String commands = consoleView.getText();
         resources.getBaseBundleName();

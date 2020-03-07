@@ -38,7 +38,7 @@ public class DoTimes extends LoopCommand implements MultipleTurtlesCommand{
 
     for (int i = 0; i < loopLimit; i++) {
       try{
-        variableModel.updateVariable(varName, i);
+        variableModel.updateVariable(varName, i,false);
         Parser parser = new Parser(loopBody, language, variableModel, consoleModel , methodModels, turtleModelContainer);
 
         lastReturnValue = parser.getLastReturnValue();

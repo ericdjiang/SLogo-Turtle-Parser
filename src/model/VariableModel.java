@@ -5,48 +5,52 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VariableModel {
 
     private HashMap<String, Double> myMap;
-    private List myVariableNames;
-    private List myVariableVals;
     private boolean isNewVarAdded;
-    private String oldVariable;
-    private double oldVariableVal;
-    private List<String> varNames;
-    private List<String> varVals;
+    private List<Variable> myVariables;
+    private Map<String,Integer> Map;
 
     public VariableModel(){
         myMap = new HashMap<>();
-        myVariableNames = new ArrayList();
-        myVariableVals = new ArrayList();
-        varNames = new ArrayList();
-        varVals = new ArrayList<>();
-        this.oldVariable=null;
+        myVariables = new ArrayList<>();
+        Map = new HashMap<>();
     }
 
-    public void updateVariable(String variableName, double value){
+    public Variable addVariable(String name, double value){
+        Variable variable = new Variable(myVariables.size(),name,value);
+        Map.put(name,myVariables.size());
+        myVariables.add(variable);
+        return variable;
+    }
+
+    public void updateVariable(String variableName, double value,boolean fromFront){
         String variable = variableName.substring(1);
-        if (! myMap.containsKey(variable) || (myMap.containsKey(variable) && myMap.get(variable) != value)) {
-            isNewVarAdded = true;
-            varNames.add(variable);
-            varVals.add(Double.toString(value));
+        if(!Map.containsKey(variable)) {
+            addVariable(variable, value);
+            System.out.println("new Variable");
         }
-        oldVariable = variable;
-        oldVariableVal = value;
-        myMap.put(variable,value);
-        myVariableNames.add(variable);
-        myVariableVals.add(value);
+        else{
+            int index = Map.get(variable);
+            System.out.println(index);
+            Variable v = myVariables.get(index);
+            String vName = v.getName();
+            double vVal = v.getVal();
+            if(!vName.equals(variable)){
+                v.updateVariable(variable);
+            }
+            if(vVal != value){
+                v.updateVariable(value);
+            }
+
+        }
+        if(!fromFront) isNewVarAdded = true;
         System.out.println(variable + value);
-
     }
 
-    public void frontEndUpdate(String variableName, double value){
-        String variable = variableName.substring(1);
-        myMap.put(variable,value);
-
-    }
 
 
     public boolean checkIfVariableExists(String variableName){
@@ -56,8 +60,11 @@ public class VariableModel {
 
     public double getValue(String variableName){
         String variable = variableName.substring(1);
-        if(!myMap.containsKey(variable)) return 0;
-        return myMap.get(variable);
+        if(!Map.containsKey(variable)) return 0;
+        int index = Map.get(variable);
+        System.out.println(index);
+        Variable v = myVariables.get(index);
+        return v.getVal();
     }
 
     public double addVariables(String variable1, String variable2){
@@ -69,22 +76,7 @@ public class VariableModel {
         return sum;
     }
     //TODO impelment memory
-    public List getVariableName() {
-        if (myVariableNames.size() > 0) {
-            return varNames;
-        }
-        else {
-            return null;
-        }
-    }
-    public List getVariableInfo() {
-        if (myVariableNames.size() > 0) {
-            return varVals;
-        }
-        else {
-            return null;
-        }
-    }
+
     public boolean newVarAdded() {
         return this.isNewVarAdded;
     }
@@ -92,7 +84,9 @@ public class VariableModel {
         isNewVarAdded = false;
     }
     public void clearVarInfo() {
-        varNames.clear();
-        varVals.clear();
+      //  myVariables.clear();
+    }
+    public List<Variable> getVariables(){
+        return myVariables;
     }
 }

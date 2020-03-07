@@ -74,11 +74,13 @@ public class Controller {
     double ycoord;
     public void update() {
         if (variableView.isChangedVariables()) {
-            List<String> viewVariables = variableView.geVariables();
-            List<String> viewValues = variableView.getValues();
+            List<Variable> viewVariables = variableView.getVariables();
             for(int i = 0; i < viewVariables.size(); i++){
-                variableModel.updateVariable(viewVariables.get(i),Double.parseDouble(viewValues.get(i)));
-                System.out.println(variableModel.getValue(":x"));
+                Variable variable = viewVariables.get(i);
+                variableModel.updateVariable(":"+variable.getName(),variable.getVal(),true);
+                System.out.println(variable.getName());
+                System.out.println(variableModel.getVariables().get(0).getName());
+                System.out.println(variable.getVal());
             }
             variableView.setChangedVariablesFalse();
         }
@@ -228,7 +230,7 @@ public class Controller {
     }
     public void updateVariableView() {
         if (variableModel.newVarAdded()) {
-            variableView.addVariable(variableModel.getVariableName(), variableModel.getVariableInfo());
+            variableView.addVariable(variableModel.getVariables());
             variableModel.clearVarInfo();
         }
         variableModel.varReceived();

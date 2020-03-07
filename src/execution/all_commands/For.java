@@ -36,7 +36,7 @@ public class For implements MultipleTurtlesCommand {
     double lastReturnValue = 0;
     for (double i = loopStart; i < loopEnd; i+=loopIncrement) {
       try{
-        variableModel.updateVariable(varName, i);
+        variableModel.updateVariable(varName, i,false);
         Parser parser = new Parser(loopBody, language, variableModel, consoleModel, methodModels,turtleModelContainer);
         lastReturnValue = parser.getLastReturnValue();
       } catch (Exception e) {

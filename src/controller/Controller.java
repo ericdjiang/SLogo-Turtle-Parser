@@ -85,7 +85,7 @@ public class Controller {
             turtleWindow.setColor(Color.rgb(colorVals.get(0), colorVals.get(1), colorVals.get(2)));
             allModels.getTurtleModelContainer().getActiveTurtles().get(0).setColorChanged(false);
         }
-        
+
 
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);

@@ -8,10 +8,12 @@ import java.util.List;
 public class GetPenColor implements Command {
     @Override
     public double execute(List<String> parameters, TurtleModel TurtleModel, ModelContainer allModels) {
+        ConsoleModel consoleModel = allModels.getConsoleModel();
         PaletteModel palette = allModels.getPaletteModel();
         List<Integer> rgbVals = TurtleModel.getPenColor();
         Double index = palette.getIndex(rgbVals);
-        return 0;
+        consoleModel.setReturnVal(index);
+        return index;
     }
 
     @Override

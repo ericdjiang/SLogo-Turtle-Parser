@@ -8,12 +8,15 @@ public class TurtleModel {
   private double myX;
   private double myY;
   private double myAngle;
+  private double penSize;
   private boolean isShowing;
   private boolean penDown;
   private double myZeroX;
   private double myZeroY;
   private boolean isCleared;
   private List<Double> myPoints;
+  private List<Double> backgroundColor;
+  private List<Double> penColor;
 
 
   public TurtleModel (int id,double myX, double myY, double myAngle) {
@@ -28,6 +31,13 @@ public class TurtleModel {
     this.myPoints.add(myY);
     this.isShowing = true;
     this.penDown = true;
+  }
+  public void setBackgroundColor(List<Double> rgbVals){
+    backgroundColor = rgbVals;
+  }
+
+  public void setPenColor(List<Double> rgbVals){
+    penColor = rgbVals;
   }
 
   public void setX(double x){
@@ -88,6 +98,9 @@ public class TurtleModel {
   public void setCleared(boolean b){
     isCleared = b;
   }
+  public void setPenSize(double size){
+    penSize = size;
+  }
   public boolean getClearedStatus() {
     return this.isCleared;
   }
@@ -98,5 +111,9 @@ public class TurtleModel {
   }
   public int getModelId(){
     return myId;
+  }
+
+  public List<Double> getPenColor(){
+    return penColor;
   }
 }

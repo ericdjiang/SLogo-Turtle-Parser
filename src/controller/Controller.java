@@ -242,13 +242,13 @@ public class Controller {
         }
     }
     public void updateInputHistory(String commands){
-        if (! consoleModel.getErrorMessage().equals(null)) {
+        if (! consoleModel.getErrorMessage().equals("")) {
             historyView.displayError(consoleModel.getErrorMessage());
         }
         else {
             historyView.updateHistory(commands, consoleModel.getReturnVal());
         }
-        consoleModel.setErrorMessage(null);
+        consoleModel.setErrorMessage("");
     }
     public void createParser(String commands) {
         allModels = new ModelContainer(variableModel, consoleModel, methodModels, turtleContainer.getTurtleModelContainer(), paletteModel);

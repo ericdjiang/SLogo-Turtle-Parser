@@ -2,6 +2,9 @@ package view.views;
 
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -35,11 +38,17 @@ public class CommandHistoryView extends InformationView {
         lineNumbers.getChildren().add(lineNumber);
         inputs.getChildren().add(consoleInput);
         outputs.getChildren().add(consoleOutput);
-        createAndAddEntry(lineNumbers, inputs, outputs);
+        createAndAddEntry(lineNumbers, inputs, outputs,input);
         lineNum ++;
     }
-    private void createAndAddEntry(Node nums, Node in, Node out) {
+    private void createAndAddEntry(Node nums, Node in, Node out, String input) {
         HBox entry = new HBox();
+        entry.setOnDragDetected(e->{
+            Dragboard db = entry.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putString(input);
+            db.setContent(content);
+        });
         entry.getStyleClass().add(STYLE);
         entry.getChildren().add(nums);
         entry.getChildren().add(in);
@@ -57,7 +66,8 @@ public class CommandHistoryView extends InformationView {
             inputs.getChildren().add(error);
             lineNumbers.getStyleClass().add(STYLE);
             inputs.getStyleClass().add(STYLE);
-            createAndAddEntry(lineNumbers, inputs, null);
+            createAndAddEntry(lineNumbers, inputs, null,"ERROR");
+            //FIXME: CHANGE ERROR
             lineNum++;
         }
     }

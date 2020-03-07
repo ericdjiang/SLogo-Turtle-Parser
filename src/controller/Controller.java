@@ -72,6 +72,9 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
+        if (variableView.isChangedVariables()) {
+        }
+
         if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
             Color backGroundColor = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackGroundColor();
             System.out.println(backGroundColor);

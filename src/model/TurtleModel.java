@@ -19,6 +19,7 @@ public class TurtleModel {
   private boolean isCleared;
   private List<Double> myPoints;
   private Color backGroundColor;
+  private boolean colorChanged;
 
 
 
@@ -35,6 +36,7 @@ public class TurtleModel {
     this.isShowing = true;
     this.penDown = true;
     backGroundColor = backgroundcolor;
+    colorChanged = false;
   }
 
   public void setX(double x){
@@ -108,6 +110,9 @@ public class TurtleModel {
   }
   public void setBackGroundColor(Color backgroundcolor){
     backGroundColor = backgroundcolor;
+    colorChanged = true;
   }
   public Color getBackGroundColor(){return backGroundColor;}
+  public boolean getIsColorChanged(){return colorChanged; }
+  public void setColorChangedFalse(){colorChanged = false;}
 }

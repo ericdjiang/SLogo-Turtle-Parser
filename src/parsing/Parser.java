@@ -41,7 +41,7 @@ public class Parser {
         add("DoTimes");
         add("If");
         add("IfElse");
-        add("To");
+        add("MakeUserInstruction");
         add("Tell");
         add("Turtles");
         add("Ask");
@@ -52,8 +52,8 @@ public class Parser {
         put("Dotimes", 2);
         put("For", 2);
         put("If", 1);
-        put("Ifelse", 2);
-        put("To", 2);
+        put("IfElse", 2);
+        put("MakeUserInstruction", 2);
         put("Tell", 1);
         put("Ask", 2);
     }};

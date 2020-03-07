@@ -55,10 +55,14 @@ public class Controller {
     double xcoord;
     double ycoord;
     public void update() {
-        Color backGroundColor = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackGroundColor();
-        System.out.println(backGroundColor);
-        turtleWindow.setColor(backGroundColor);
-        turtleWindow.setBackground(new Background(new BackgroundFill(backGroundColor, CornerRadii.EMPTY, Insets.EMPTY)));
+        if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
+            Color backGroundColor = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackGroundColor();
+            System.out.println(backGroundColor);
+            turtleWindow.setColor(backGroundColor);
+            turtleWindow.setBackground(new Background(new BackgroundFill(backGroundColor, CornerRadii.EMPTY, Insets.EMPTY)));
+            turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).setColorChangedFalse();
+        }
+
 
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++){
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);

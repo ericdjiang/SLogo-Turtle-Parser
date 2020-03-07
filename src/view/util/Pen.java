@@ -65,7 +65,6 @@ public class Pen {
         myPoints.clear();
     }
     public void setDashOffset(double spacing) {
-        System.out.println("worked");
         dashOffset = spacing;
     }
     public void setStrokeWidth(double width) {

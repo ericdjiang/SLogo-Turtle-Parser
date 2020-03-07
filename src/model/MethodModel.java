@@ -10,7 +10,7 @@ public class MethodModel {
   private List<String> methodNames;
 
   public MethodModel (String variableString , String methodBody) {
-    if (!variableString.matches("a-zA-Z")) this.variableNames = new ArrayList<>();
+    if (variableString.strip().length() == 0) this.variableNames = new ArrayList<>();
     else this.variableNames = Arrays.asList(variableString.split("[ ]+"));
 
     this.methodBody = methodBody;

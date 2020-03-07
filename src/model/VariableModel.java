@@ -42,6 +42,12 @@ public class VariableModel {
 
     }
 
+    public void frontEndUpdate(String variableName, double value){
+        String variable = variableName.substring(1);
+        myMap.put(variable,value);
+
+    }
+
 
     public boolean checkIfVariableExists(String variableName){
         String variable = variableName.substring(1);

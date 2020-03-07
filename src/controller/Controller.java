@@ -27,6 +27,7 @@ import view.layout.TurtleWindow;
 import view.views.VariableView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Controller {
@@ -73,6 +74,13 @@ public class Controller {
     double ycoord;
     public void update() {
         if (variableView.isChangedVariables()) {
+            List<String> viewVariables = variableView.geVariables();
+            List<String> viewValues = variableView.getValues();
+            for(int i = 0; i < viewVariables.size(); i++){
+                variableModel.updateVariable(viewVariables.get(i),Double.parseDouble(viewValues.get(i)));
+                System.out.println(variableModel.getValue(":x"));
+            }
+            variableView.setChangedVariablesFalse();
         }
 
         if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){

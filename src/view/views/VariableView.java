@@ -12,23 +12,29 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class VariableView extends InformationView {
     private static final String STYLE = "vbox";
     private boolean changedVariables = false;
+    private List<String> myVariables;
+    private List<String> myValues;
 
     public VariableView(ResourceBundle resources) {
         super(resources);
         setHeader();
+        myVariables = new ArrayList<>();
+        myValues = new ArrayList<>();
     }
     public void addVariable(List<String> varName, List<String> varVal) {
         for (int i = 0; i < varName.size(); i ++) {
             VBox variableNames = new VBox();
             VBox variableVals = new VBox();
-            Text name = new Text(varName.get(i));
-            Text val = new Text(varVal.get(i));
+            // Throw error here
+            Text name = new VariableText(varName.get(i),myVariables.size());
+            Text val = new VariableText(varVal.get(i),myVariables.size());
+            myVariables.add(varName.get(i));
+            myValues.add(varName.get(i));
             name.setWrappingWidth(250);
             val.setWrappingWidth(250);
             name.setOnMouseClicked(e->
@@ -64,21 +70,10 @@ public class VariableView extends InformationView {
         s.show();
         s.setScene(new Scene(ta));
         s.setAlwaysOnTop(true);
-        ta.setOnMouseClicked(f->{
-            s.hide();
-            if(!ta.getText().equals("")){
-                //FIXME: send error if not right type
-                text.setText(ta.getText());
-                changedVariables = true;
-            }
-        });
+        ta.setOnMouseExited(f-> hideAndChangeText(s,ta,text,type));
         ta.setOnKeyPressed(k->{
             if (k.getCode() == KeyCode.ENTER){
-                s.hide();
-                if(!ta.getText().equals("")){
-                    text.setText(ta.getText());
-                    changedVariables = true;
-                }
+                hideAndChangeText(s,ta,text,type);
             }
         });
     }
@@ -87,6 +82,36 @@ public class VariableView extends InformationView {
     }
     public void setChangedVariablesFalse(){
         changedVariables = false;
+    }
+    private void hideAndChangeText(Stage s, TextArea ta, Text text, String type){
+        s.hide();
+        if(!ta.getText().equals("")){
+            text.setText(ta.getText());
+            changedVariables = true;
+            updateMap(type,ta.getText(),((VariableText)text).getIndex());
+        }
+    }
+    private void updateMap(String type, String text,int index){
+        switch (type){
+            case "Variable":
+                myVariables.set(index,text);
+                break;
+            case "Value":
+                myValues.set(index,text);
+                try {
+                    double d = Double.parseDouble(text);
+                }
+                catch (NumberFormatException e){
+                    System.out.println("ERROR WRONG TYPE");
+                }
+                break;
+        }
+    }
+    public List<String> geVariables(){
+        return myVariables;
+    }
+    public List<String> getValues(){
+        return myValues;
     }
 }
 

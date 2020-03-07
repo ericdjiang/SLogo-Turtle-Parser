@@ -83,7 +83,7 @@ public class Controller {
 
         if(turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getIsColorChanged()){
             List<Double> colorVals = turtleContainer.getTurtleModelContainer().getActiveTurtles().get(0).getBackgroundColor();
-            turtleWindow.setColor(new Color(colorVals.get(0), colorVals.get(1), colorVals.get(2), 1));
+            turtleWindow.setColor(new Color(colorVals.get(0)/255, colorVals.get(1)/255, colorVals.get(2)/255, 1));
             allModels.getTurtleModelContainer().getActiveTurtles().get(0).setColorChanged(false);
         }
 
@@ -123,7 +123,7 @@ public class Controller {
             }
             else {
                 if (turtleModel.getPenStatus()) {
-                    if (                point > turtleWindow.getViewHeight() && point > turtleWindow.getViewWidth() && point < 0 && point < 0) {
+                    if (point > turtleWindow.getViewHeight() && point > turtleWindow.getViewWidth() && point < 0 && point < 0) {
                         turtleView.setVisible(false);
                     }
 //correct one
@@ -258,9 +258,9 @@ public class Controller {
         for(int t = 1; t <= turtleContainer.getTurtleModelContainer().getTurtleModels().size(); t++) {
             TurtleModel turtleModel = turtleContainer.getTurtleModelContainer().getTurleModel(t);
             List<Double> l = new ArrayList<>();
-            l.add(color.getGreen());
-            l.add(color.getRed());
-            l.add(color.getBlue());
+            l.add(color.getGreen()*255);
+            l.add(color.getRed()*255);
+            l.add(color.getBlue()*255);
             turtleModel.setBackgroundColor(l);
         }
     }

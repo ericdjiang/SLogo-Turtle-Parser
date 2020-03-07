@@ -38,6 +38,7 @@ public class TurtleModel {
     this.isShowing = true;
     this.penDown = true;
     isColorChanged = false;
+    this.backgroundColor = new ArrayList<>();
   }
 
   public void setColorChanged(boolean changed){

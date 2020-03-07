@@ -1,5 +1,6 @@
 package view.views;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -40,18 +41,10 @@ public class CustomizationView extends ScrollPane {
         setContent(content);
         this.penThicknessVal=DEFAULT;
         this.penOffsetVal=DEFAULT;
-        row1 = new HBox();
-        row2 = new HBox();
-        row3 = new HBox();
-        row1.getStyleClass().add(STYLE);
-        row2.getStyleClass().add(STYLE);
-        row3.getStyleClass().add(STYLE);
+
         initRowOne();
         initRowTwo();
         initRowThree();
-        content.getChildren().add(row1);
-        content.getChildren().add(row2);
-        content.getChildren().add(row3);
     }
     private void initializeText() {
         turtleX = new Text(null);
@@ -100,7 +93,6 @@ public class CustomizationView extends ScrollPane {
         strokeThicknessSlider = new Slider();
         HBox widthSliderField = new HBox();
         HBox thicknessSliderField = new HBox();
-        row3.getStyleClass().add(STYLE);
         widthSliderField.getChildren().add(dashWidthSlider);
         thicknessSliderField.getChildren().add(strokeThicknessSlider);
         widthSliderField.getChildren().add(new Text("Change Dash Width"));

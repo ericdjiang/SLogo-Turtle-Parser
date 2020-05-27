@@ -51,8 +51,6 @@ public class    VariableModel {
         System.out.println(variable + value);
     }
 
-
-
     public boolean checkIfVariableExists(String variableName){
         String variable = variableName.substring(1);
         return myMap.containsKey(variable);
